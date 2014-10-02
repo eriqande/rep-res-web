@@ -46,35 +46,29 @@
 
       <div class="row">
         <div class="col-sm-3" id="nav">
-        <div class="well">
-          How's this site built? See all sources at the course <a href="http://github.com/eriqande/rep-res-course">repository</a> on GitHub.
-        <p><hr></p>
-        <p><a class="btn btn-primary" href="https://github.com/eriqande/rep-res-course/blob/master/lectures/test-slidy-lecture.rmd">View on GitHub</a></p>
-        </div>
+          <div class="well">
+  How's this site built? See all sources at the course <a href="http://github.com/eriqande/rep-res-course">repository</a> on GitHub.
+  <p><hr></p>
+  <p><a class="btn btn-primary" href="https://github.com/eriqande/rep-res-course/blob/master/lectures/test-slidy-lecture.rmd">View on GitHub</a></p>
+</div>
 
-        <h4>Page Contents</h4>
-          <ul class="list-unstyled" id="toc"></ul>
+<h4>Page Contents</h4>
+<ul class="list-unstyled" id="toc"></ul>
 
-          <hr>
-          <p><a href="http://eriqande.github.io/rep-res-web/contribute.html">How to contribute</a></p>
+<hr>
+<p><a href="http://eriqande.github.io/rep-res-web/contribute.html">How to contribute</a></p>
+<p><a class="btn btn-primary" href="https://github.com/eriqande/rep-res-course/edit/master/lectures/test-slidy-lecture.rmd">Edit this page</a></p>
 
-          <p><a class="btn btn-primary" href="https://github.com/eriqande/rep-res-course/edit/master/lectures/test-slidy-lecture.rmd">Edit this page</a></p>
+
         </div>
 
         <div id="content" class="col-sm-8 pull-right">
           <h1>Multinomial Models</h1>
 <p>This is just some stuff I had lying around that Bruno had written and I had copied at one point to see how slidy worked.</p>
 <h2>The multinomial distribution</h2>
-<p>The binomial distribution can be generalized to allow for more than two mutually exclusive outcomes. We consider a random variable taking one of of <span class="math"><em>k</em></span> possible outcomes and count the number of occurrences of each type of outcome. The vector of such counts, <span class="math"><em>y</em></span> has the density <br /><span class="math">$$
-p(y|\theta) \propto \prod_{j=1}^k \theta_j^{y_j}~~,~~\sum_{j=1}^k \theta_j = 1.
-$$</span><br /> We assume that <span class="math">$\sum_{j=1}^k y_j = n$</span> is known.</p>
+<p>The binomial distribution can be generalized to allow for more than two mutually exclusive outcomes. We consider a random variable taking one of of <span class="math"><em>k</em></span> possible outcomes and count the number of occurrences of each type of outcome. The vector of such counts, <span class="math"><em>y</em></span> has the density <br /><span class="math"><em>p</em>(<em>y</em>∣<em>θ</em>) ∝ ∏<sub><em>j</em> = 1</sub><sup><em>k</em></sup><em>θ</em><sub><em>j</em></sub><sup><em>y</em><sub><em>j</em></sub></sup>  ,   ∑<sub><em>j</em> = 1</sub><sup><em>k</em></sup><em>θ</em><sub><em>j</em></sub> = 1.</span><br /> We assume that <span class="math">∑<sub><em>j</em> = 1</sub><sup><em>k</em></sup><em>y</em><sub><em>j</em></sub> = <em>n</em></span> is known.</p>
 <h2>The Dirichlet distribution</h2>
-<p>A generalization of the beta distribution to <span class="math"><em>k</em></span> components is given by the Dirichlet distribution <br /><span class="math">$$
-p(\theta|\alpha) \propto \prod_{j=1}^k \theta_j^{\alpha_j-1}~~,~~
-\sum_{j=1}^k \theta_j =1~~,~~\theta_j&gt;0,~ \alpha_j &gt;0,~~ j=1,...,k. 
-$$</span><br /> This distribution is a conjugate prior for the multinomial likelihood. The corresponding posterior distribution is <br /><span class="math">$$
-p(\theta|y)  \propto \prod_{j=1}^k \theta_j^{\alpha_j + y_j -1}.
-$$</span><br /> This implies that the posterior distribution is a Dirichlet with parameters <span class="math"><em>α</em><sub><em>j</em></sub> + <em>y</em><sub><em>j</em></sub>  ,   <em>j</em> = 1, …, <em>k</em></span>.</p>
+<p>A generalization of the beta distribution to <span class="math"><em>k</em></span> components is given by the Dirichlet distribution <br /><span class="math"><em>p</em>(<em>θ</em>∣<em>α</em>) ∝ ∏<sub><em>j</em> = 1</sub><sup><em>k</em></sup><em>θ</em><sub><em>j</em></sub><sup><em>α</em><sub><em>j</em></sub> − 1</sup>  ,   ∑<sub><em>j</em> = 1</sub><sup><em>k</em></sup><em>θ</em><sub><em>j</em></sub> = 1  ,   <em>θ</em><sub><em>j</em></sub> &gt; 0,  <em>α</em><sub><em>j</em></sub> &gt; 0,   <em>j</em> = 1, ..., <em>k</em>.</span><br /> This distribution is a conjugate prior for the multinomial likelihood. The corresponding posterior distribution is <br /><span class="math"><em>p</em>(<em>θ</em>∣<em>y</em>) ∝ ∏<sub><em>j</em> = 1</sub><sup><em>k</em></sup><em>θ</em><sub><em>j</em></sub><sup><em>α</em><sub><em>j</em></sub> + <em>y</em><sub><em>j</em></sub> − 1</sup>.</span><br /> This implies that the posterior distribution is a Dirichlet with parameters <span class="math"><em>α</em><sub><em>j</em></sub> + <em>y</em><sub><em>j</em></sub>  ,   <em>j</em> = 1, …, <em>k</em></span>.</p>
 <h2>Sampling from a Dirichlet</h2>
 <p>To obtain a sample from a Dirichlet <span class="math"><em>α</em> = (<em>α</em><sub>1</sub>, …, <em>α</em><sub><em>k</em></sub>)</span>, generate <span class="math"><em>k</em></span> independent gamma random variates <span class="math"><em>x</em><sub>1</sub>, …, <em>x</em><sub><em>k</em></sub></span>, with shape parameters <span class="math"><em>α</em><sub>1</sub>, …, <em>α</em><sub><em>k</em></sub></span>. Let <br /><span class="math">$$
 \theta_j = \frac{x_j}{\sum_{j=1}^k x_j}.

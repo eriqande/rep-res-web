@@ -46,19 +46,20 @@
 
       <div class="row">
         <div class="col-sm-3" id="nav">
-        <div class="well">
-          How's this site built? See all sources at the course <a href="http://github.com/eriqande/rep-res-course">repository</a> on GitHub.
-        <p><hr></p>
-        <p><a class="btn btn-primary" href="https://github.com/eriqande/rep-res-course/blob/master/_posts/2014-10-01-getting-ready-for-course.rmd">View on GitHub</a></p>
-        </div>
+          <div class="well">
+  How's this site built? See all sources at the course <a href="http://github.com/eriqande/rep-res-course">repository</a> on GitHub.
+  <p><hr></p>
+  <p><a class="btn btn-primary" href="https://github.com/eriqande/rep-res-course/blob/master/_posts/2014-10-01-getting-ready-for-course.rmd">View on GitHub</a></p>
+</div>
 
-        <h4>Page Contents</h4>
-          <ul class="list-unstyled" id="toc"></ul>
+<h4>Page Contents</h4>
+<ul class="list-unstyled" id="toc"></ul>
 
-          <hr>
-          <p><a href="http://eriqande.github.io/rep-res-web/contribute.html">How to contribute</a></p>
+<hr>
+<p><a href="http://eriqande.github.io/rep-res-web/contribute.html">How to contribute</a></p>
+<p><a class="btn btn-primary" href="https://github.com/eriqande/rep-res-course/edit/master/_posts/2014-10-01-getting-ready-for-course.rmd">Edit this page</a></p>
 
-          <p><a class="btn btn-primary" href="https://github.com/eriqande/rep-res-course/edit/master/_posts/2014-10-01-getting-ready-for-course.rmd">Edit this page</a></p>
+
         </div>
 
         <div id="content" class="col-sm-8 pull-right">
@@ -70,7 +71,7 @@
 <h2>Getting my head around forking and pull requests</h2>
 <p>Ultimately I want students to submit their completed homeworks through pull requests. And, then I would like pairs of students to comment on each other’s pull requests. I think that I can do that all on the single repository—i.e. there is no need or individuals to submit pull requests to other people’s forks of the course repo. But I am not sure how that all works (this is a serious example of learning something just days before I want to teach it!)</p>
 <p>The big questions to me now have to do with updating branches on one’s fork after the upstream repository has added a new branch. For example, if someone has already forked my repo, and then I make a new branch called <code>hw3</code> (homework 3) and I would like them to fetch that and pull it into their own <code>hw3</code> branch and then send me a pull request on that, I am not entirely clear of what the best way forward on that is.</p>
-<p>So, I am going to make myself a new GitHub account tied to my personal email so that I can test some forking stuff. And then I have a lot of reading to do, starting with <a href="https://help.github.com/categories/18/articles" class="uri">https://help.github.com/categories/18/articles</a></p>
+<p>So, I am going to make myself a new GitHub account tied to my personal email so that I can test some forking stuff. And then I have a lot of reading to do, starting with <a href="https://help.github.com/categories/18/articles">https://help.github.com/categories/18/articles</a></p>
 <p>For future reference when I have the students do it, these are the steps to setting up a GitHub account:</p>
 <ol style="list-style-type: decimal">
 <li>Go to github.com</li>
@@ -82,7 +83,7 @@
 </ol>
 <p>And that is about it. I made myself an account called <code>eca-home</code> using my stanford address. I have to use that account with FireFox, because on Chrome I am <code>eriqande</code> at GitHub.</p>
 <h3>Try Editing rep-res-course</h3>
-<p>I will try editing the index.rmd using the Edit button. So, in FireFox I went to <a href="http://eriqande.github.io/rep-res-web/" class="uri">http://eriqande.github.io/rep-res-web/</a> and hit “Edit this page”. Here is what happened:</p>
+<p>I will try editing the index.rmd using the Edit button. So, in FireFox I went to <a href="http://eriqande.github.io/rep-res-web/">http://eriqande.github.io/rep-res-web/</a> and hit “Edit this page”. Here is what happened:</p>
 <ul>
 <li>Got a page telling me I need to <code>fork this repository and propose changes</code>, with a big green button telling me to do so.</li>
 <li>It then gives a message that says: <em>You are editing a file in a project you do not have write access to. We are forking this project for you (if one does not yet exist) to write your proposed changes to. Submitting a change to this file will write it to a new branch in your fork so you can send a pull request.</em> And you can edit stuff directly write on the web.</li>
@@ -183,7 +184,7 @@ Eric At Home
 <span class="dv">2014-10-01</span> <span class="dv">13</span>:<span class="dv">06</span> /rep-res-course/--% (master) git remote -v
 origin  https:<span class="er">//</span>github.com/eca-home/rep-res-<span class="kw">course.git</span> (fetch)
 origin  https:<span class="er">//</span>github.com/eca-home/rep-res-<span class="kw">course.git</span> (push)</code></pre>
-<p>There is a good post about upstream remotes here <a href="http://felipec.wordpress.com/2013/09/01/advanced-git-concepts-the-upstream-tracking-branch/" class="uri">http://felipec.wordpress.com/2013/09/01/advanced-git-concepts-the-upstream-tracking-branch/</a> in particular the command <code>git remote -vv</code> is handy.</p>
+<p>There is a good post about upstream remotes here <a href="http://felipec.wordpress.com/2013/09/01/advanced-git-concepts-the-upstream-tracking-branch/">http://felipec.wordpress.com/2013/09/01/advanced-git-concepts-the-upstream-tracking-branch/</a> in particular the command <code>git remote -vv</code> is handy.</p>
 <h3>Hmm…wait a minute. There might be a better way to do this.</h3>
 <p>Rather than clone the fork. It might be better to clone the main repository into a master branch which will track the main (eriqande’s) repo as origin/master. Then things can be branched off origin/master. (This is what the Pro Git book seems to recommend). Let’s try that.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="dv">2014-10-01</span> <span class="dv">13</span>:<span class="dv">20</span> /git-eca-home/--% sudo rm -r rep-res-course/
