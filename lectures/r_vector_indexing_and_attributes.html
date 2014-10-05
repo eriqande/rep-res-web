@@ -14,7 +14,7 @@
 
   <body>
     <div class="navbar navbar-default navbar-static-top">
- <div class="navbar-header"><a class="navbar-brand" href="#">Brand</a>
+ <div class="navbar-header"><a class="navbar-brand" href="http://eriqande.github.io/rep-res-web/index.html">Welcome</a>
       <a class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -23,10 +23,10 @@
     </div>
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Home</a></li>
-        <li><a href="#">Link</a></li>
-        <li><a href="#">More</a></li>
-        <li><a href="#">Options</a></li>
+        <li class="active"><a href="http://eriqande.github.io/rep-res-web/syllabus.html">Syllabus</a></li>
+        <li><a href="#">Assignments</a></li>
+        <li><a href="#">Resources</a></li>
+        <li><a href="#">Results/Gallery</a></li>
       </ul>
       <div class="navbar-right">
     	<p class="navbar-text">I'm navbar-fixed-top</p>
@@ -63,7 +63,7 @@
         </div>
 
         <div id="content" class="col-sm-8 pull-right">
-          <h1 id="vectorization">Vectorization and Indexing in R</h1>
+          <h1 id="vectorization-and-indexing">Vectorization and Indexing in R</h1>
 <h2 id="bin-comp-ops">Binary Comparison Operators</h2>
 <p>These are “binary” because they involve <em>two</em> arguments.<br />Operate <em>elementwise</em> on vectors and return //logical vectors//</p>
 <pre class="sourceCode r"><code class="sourceCode r">x &lt;<span class="st"> </span>y    <span class="co"># less than</span>
@@ -152,8 +152,11 @@ x
 <pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="ot">NA</span>, T, F, T, F)
 y &lt;-<span class="st"> </span><span class="kw">c</span>(T, T, F, F, <span class="ot">NA</span>)
 x; y
+<span class="co">#&gt; [1]    NA  TRUE FALSE  TRUE FALSE</span>
 <span class="co">#&gt; [1]  TRUE  TRUE FALSE FALSE    NA</span>
 x &amp;<span class="st"> </span>y; x |<span class="st"> </span>y; <span class="kw">xor</span>(x,y)
+<span class="co">#&gt; [1]    NA  TRUE FALSE FALSE FALSE</span>
+<span class="co">#&gt; [1]  TRUE  TRUE FALSE  TRUE    NA</span>
 <span class="co">#&gt; [1]    NA FALSE FALSE  TRUE    NA</span></code></pre>
 <h2 id="math-ops">Mathematical Operators</h2>
 <p>Operate on <code>numeric</code> or <code>complex</code> mode data and return the same</p>
@@ -210,7 +213,7 @@ y&lt;-<span class="dv">2</span>
 ?sum
 ?mean</code></pre>
 <p>Builtin help on topics we have discussed today can be found at <code>?Syntax</code>, <code>?Logic</code>, <code>?Comparison</code>, <code>?Arithmetic</code>.</p>
-<p>Also, all material here is covered in parts of sections 1 through 3 in [[<a href="http:_cran.r-project.org/doc/manuals/R-intro.pdf|R-intro.pdf">http:_cran.r-project.org/doc/manuals/R-intro.pdf|R-intro.pdf</a>]] available on CRAN.</p>
+<p>Also, all material here is covered in parts of sections 1 through 3 in [[<a href="http:_cran.r-project.org/doc/manuals/R-intro.pdf|R-intro.pdf" class="uri">http:_cran.r-project.org/doc/manuals/R-intro.pdf|R-intro.pdf</a>]] available on CRAN.</p>
 <h2 id="playing-around-temp-data">A Little Play With Some Temp Data</h2>
 <p>You can download max and min temperature data for the last 28 days at Watsonville Airport: Once you have downloaded this, you can load it into your R session. You will have to tailor this according to where the file gets downloaded on your computer</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">load</span>(<span class="st">&quot;~/Downloads/sept_watsonville_temps.rda&quot;</span>)  <span class="co"># load that data in.</span>
@@ -265,8 +268,10 @@ x[<span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">1</span>,
 </ul>
 <pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">7</span>,<span class="dv">8</span>)
 x[-<span class="dv">2</span>]; x[-<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span>)]
+<span class="co">#&gt; [1] 5 7 8</span>
 <span class="co">#&gt; [1] 5 7</span>
 x[-<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">4</span>)]; x[-<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">18</span>)]
+<span class="co">#&gt; [1] 5 7</span>
 <span class="co">#&gt; [1] 5 7</span></code></pre>
 <p>You <em>cannot</em> mix positive and negative indices!</p>
 <h3>Indexing with Logical Vectors</h3>
@@ -321,6 +326,7 @@ x[<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">1</span>,
 <span class="co">#&gt; [1] 4</span>
 x[<span class="dv">10</span>] &lt;-<span class="st"> </span><span class="dv">12</span>
 x; <span class="kw">length</span>(x)
+<span class="co">#&gt;  [1]  5  4  7  8 NA NA NA NA NA 12</span>
 <span class="co">#&gt; [1] 10</span></code></pre>
 <ul>
 <li>Those NA’s don’t get overwritten by recycling. Recycling only occurs to match the length of the vector returned by the indexing operation:</li>

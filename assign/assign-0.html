@@ -14,7 +14,7 @@
 
   <body>
     <div class="navbar navbar-default navbar-static-top">
- <div class="navbar-header"><a class="navbar-brand" href="#">Brand</a>
+ <div class="navbar-header"><a class="navbar-brand" href="http://eriqande.github.io/rep-res-web/index.html">Welcome</a>
       <a class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -23,10 +23,10 @@
     </div>
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Home</a></li>
-        <li><a href="#">Link</a></li>
-        <li><a href="#">More</a></li>
-        <li><a href="#">Options</a></li>
+        <li class="active"><a href="http://eriqande.github.io/rep-res-web/syllabus.html">Syllabus</a></li>
+        <li><a href="#">Assignments</a></li>
+        <li><a href="#">Resources</a></li>
+        <li><a href="#">Results/Gallery</a></li>
       </ul>
       <div class="navbar-right">
     	<p class="navbar-text">I'm navbar-fixed-top</p>
@@ -74,11 +74,50 @@
 <li>Install Git</li>
 </ol>
 <p>Below I have explicit instructions for Macs and PC’s.</p>
+<h3>Instructions on a Mac</h3>
+<h4>Install R</h4>
+<p>I would like everyone to be running R version 3.1.0 (2014-04-10) or later. If you have that already, great. If not, download the latest version from <a href="http://cran.us.r-project.org/" class="uri">http://cran.us.r-project.org/</a> Click on the <code>Download R for (Mac) OS X</code> link on that page and choose the <code>R-3.1.1-snowleopard.pkg</code> link if you don’t have the Mavericks operating system and <code>R-3.1.1-mavericks.pkg</code> if you. Install it.</p>
+<h4>Install Rstudio</h4>
+<h3>Instructions on a PC</h3>
+<p>I don’t have a PC, so I am doing this on a fresh instance of a MS 2012 Server on Amazon’s elastic compute cluster.</p>
+<h4>Install R</h4>
+<ol style="list-style-type: decimal">
+<li>From <a href="http://cran.us.r-project.org/" class="uri">http://cran.us.r-project.org/</a> click on <code>Download R for Windows</code>.</li>
+<li>On the next page click on the <code>base</code> link, and on the next page the <code>Download R 3.1.1 for Windows</code> link.</li>
+<li>Run the installer. Click <code>Next</code> on everthing to accept the defaults.</li>
+</ol>
+<p>Once that is done you want to go back one page in your browser and then</p>
+<ol style="list-style-type: decimal">
+<li>click on the <code>Rtools</code> link. (We will end up using these to build our own packages, and also to build other people’s packages.)</li>
+<li>Click on the <code>Rtools31.exe</code> link.</li>
+<li>Run the Rtools installer and choose the default settings. (<strong>Note</strong> if you already have Cygwin you need to do something different than the default. If you already have Cygwin, though, you don’t need any handholding…)</li>
+</ol>
+<h4>Install RStudio</h4>
+<ol style="list-style-type: decimal">
+<li>Go to <a href="http://www.rstudio.com/" class="uri">http://www.rstudio.com/</a></li>
+<li>Click on the big <code>Download RStudio</code> button.</li>
+<li>Click on the <code>Desktop</code> version. 1 On the next page click <code>Download Rstudio Desktop</code></li>
+<li>Under <code>Installers for All Platforms</code> get the appropriate one for yourself (i.e. Windows) and run the installer.</li>
+<li>You can choose all the defaults.</li>
+</ol>
+<p>You can now use RStudio. However, we ought to go get git as well</p>
+<h4>Install git</h4>
+<ol style="list-style-type: decimal">
+<li>Go to <a href="http://msysgit.github.io/" class="uri">http://msysgit.github.io/</a></li>
+<li>Under where it says “we bring the awesome Git SCM to Windows” Hit the <code>Download</code> button.</li>
+<li>Run the installer. The default choices appear to be best. Go ahead and use them unless you know what you are doing. In particular, I think you should stick with using Git Bash as the shell.</li>
+</ol>
+<p>That should install fine. When you are done. Re-launch RStudio and see if it has detected git on the system.</p>
+<ol style="list-style-type: decimal">
+<li>In the RStudio menu select <code>Tools</code> -&gt; <code>Global Options</code> and on the bottom select Git/SVN.</li>
+<li>If it says (Not Found) under <code>Git executable</code> then browse for it. On my PC it was installed into <code>Program Files (x86)/Git/bin/git.exe</code>. Go ahead and choose that.</li>
+</ol>
+<ul>
+<li>after that you might have to hit Apply and then OK rather than just OK. You might also need to restart RStudio.</li>
+</ul>
 
-        </div>
-      </div>
-
-       <div id="disqus_thread"></div>
+          <hr>
+           <div id="disqus_thread"></div>
     <script type="text/javascript">
         /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
         var disqus_shortname = 'rep-res-course'; // required: replace example with your forum shortname
@@ -93,6 +132,8 @@
     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
     <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     
+        </div>
+      </div>
 
             <div class="footer">
         <hr>
