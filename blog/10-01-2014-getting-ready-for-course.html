@@ -64,11 +64,12 @@
 
         <div id="content" class="col-sm-8 pull-right">
           <h1>Getting ready for the course</h1>
-<h2>Website setup</h2>
+<p>2014-10-01</p>
+<h2 id="blog-website-setup">Website setup</h2>
 <p>I spent the better part of last night wrangling with CSS/bootstrap related things. I don’t really do any web-stuff or CSS-schmid, so there was a lot of learning (and a painful amount of ignorance) going on last night. I had a good time putting most of the components into little html snippets in the <code>_includes</code> directory and then using the Liquid <code>include</code> type tags. That makes things a lot cleaner. Then I totally frittered away an hour trying to figure out how to put some extra padding on top of the body to keep the fixed top navbar from covering up the page title. Turns out I had to wrap the <code>body { top-padding: 70px }</code> directive in some <code>&lt;style&gt;</code> tags (told you I was a total CSS noob). I finally got it to work, but then decided that a static top bar was the way to go b/c of the way I will present the “lectures” (see below).</p>
-<p>I decided that rather than render the lectures into <code>slidy</code> format or <code>ioslides</code> it would be better to just set my browser to full screen and crank up the font size. Bootstrap is so brilliant that when I do that, the mini column on the right eventually gets stacked on top of the main content in the lecture notes so I can just go through it serially. This seems way better because there are always problems with code getting chopped off in <code>slidy</code> on the right of the window, and also with losing stuff off the bottom of the slides. So, not only will it be easier, I think it will be better.</p>
+<p>I decided that rather than render the lectures into <code>slidy</code> format or <code>ioslides</code> it would be better to just set my browser to full screen and crank up the font size. Bootstrap is so brilliant that when I do that, the mini column on the left eventually gets stacked on top of the main content in the lecture notes so I can just go through it serially. This seems way better because there are always problems with code getting chopped off in <code>slidy</code> on the right of the window, and also with losing stuff off the bottom of the slides. So, not only will it be easier, I think it will be better.</p>
 <p>I do want to modify the left hand side-bar, however. Currently it doesn’t flow up the screen when scrolling. I really like the one that the Bootstrap site uses on the right hand side in its documentation section. It would be cool to get that going, and use several different levels of headers. Not sure if I will be able to pull that off, though.</p>
-<h2>Getting my head around forking and pull requests</h2>
+<h2 id="blog-head-around-forking">Getting my head around forking and pull requests</h2>
 <p>Ultimately I want students to submit their completed homeworks through pull requests. And, then I would like pairs of students to comment on each other’s pull requests. I think that I can do that all on the single repository—i.e. there is no need or individuals to submit pull requests to other people’s forks of the course repo. But I am not sure how that all works (this is a serious example of learning something just days before I want to teach it!)</p>
 <p>The big questions to me now have to do with updating branches on one’s fork after the upstream repository has added a new branch. For example, if someone has already forked my repo, and then I make a new branch called <code>hw3</code> (homework 3) and I would like them to fetch that and pull it into their own <code>hw3</code> branch and then send me a pull request on that, I am not entirely clear of what the best way forward on that is.</p>
 <p>So, I am going to make myself a new GitHub account tied to my personal email so that I can test some forking stuff. And then I have a lot of reading to do, starting with <a href="https://help.github.com/categories/18/articles" class="uri">https://help.github.com/categories/18/articles</a></p>
@@ -158,7 +159,7 @@ To https:<span class="er">//</span>github.com/eriqande/rep-res-course.git
 <span class="dv">2014-10-01</span> <span class="dv">10</span>:<span class="dv">35</span> /rep-res-course/--% (master) git branch -d eca-home-patch<span class="dv">-3</span> 
 Deleted branch eca-home-patch<span class="dv">-3</span> (was a522320).</code></pre>
 <p>OK, so, that was pretty easy. Now I just need to figure out how to instruct students to make branches and checkout homework into those branches and make good pull requests. Still not there yet, but getting my head around this.</p>
-<h2>Forking and pull requests via the command line</h2>
+<h2 id="blog-fork-commline">Forking and pull requests via the command line</h2>
 <p>OK, I now have a fork of rep-res-course at <code>eca-home</code>. Now I want to clone that locally and then update to upstream, and then make a branch and edit it and then push it up to my fork and make a pull request on that.</p>
 <p>Let’s see how that goes</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># first clone it</span>
@@ -204,8 +205,32 @@ origin  https:<span class="er">//</span>github.com/eca-home/rep-res-<span class=
 <span class="dv">2014-10-01</span> <span class="dv">13</span>:<span class="dv">40</span> /rep-res-course/--% (mock-homework<span class="dv">-1</span>) git push my-rep-res-fork mock-homework<span class="dv">-1</span> </code></pre>
 <p>After that, when I go to my <code>eca-home</code> github account. There is a big green button at the top telling me that I just pushed that branch up, and it asks me if I want to send a pull request.</p>
 <p>So, let’s press that big green button. That does just what it is supposed to do. Unfortunately, all of a sudden the colors on my screen got horribly washed out. I’m going to restart here.</p>
-<pre><code></code></pre>
+<h3>Doing a similar thing with Bookdown</h3>
+<p>I wanted to tweak a very minor thing in hadley’s bookdown package (needed it to recursively find all the .rmd files in my repository to index them into toc.yaml). So, I cloned his bookdown repository and then did this:</p>
+<pre class="sourceCode r"><code class="sourceCode r">/bookdown/--% (index-recursively) pwd
+/Users/eriq/Documents/git-others-repos/bookdown
+/bookdown/--% (master) git checkout -b index-recursively
+<span class="co"># then I made the minor changes </span>
 
+<span class="co"># then, set up remote and send it there:</span>
+/bookdown/--% (index-recursively) git remote add myfork https:<span class="er">//</span>github.com/eriqande/bookdown.git</code></pre>
+
+          <hr>
+           <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'rep-res-course'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    
         </div>
       </div>
 
