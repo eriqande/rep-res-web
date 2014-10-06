@@ -64,8 +64,200 @@
 
         <div id="content" class="col-sm-8 pull-right">
           <h1 id="rstudio-orientation">R and Rstudio Orientation</h1>
-<p>Gotta put this in there. R Console. R studio Panes…</p>
+<p>Let’s learn about:</p>
+<ol style="list-style-type: decimal">
+<li>The idea of RStudio “Projects”</li>
+<li>The layout of the RStudio IDE</li>
+<li>How the R console works</li>
+</ol>
+<h2>Rstudio…</h2>
+<ul>
+<li>Is an IDE (integrated development environment) that <em>sits on top of</em> R and makes it easier to interact with R.</li>
+<li>Organizes your work into R in neatly-contained packages of work (typically data and code) called “projects”</li>
+<li>Nothing mysterious about these—just collections of files stored together in a single directory on your computer.</li>
+</ul>
+<h3>Let’s make a new project</h3>
+<p>Do This in RStudio:</p>
+<ol style="list-style-type: decimal">
+<li>Select File -&gt; New Project</li>
+<li>Create project from: Choose “New Directory”
+<ol style="list-style-type: decimal">
+<li>Choose “Empty Project”</li>
+<li>Give the directory name as <code>project1</code></li>
+<li>and put it somewhere in your home directory (browse to where you want to put it in the “create project as subdirectory of:”)</li>
+<li>For now, unselect buttons to create a git repository or to use packrat.</li>
+<li>Hit <code>Create Project</code></li>
+</ol></li>
+</ol>
+<h3>Now Explore:</h3>
+<ul>
+<li>Notice that RStudio has started R in your console in the project directory:</li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getwd</span>()  <span class="co"># this tells you the current directory that R is in</span>
 
+<span class="co"># here is what it is on my computer:</span>
+[<span class="dv">1</span>] <span class="st">&quot;/Users/eriq/project1&quot;</span></code></pre>
+<ul>
+<li>Paste the following code into the console window and see what happens. Do not worry if you don’t know what any of it means.</li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># plot some linearly-related simulated data</span>
+<span class="kw">set.seed</span>(<span class="dv">5</span>) <span class="co"># set the random number seed</span>
+n &lt;-<span class="st"> </span><span class="dv">400</span>
+x_data &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n, <span class="dt">mean =</span> <span class="dv">100</span>, <span class="dt">sd =</span> <span class="dv">15</span>)
+y_data &lt;-<span class="st"> </span>x_data +<span class="st"> </span><span class="kw">rnorm</span>(n, <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd =</span> <span class="dv">5</span>)
+<span class="kw">plot</span>(x_data, y_data)
+fit &lt;-<span class="st"> </span><span class="kw">lm</span>(y_data ~<span class="st"> </span>x_data)
+<span class="kw">abline</span>(fit)
+
+<span class="co"># don&#39;t know what the abline function does? Check out its help:</span>
+?abline</code></pre>
+<ul>
+<li>Now we will take a tour of some of the windows
+<ul>
+<li>Environment</li>
+<li>History</li>
+<li>Plots</li>
+<li>Files</li>
+<li>Help</li>
+<li>etc</li>
+</ul></li>
+</ul>
+<h2 id="r-console">The R Console</h2>
+<h3>“Communicating” with R</h3>
+<ul>
+<li>R is an <em>interpreted</em> language, so it just reads through source code line by line and executes the instructions it finds.</li>
+<li>Contrast to <em>compiled</em> language like C in which all the source code is parsed and checked for consistency, and then binary computer instructions are made from that and optimized for speed, memory efficiency, etc.</li>
+<li>Because R goes line by line, we can work <em>interactively</em> with it</li>
+<li>You can also write programs in a text editor and then send them to R, all at once, to be interpreted.
+<ul>
+<li>This is much more reproducible than interactive work</li>
+<li>But interactive work is good for testing things, etc.</li>
+</ul></li>
+</ul>
+<h3>The R Console</h3>
+<p>This is R’s “command prompt” where you type <em>expressions</em> and, when you hit RETURN, these expressions are <em>evaluated</em> (so long as they are <em>complete</em> expressions). Here is what it looks like:</p>
+<pre class="sourceCode r"><code class="sourceCode r">&gt;</code></pre>
+<p>That little <code>&gt;</code> symbol at the beginning of the line says “R is ready to begin a new expression.” Now try entering an expression:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="dv">13+19</span>
+<span class="co">#&gt; [1] 32</span></code></pre>
+<p>It evaluated “13+19” and, by default, if “nothing is done” with the result of the evaluation, R just prints the result. We’ll talk about the significance of the [1] later.</p>
+<h3>Inserting Comments in Your Code</h3>
+<ul>
+<li>Though it doesn’t seem all that useful when working in interactive mode, you can write comments in your code.</li>
+<li>These let you point things out in your code, but not confuse the interpreter.</li>
+<li>Everything right of a <code>#</code> until the end of the line is ignored by the interpreter:</li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="dv">13+19</span> <span class="co"># Look at me! I&#39;m adding two primes</span>
+<span class="co">#&gt; [1] 32</span></code></pre>
+<h3>Command Recall</h3>
+<p>Using your up arrow will recall the expressions that have been evaluated recently by the R interpreter. This can be useful when working interactively.</p>
+<h3>A Semicolon is as good as a RETURN</h3>
+<p>You can break a line into multiple expressions that get evaluated individually by separating them with semicolons:</p>
+<pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span><span class="dv">13+19</span>; <span class="dv">12+2</span>
+[<span class="dv">1</span>] <span class="dv">32</span>
+[<span class="dv">1</span>] <span class="dv">14</span></code></pre>
+<p>When R gets to each semicolon, it evaluates the expression and then, because we aren’t doing anything else with it, it prints the result.</p>
+<h3>Incomplete Expressions Make R wait for you</h3>
+<p>If you press RETURN and R finds that the expression you typed is <em>incomplete</em> then it taps its foot and waits for you to input the rest of the expression, to make it <em>complete</em>. To show you that it is tapping its foot, R changes the prompt from <code>&gt;</code> to <code>+</code></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="dv">13</span>+<span class="st">   </span><span class="co"># This expression is incomplete!  </span>
++<span class="st">  </span><span class="dv">19</span>   <span class="co"># when I enter this, R has a complete expression and can evaluate it!</span></code></pre>
+<p>If you force R to evaluate an incomplete expression by giving it a <code>;</code> at the end of it, R will complain by giving an <em>error message</em></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="dv">13</span>+<span class="st">  </span><span class="co"># incomplete expression</span>
++<span class="st"> </span>;    <span class="co"># I don&#39;t care R! Evaluate it anyway you lousy bum!</span>
+Error:<span class="st"> </span>unexpected <span class="st">&#39;;&#39;</span> in:
+<span class="st">&quot;13+</span>
+<span class="st">;&quot;</span></code></pre>
+<p>Note that this is useful if you don’t know why your expression is incomplete and you want to start all over again anyway.</p>
+<h3>R is more than a glorified calculator</h3>
+<p>Please tell me that R does more than just adding numbers together!! Please, please!</p>
+<p>You’re in luck. Though your R expressions can be as simple as adding two numbers together, the power of R starts to be realized when you assign <em>values</em> to <em>symbols</em>, because you then can evaluate expressions involving those symbols.</p>
+<h2 id="intro-symbols">Symbols</h2>
+<ul>
+<li>A <em>symbol</em> in R is a text string in your R code that refers to an <em>object</em>. An <em>object</em> is the name given to “anything that the R interpreter might know about.” One might say that “everything in R” is an object.</li>
+<li>In vernacular, some might refer to a symbol as a <em>variable</em></li>
+<li>For R to recognize a symbol, that symbol must adhere to some standards:
+<ul>
+<li>Use only letters or numerals: (a-zA-Z0-9) as well as <code>.</code> and <code>_</code></li>
+<li>Must start with a letter or <code>.</code></li>
+</ul></li>
+</ul>
+<p>What (if anything) is wrong with each of these: <code>my.variable</code>, <code>your%variable</code>, <code>foo_bar</code>, <code>_bar_foo</code>, <code>.boing</code>, <code>Fish_lengths</code>, <code>9_treatment_results</code></p>
+<h3>Assigning Values</h3>
+<p>The special operators:<br /> <code>&lt;-</code> and <code>-&gt;</code><br />are used to <em>assign</em> values to the objects referred to by symbols.</p>
+<ul>
+<li>It is like a pointy arrow or a stick, so you can think of it is “stick this in the object”</li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="dv">13</span>    <span class="co"># leftwards assignment is typically used</span>
+<span class="dv">19</span> -&gt;<span class="st"> </span>y    <span class="co"># rightwards assignment is seldom used</span>
+z &lt;-<span class="st"> </span>x +<span class="st"> </span>y   <span class="co"># assign result of the evaluated expression</span>
+
+<span class="co"># hey! it didn&#39;t print any result!</span>
+z  <span class="co"># just type the symbol to print it</span>
+<span class="co">#&gt; [1] 32</span></code></pre>
+<ul>
+<li>If you assign a result, there isn’t anything left to print. But if you just type a symbol, the value of the object it refers to is printed. This is called “Auto Printing”.</li>
+</ul>
+<h3>R Assigns Values, not References</h3>
+<ul>
+<li>In some languages, like C, there are facilities to assign a variable to “point at” a specific area in the computer memory where the value for a symbol is stored.</li>
+<li>That is <em>emphatically not</em> what happens in R. Observe:</li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="dv">19</span>
+y &lt;-<span class="st"> </span>x
+y
+<span class="co">#&gt; [1] 19</span>
+x &lt;-<span class="st"> </span><span class="dv">13</span>
+x
+<span class="co">#&gt; [1] 13</span>
+y
+<span class="co">#&gt; [1] 19</span></code></pre>
+<p>If you assign the value of object1 to object2, the value of object2 will not change if you subsequently change the value of object1.</p>
+<h3>I Need More Than Scalars!!</h3>
+<p>Data almost always come as more than one number. If you caught a lot of fish and recorded their lengths in mm it would <em>way-totally-super-uncool</em> if you had to do this:</p>
+<pre class="sourceCode r"><code class="sourceCode r">fish1 &lt;-<span class="st"> </span><span class="dv">121</span>; fish2 &lt;-<span class="st"> </span><span class="dv">95</span>; fish3 &lt;-<span class="st"> </span><span class="dv">87</span>
+fish4 &lt;-<span class="st"> </span><span class="dv">142</span>  <span class="co"># and so on and on, so help me God!</span></code></pre>
+<p>But R has you covered here. R loves <em>vectors</em>! (one dimensional arrays), observe:</p>
+<pre class="sourceCode r"><code class="sourceCode r">fish &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">121</span>, <span class="dv">95</span>, <span class="dv">87</span>, <span class="dv">142</span>)
+fish
+<span class="co">#&gt; [1] 121  95  87 142</span></code></pre>
+<h2 id="quick-intro-to-functions">A quick word on functions</h2>
+<ul>
+<li>In the previous slide we saw the <code>c</code> function, which is the first <em>function</em> we have seen that actually looks like a function (technically <code>x+y</code> is <code>&quot;+&quot;(x,y)</code>, but let us not get into that now).</li>
+<li>In R, functions typically take the form of:<br /> <code>function_name( function_arguments )</code><br />where <code>function_name</code> must follow the requirements for symbols and the <code>function_arguments</code> could be lots of different things, as long as they make sense for the function.</li>
+<li>You pass arguments (which are typically other symbols that have some values assigned to them) to a function and the function returns a result.</li>
+</ul>
+<h3>The c() function</h3>
+<p>In</p>
+<pre class="sourceCode r"><code class="sourceCode r">fish &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">121</span>, <span class="dv">95</span>, <span class="dv">87</span>, <span class="dv">142</span>)</code></pre>
+<p>The arguments to <code>c</code> are <code>121</code>, <code>95</code>, <code>87</code>, and <code>142</code>.</p>
+<ul>
+<li>The arguments could be <em>symbols</em>, of course:</li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r">fish1 &lt;-<span class="st"> </span><span class="dv">121</span>; fish2 &lt;-<span class="st"> </span><span class="dv">95</span>; fish3 &lt;-<span class="st"> </span><span class="dv">87</span>; fish4 &lt;-<span class="st"> </span><span class="dv">142</span>
+catfish &lt;-<span class="st"> </span><span class="kw">c</span>(fish1, fish2, fish3, fish4)
+catfish
+<span class="co">#&gt; [1] 121  95  87 142</span></code></pre>
+<ul>
+<li>The <code>c</code> function simply <em>catenates</em> its arguments together and returns the result as a <em>vector</em>.</li>
+<li>R treats everything as a vector: that <code>[1]</code> in its output tells us that the next thing it prints is the first element of a vector!</li>
+</ul>
+
+          <hr>
+           <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'rep-res-course'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    
         </div>
       </div>
 

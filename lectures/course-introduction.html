@@ -64,8 +64,137 @@
 
         <div id="content" class="col-sm-8 pull-right">
           <h1 id="intro-lecture">Course Introduction</h1>
-<p>Gotta put this in there.</p>
+<h2 id="intro-welcome">Welcome and Introductions</h2>
+<h3>Who is Eric and Why is he teaching this course?</h3>
+<ul>
+<li>Statistician that specializes in genetic data</li>
+<li>Have used R (or S) since 1998, but didn’t understand it until recently
+<ul>
+<li>Was more of a C programmer</li>
+</ul></li>
+<li>Disliked R for most of the last 20 years</li>
+<li>Taught and R course two years ago
+<ul>
+<li>When I finally learned R, I learned to love it</li>
+</ul></li>
+<li>Seeing R incorporated into Reproducible Research excites me</li>
+</ul>
+<h3>What the heck is reproducible research?</h3>
+<ul>
+<li>In computational sciences and data analysis, let’s go with <strong>this definition</strong>:
+<ul>
+<li><em>the data and code used to make a finding are available and they are presented in such a way that it is (relatively) straightforward for an independent researcher to recreate the finding.</em></li>
+</ul></li>
+<li>This actually seldom happens. Consider two interesting articles by Tim Vines:
+<ul>
+<li><a href="http://www.sciencedirect.com/science/article/pii/S0960982213014000">The Availability of Research Data Declines Rapidly with Article Age</a> “<em>of 516 articles published between 2 and 22 years ago…the odds of a data set being extant fell by 17% per year.</em>”</li>
+<li><a href="http://onlinelibrary.wiley.com/doi/10.1111/j.1365-294X.2012.05754.x/full">Recommendations for utilizing and reporting population genetic analyses: the reproducibility of genetic clustering using the program structure</a> “<em>we reanalysed data sets gathered from papers using the software package ‘structure’… 30% of analyses were unable to reproduce the same number of population clusters.</em>”</li>
+</ul></li>
+<li>Scientific articles have fairly detailed methods sections, but those are typically insufficient to actually reproduce an analysis.</li>
+<li>Scientists owe it to themselves and their community to have an explicit record of all the steps in an analysis done at a computer.</li>
+</ul>
+<h3>How should we do reproducible research?</h3>
+<ul>
+<li>How do you efficiently record what it is you have done at your computer?</li>
+<li>There would be lots of ways, but we will look at using 4 tools:
+<ol style="list-style-type: decimal">
+<li>R – open source, free, industry-standard analysis software</li>
+<li>RStudio – open source, free, environment for working with R</li>
+<li>git – open source, free version control software (because research is never really linear when it is happening)</li>
+<li>GitHub – website with tools making it very easy to collaborate with people using git.</li>
+</ol></li>
+</ul>
+<h2 id="course-org">Course Organization</h2>
+<ul>
+<li>Weekly format
+<ul>
+<li>Tuesdays: R and RStudio</li>
+<li>Thursdays: How to write reports/articles using Rmarkdown. Using git and GitHub</li>
+</ul></li>
+<li>However the course is integrated!
+<ul>
+<li>Would be hard to just do Tu or just Th.</li>
+<li>We will use git to obtain and submit R homeworks, etc.</li>
+<li>This is how it works in real life too…</li>
+</ul></li>
+</ul>
+<h3>Course Website</h3>
+<ul>
+<li>Main Page: <a href="http://eriqande.github.io/rep-res-web/"><a href="http://eriqande.github.io/rep-res-web/">http://eriqande.github.io/rep-res-web/</a></a></li>
+<li>Syllabus: <a href="http://eriqande.github.io/rep-res-web/syllabus.html"><a href="http://eriqande.github.io/rep-res-web/syllabus.html">http://eriqande.github.io/rep-res-web/syllabus.html</a></a></li>
+</ul>
+<p>Note that you can see the raw rmarkdown source used to write each page.</p>
+<h2 id="course-philos">Course Philosophy</h2>
+<h3>Focus on the practical</h3>
+<ul>
+<li>Two years ago my course was focused on R as a programming language</li>
+<li>Having satisfied my curiosity about that, this year I mostly want to teach people how to use R, practically, as a useful tool</li>
+</ul>
+<h3>We have a big group!</h3>
+<ul>
+<li>Quick show of hands for NMFS Fed, NMFS Contractor, grad student, PCS, MBARI, others?</li>
+<li>How about the range of experience with R and git?</li>
+<li>Great that we have that much interest</li>
+<li>But, it will dictate a few things about the course:
+<ol style="list-style-type: decimal">
+<li>I won’t be able to answer everyone’s every question
+<ul>
+<li>“It takes a village”</li>
+</ul></li>
+<li>My vision: we are a dedicated community of researchers that will work together, helping one another become fluent in these tools. So:
+<ul>
+<li>If a practical in-class exercise, or a homework assignment seems easy to you because you are already well-versed in R, then take a moment to help someone that is being challenged by it!</li>
+<li>If you are new to all this, find someone in the class that can help you!</li>
+</ul></li>
+<li>Please add comments to the <a href="https://disqus.com/">DISQUS</a> comment boxes on each page
+<ul>
+<li>Sign up with a reasonable identifier</li>
+<li>Let’s crowd source solutions to issues that come up for people in the course!</li>
+<li>Particularly for PC users (which I am not…)</li>
+</ul></li>
+</ol></li>
+</ul>
+<h3>Your contributions are invited!</h3>
+<ul>
+<li>Every page of this course is editable</li>
+<li>If you see something that needs changing, you can do it and send me a pull request</li>
+<li>This will make much more sense after a few more weeks.</li>
+</ul>
+<h2 id="hw-and-assign">Homework/Assignments</h2>
+<ul>
+<li>There will be homework! (As long as I have time to write more…)</li>
+<li>You can’t learn these methods without <em>doing</em> and <em>using</em> them</li>
+<li>Amounts of HW should not be overwhelming.</li>
+<li>I won’t be grading everything, but:
+<ul>
+<li>I will establish “peer-review” of homework</li>
+<li>Everyone will do homework and “referee” homework</li>
+<li>Doing this will let us get intimately familiar with how to use git and GitHub.</li>
+</ul></li>
+<li>Familiar and advanced R users:
+<ul>
+<li>Please contribute assignments and homework problems</li>
+<li>Once we have gotten the rudiments of GitHub down I will make a place for you to submit new homework problems</li>
+</ul></li>
+</ul>
+<h3>Any Questions?</h3>
 
+          <hr>
+           <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'rep-res-course'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    
         </div>
       </div>
 
