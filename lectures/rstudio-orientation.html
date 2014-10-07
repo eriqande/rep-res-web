@@ -170,36 +170,48 @@ Error:<span class="st"> </span>unexpected <span class="st">&#39;;&#39;</span> in
 <p>Note that this is useful if you don’t know why your expression is incomplete and you want to start all over again anyway.</p>
 <h3>R is more than a glorified calculator</h3>
 <p>Please tell me that R does more than just adding numbers together!! Please, please!</p>
-<p>You’re in luck. Though your R expressions can be as simple as adding two numbers together, the power of R starts to be realized when you assign <em>values</em> to <em>symbols</em>, because you then can evaluate expressions involving those symbols.</p>
-<h2 id="intro-symbols">Symbols</h2>
+<p>You’re in luck. Though your R expressions can be as simple as adding two numbers together, the power of R starts to be realized when you assign <em>values</em> to <em>objects</em>, because you then can evaluate expressions involving those objects.</p>
+<h2>Objects vs Symbols</h2>
+<p><strong>Warning This Little Section is Sort of Superfluous and Likely Confusing</strong></p>
+<p><strong>You needn’t read this bit…</strong></p>
+<p>Hard core R people who trip out on the many cool meta-language features of R are likely to want to draw a distinction between <em>objects</em> (think of them as places in computer memory where values are stored) and <em>symbols</em>, which are the names the programmer gives to objects to access them (for example, the name <code>fit</code> several sections back). This is useful, but for a first course in R, it will probably suffice to just think in terms of <em>objects</em> and use the word “object” to refer to the computer instantiation of something that can hold a value <em>and</em> for the name that the programmer gives to it (i.e. <code>fit</code>).</p>
+<h2 id="intro-objects">Objects</h2>
 <ul>
-<li>A <em>symbol</em> in R is a text string in your R code that refers to an <em>object</em>. An <em>object</em> is the name given to “anything that the R interpreter might know about.” One might say that “everything in R” is an object.</li>
-<li>In vernacular, some might refer to a symbol as a <em>variable</em></li>
-<li>For R to recognize a symbol, that symbol must adhere to some standards:
+<li>An <em>object</em> is the name given to “anything that the R interpreter might know about.” One might say that “everything in R” is an object.</li>
+<li>In vernacular, some might refer to an object as a <em>variable</em></li>
+<li>Examples:</li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="dv">1</span>:<span class="dv">10</span>  <span class="co"># x is the name of an object that holds a vector 1, 2, 3, ..., 10</span>
+fit &lt;-<span class="st"> </span><span class="kw">lm</span>(y_data ~<span class="st"> </span>x_data) <span class="co"># fit is an object holding the output of a linear model</span>
+
+<span class="co"># for that matter, y_data and x_data are objects.</span></code></pre>
 <ul>
-<li>Use only letters or numerals: (a-zA-Z0-9) as well as <code>.</code> and <code>_</code></li>
-<li>Must start with a letter or <code>.</code></li>
+<li>If you want to give a name to an object and refer to it in your code, you must adhere to a few simple standards. You must:
+<ul>
+<li>use only letters or numerals: (a-zA-Z0-9) as well as <code>.</code> and <code>_</code></li>
+<li>start the object’s name with a letter or with <code>.</code></li>
 </ul></li>
 </ul>
-<p>What (if anything) is wrong with each of these: <code>my.variable</code>, <code>your%variable</code>, <code>foo_bar</code>, <code>_bar_foo</code>, <code>.boing</code>, <code>Fish_lengths</code>, <code>9_treatment_results</code></p>
+<p>QUIZ: What (if anything) is wrong with each of these potential object names: <code>my.variable</code>, <code>your%variable</code>, <code>foo_bar</code>, <code>_bar_foo</code>, <code>.boing</code>, <code>Fish_lengths</code>, <code>9_treatment_results</code></p>
 <h3>Assigning Values</h3>
-<p>The special operators:<br /> <code>&lt;-</code> and <code>-&gt;</code><br />are used to <em>assign</em> values to the objects referred to by symbols.</p>
+<p>The special operators:<br /> <code>&lt;-</code> and <code>-&gt;</code><br />are used to <em>assign</em> values to the objects.</p>
 <ul>
-<li>It is like a pointy arrow or a stick, so you can think of it is “stick this in the object”</li>
+<li>These are like pointy arrows or sticks, so you can think of them as “stick this value in the object”</li>
 </ul>
 <pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="dv">13</span>    <span class="co"># leftwards assignment is typically used</span>
 <span class="dv">19</span> -&gt;<span class="st"> </span>y    <span class="co"># rightwards assignment is seldom used</span>
 z &lt;-<span class="st"> </span>x +<span class="st"> </span>y   <span class="co"># assign result of the evaluated expression</span>
 
 <span class="co"># hey! it didn&#39;t print any result!</span>
-z  <span class="co"># just type the symbol to print it</span>
+z  <span class="co"># just type the object to print it</span>
 <span class="co">#&gt; [1] 32</span></code></pre>
 <ul>
-<li>If you assign a result, there isn’t anything left to print. But if you just type a symbol, the value of the object it refers to is printed. This is called “Auto Printing”.</li>
+<li>If you assign a result, there isn’t anything left to print. But if you just type an object’s name, the value of the object is printed. This is called “Auto Printing”.</li>
+<li>Note that <code>-&gt;</code> is very seldom used in programs. It was more useful back in the days when people did a lot of interactive work with R.</li>
 </ul>
 <h3>R Assigns Values, not References</h3>
 <ul>
-<li>In some languages, like C, there are facilities to assign a variable to “point at” a specific area in the computer memory where the value for a symbol is stored.</li>
+<li>In some languages, like C, there are facilities to assign a variable to “point at” a specific area in the computer memory where the value of an object is stored. Then, if the value in that area of memory changes, you get that new value when you extract it using the variable that points at that area of memory.</li>
 <li>That is <em>emphatically not</em> what happens in R. Observe:</li>
 </ul>
 <pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="dv">19</span>
@@ -211,9 +223,9 @@ x
 <span class="co">#&gt; [1] 13</span>
 y
 <span class="co">#&gt; [1] 19</span></code></pre>
-<p>If you assign the value of object1 to object2, the value of object2 will not change if you subsequently change the value of object1.</p>
+<p>If you assign the value of <code>object1</code> to <code>object2</code>, the value of <code>object2</code> will not change if you subsequently change the value of <code>object1</code>.</p>
 <h3>I Need More Than Scalars!!</h3>
-<p>Data almost always come as more than one number. If you caught a lot of fish and recorded their lengths in mm it would <em>way-totally-super-uncool</em> if you had to do this:</p>
+<p>Data almost always come as more than one number. If you caught a lot of fish and recorded their lengths in mm it would be <em>way-totally-super-uncool</em> if you had to do this:</p>
 <pre class="sourceCode r"><code class="sourceCode r">fish1 &lt;-<span class="st"> </span><span class="dv">121</span>; fish2 &lt;-<span class="st"> </span><span class="dv">95</span>; fish3 &lt;-<span class="st"> </span><span class="dv">87</span>
 fish4 &lt;-<span class="st"> </span><span class="dv">142</span>  <span class="co"># and so on and on, so help me God!</span></code></pre>
 <p>But R has you covered here. R loves <em>vectors</em>! (one dimensional arrays), observe:</p>
@@ -223,17 +235,17 @@ fish
 <h2 id="quick-intro-to-functions">A quick word on functions</h2>
 <ul>
 <li>In the previous slide we saw the <code>c</code> function, which is the first <em>function</em> we have seen that actually looks like a function (technically <code>x+y</code> is <code>&quot;+&quot;(x,y)</code>, but let us not get into that now).</li>
-<li>In R, functions typically take the form of:<br /> <code>function_name( function_arguments )</code><br />where <code>function_name</code> must follow the requirements for symbols and the <code>function_arguments</code> could be lots of different things, as long as they make sense for the function.</li>
-<li>You pass arguments (which are typically other symbols that have some values assigned to them) to a function and the function returns a result.</li>
+<li>In R, functions typically take the form of:<br /> <code>function_name( function_arguments )</code><br />where <code>function_name</code> must follow the requirements for names of objects and the <code>function_arguments</code> could be lots of different things (objects or values), as long as they make sense for the function.</li>
+<li>You pass arguments (which are typically other objects that have some values assigned to them) to a function and the function returns a result.</li>
 </ul>
 <h3>The c() function</h3>
 <p>In</p>
 <pre class="sourceCode r"><code class="sourceCode r">fish &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">121</span>, <span class="dv">95</span>, <span class="dv">87</span>, <span class="dv">142</span>)</code></pre>
 <p>The arguments to <code>c</code> are <code>121</code>, <code>95</code>, <code>87</code>, and <code>142</code>.</p>
 <ul>
-<li>The arguments could be <em>symbols</em>, of course:</li>
+<li>The arguments could be <em>objects</em>, of course:</li>
 </ul>
-<pre class="sourceCode r"><code class="sourceCode r">fish1 &lt;-<span class="st"> </span><span class="dv">121</span>; fish2 &lt;-<span class="st"> </span><span class="dv">95</span>; fish3 &lt;-<span class="st"> </span><span class="dv">87</span>; fish4 &lt;-<span class="st"> </span><span class="dv">142</span>
+<pre class="sourceCode r"><code class="sourceCode r">fish1 &lt;-<span class="st"> </span><span class="dv">121</span>; fish2 &lt;-<span class="st"> </span><span class="dv">95</span>; fish3 &lt;-<span class="st"> </span><span class="dv">87</span>; fish4 &lt;-<span class="st"> </span><span class="dv">142</span>;
 catfish &lt;-<span class="st"> </span><span class="kw">c</span>(fish1, fish2, fish3, fish4)
 catfish
 <span class="co">#&gt; [1] 121  95  87 142</span></code></pre>
