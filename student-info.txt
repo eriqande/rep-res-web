@@ -1,0 +1,173 @@
+
+name: Colleen Petrik
+github: cpetrik
+email: colleenpetrik@gmail.com
+
+name: Rosalee Ramer
+github: wildflowermt
+email: piano4girl@gmail.com
+
+name: Melissa Monk
+github: mad4mocha
+email: melissa.hedges.monk@gmail.com
+
+name: Shannon Johnson
+github: sjohnson216
+email: sjohnson@mbari.org
+
+name: Brian Spence
+github: okisutch99
+email: brian.spence@noaa.gov
+
+name: Tommy Williams
+github: sczTWilliams
+email: tommy.williams@noaa.gov
+
+name: Rodrigo    Beas
+github: rbeas
+email:  rbeas@ucsc.edu
+
+name: L. Maxine Tarjan
+github: mtarjan
+email: ltarjan@ucsc.edu
+
+name: Aaron Mamula
+github: aaronmams
+email: aaron.mamula@noaa.gov
+
+name: Lyndsey Lefebvre
+github: lslefebvre
+email: lyndsey.lefebvre@noaa.gov
+
+name: Rebecca Miller
+github: RebeccaMiller
+email: Rebecca.Miller@noaa.gov
+
+name: Sara John
+github: SaraJohn
+email: sara.john@noaa.gov
+
+name: Megan Sabal
+github: msabal
+email: megan.sabal@noaa.gov
+
+name: Ellen M. Campbell
+github: EllenMCampbell
+email: ellen.campbell@noaa.gov
+
+name: E.J. Dick
+github: ej-noaa
+email: edward.dick@noaa.gov
+
+name: Ann-Marie K. Osterback
+github: osterback
+email: annmarieosterback@gmail.com
+
+name: Roy Qi
+github: q3fishboy
+email: rqi@ucsc.edu
+
+name: Cara Thow
+github: cthow
+email: cara.mira@gmail.com
+
+name: Derek A. Hamersly
+github: thederber
+email: derek@coho.org
+
+name: Aidan Glina
+github: AidanGlina
+email: aidanglina@gmail.com
+
+name: David C. Fryxell
+github: dcfryxell
+email: dcfryxell@gmail.com
+
+name: Xi He
+github: Userxh101
+email: xi.he@noaa.gov
+
+Name: Dan Hasselman
+github: Alosa
+email: dhasselm@ucsc.edu
+
+name: Will Satterthwaite
+github: willsatterthwaite
+email: will.satterthwaite@noaa.gov
+
+name: Eric Danner
+github: emdanner
+email: eric.danner@noaa.gov
+
+name: Keith Sakuma
+github: R0ckf1sh
+email: keith.sakuma@noaa.gov
+
+name: Maya Friedman
+github: mafs11
+email: maya.a.friedman@gmail.com
+
+name: Nicole Trenchard
+github: trenchie
+email: nicoletrenchard@gmail.com
+
+name: Isaac Zinman
+github: zinisaac
+email: zinisaac@gmail.com
+
+name: Andrew Pike
+github: AndrewPike
+email: andrew.pike@noaa.gov
+
+name: Colin Nicol
+github: cnicol
+email: colin.nicol@noaa.gov
+
+name: Duran Fiack
+github: dfiack
+email: dfiack@ucsc.edu
+
+name: Shanae Allen
+github: sdallen
+email: shanae.allen@noaa.gov
+
+name: Cyril Michel
+github: CyrilMichel
+email: cyril.michel@noaa.gov
+
+name: Alicia Abadía-Cardoso
+github: alyabadia
+email: alyabadia@gmail.com
+
+name: Hailey Loehde-Woolard
+github: haileywoolard
+email: hailey.woolard@gmail.com
+
+name: Sabrina Beyer
+github: sabrinabey
+email: sabrina.beyer@noaa.gov
+
+name: Abraham L. Borker
+github: abeborker
+email: abeborker@gmail.com
+
+name:  Cassie
+github: ccolumbu
+email:  cassiecolumbus@gmail.com
+
+name: Rachel Zuercher
+github: rachelzuercher
+email: rzuerche@ucsc.edu
+
+name: David Boughton
+github: vidbo
+email: David.Boughton@noaa.gov
+
+name: Ryan Driscoll
+githup: RMDriscoll
+email: RMDriscoll@gmail.com
+
+name: devon 'dude' pearse
+github: devonpearse
+email: devon.pearse@noaa.gov
+
