@@ -171,3 +171,9 @@ name: devon 'dude' pearse
 github: devonpearse
 email: devon.pearse@noaa.gov
 
+name: flora cordoleani
+github: floracordoleani
+email: fcordole@ucsc.edu
+
+
+
