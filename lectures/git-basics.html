@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Git Basics &middot; Reproducible Research.</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="http://eriqande.github.io/rep-res-web/www/bootstrap.min.css" rel="stylesheet">
+    <link href="http://eriqande.github.io/rep-res-web/www/highlight.css" rel="stylesheet">
+
+    <link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700'
+      rel='stylesheet' type='text/css'>
+  </head>
+
+  <body>
+    <div class="navbar navbar-default navbar-static-top">
+ <div class="navbar-header"><a class="navbar-brand" href="http://eriqande.github.io/rep-res-web">RepResCourse</a>
+      <a class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="http://eriqande.github.io/rep-res-web/syllabus.html">Syllabus</a></li>
+        <li><a href="http://eriqande.github.io/rep-res-web/resources.html">Resources</a></li>
+        <li><a href="http://eriqande.github.io/rep-res-web/blogs.html">Instructor Blog</a></li>
+        <li><a href="#">Results/Gallery</a></li>
+      </ul>
+      <div class="navbar-right">
+    	<p class="navbar-text">I'm navbar-fixed-top</p>
+  	  </div>
+    </div>
+</div>
+
+
+    <div class="container">
+            <!-- The title and stuff is here -->
+      <div class="masthead">
+        <p> </p>
+        <p> </p>
+        <h3 class="muted"><a href="http://eriqande.github.io/rep-res-web/">Reproducible Research Course</a> <small>by Eric C. Anderson for (NOAA/SWFSC)</small></h3>
+        <hr>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-3" id="nav">
+          <div class="well">
+  How's this site built? See all sources at the course <a href="http://github.com/eriqande/rep-res-course">repository</a> on GitHub.
+  <p><hr></p>
+  <p><a class="btn btn-primary" href="https://raw.githubusercontent.com/eriqande/rep-res-course/master/lectures/git-basics.rmd">Raw on GitHub</a></p>
+</div>
+
+<h4>Page Contents</h4>
+<ul class="list-unstyled" id="toc"></ul>
+
+<hr>
+<p><a href="http://eriqande.github.io/rep-res-web/contribute.html">How to contribute</a></p>
+<p><a class="btn btn-primary" href="https://github.com/eriqande/rep-res-course/edit/master/lectures/git-basics.rmd">Edit this page</a></p>
+
+
+        </div>
+
+        <div id="content" class="col-sm-8 pull-right">
+          <h1 id="git-basics">Git Basics</h1>
+<p>Goals for Today:</p>
+<ul>
+<li>Explain what git is (and how it is different than GitHub)</li>
+<li>Introduce the sha-1 hash (for fun!)</li>
+<li>Get familiar with RStudio’s very convenient interface to git
+<ul>
+<li>staging files</li>
+<li>unstaging file</li>
+<li>viewing differences between staged and unstaged files</li>
+<li>committing files</li>
+<li>viewing the commit history</li>
+</ul></li>
+</ul>
+<h2 id="vcs">An overview of Version Control Systems (VCS)</h2>
+<ul>
+<li>Git is a type of VCS</li>
+<li>At its crudest, a VCS is a system that provides a way of saving and restoring earlier versions of a file.</li>
+</ul>
+<h3>A typical VCS for a non-computer programmer</h3>
+<ul>
+<li>Start writing <code>my_manuscript.doc</code>.</li>
+<li>At some point worry that MS Word is going to eat your file, so,
+<ul>
+<li>Make a “backup” called <code>my_manuscript_A.doc</code></li>
+</ul></li>
+<li>Then, before overhauling the discussion, save the current file as <code>my_manuscript_B.doc</code>.</li>
+<li>Email it to your coauthors and then have a series of files with other extensions such as the initials of their names when they edit them and send them back.</li>
+<li>Etc.</li>
+<li>Disadvantages:
+<ul>
+<li>Hard to find a good record of what is in each version. (Wait! I liked the introduction I wrote three weeks ago…where is that now?)</li>
+<li>A terrible system if you have multiple files that are dependent on one another (for example, figures in your document, or scripts and data sets if you have a programming project.)</li>
+<li>If you decide that you want to merge the changes you made to the discussion in version <code>_C</code> with the edits on the introduction in version <code>_K</code>, it is hard.</li>
+</ul></li>
+</ul>
+<h3>Other popular VCS systems</h3>
+<ul>
+<li>rcs, cvs, subversion, etc.</li>
+<li>These all had a “Centralized” model:
+<ul>
+<li>You set up a repository on a server that has the full version history,</li>
+<li>then each person working on it gets a copy of the current version, and nothing more.</li>
+<li>They can submit changes back to the central repository which tries to deal with conflicting submissions.</li>
+<li>You need to be online to do most operations.</li>
+</ul></li>
+<li>I used a few of these, and missed them for a few weeks when I switched to Git, but then never looked back and couldn’t imagine using them again.</li>
+</ul>
+<h3>The Git model — Distributed Version Control</h3>
+<ul>
+<li>Git stores “snapshots” of your collection of files in a repository</li>
+<li>For our work, the “collection of files” will be “the stuff in your RStudio project”
+<ul>
+<li>Another reason it is nice to keep everything you need for a project together in a “project directory”</li>
+</ul></li>
+<li>When you clone or repository, <strong>you</strong> get the whole version history</li>
+<li>When someone else clones that repository, <strong>they also</strong> get the whole version history.</li>
+<li>Git has well-developed features for merging changes made in different repositories
+<ul>
+<li>But, for today, we will talk mostly of a single user interacting with git.</li>
+</ul></li>
+</ul>
+<h2>Git versus GitHub</h2>
+<ul>
+<li>They are not the same thing!</li>
+<li>Git is software that you can run on your own machine for doing version on a repository.
+<ul>
+<li>It can be <em>entirely</em> local. i.e. only on your hard drive and nowhere else.</li>
+<li>This is super-useful for any project, because solid version control is great to have.</li>
+</ul></li>
+<li>GitHub is a website, with tools powered by Git (and many that they brewed up themselves) that makes it very, very easy to share git repositories with people all over the place.</li>
+</ul>
+<h3>Is everything on GitHub public?</h3>
+<ul>
+<li>No! Many companies use GitHub to host their proprietary code
+<ul>
+<li>They just have to pay for that…</li>
+</ul></li>
+<li>By default, you can put anything on GitHub for free as long as it is under a fairly free-use (open source type) license and it is available to anyone</li>
+<li>If you want a private repository, as an academic affiliate you just have to ask and GitHub will give you up to 5 private repos for free.</li>
+<li>Also, they have a sweet <a href="https://github.com/blog/1900-the-best-developer-tools-now-free-for-students">“student pack”</a></li>
+</ul>
+<h2 id="git-thru-rstudio">Using git through RStudio</h2>
+<ul>
+<li>Now we can do a few things together to see how this works.</li>
+<li>Most of the action is in the Git Pane…</li>
+<li>Today we will talk about:
+<ul>
+<li>Staging files (preparing them to be <strong>committed</strong>)</li>
+<li>Committing files (putting them into the repository)</li>
+</ul></li>
+</ul>
+<h3>One final configuration before starting:</h3>
+<ul>
+<li>Open the shell (Tools-&gt;Shell…) and issue these two commands, replacing the name “John Doe” with yours, and his email with yours.
+<ul>
+<li><p>Use the email address that you gave to GitHub.</p>
+<pre><code>git config --global user.name &quot;John Doe&quot;
+git config --global user.email johndoe@example.com</code></pre>
+<p>You only need to do this once.</p></li>
+</ul></li>
+</ul>
+<h3>The status/staging panel</h3>
+<ul>
+<li>Studio keeps git constantly scanning the project directory to find any files that have changed or which are new.</li>
+<li>By clicking a file’s little “check-box” you can stage it.<br /></li>
+<li>Some symbols:
+<ul>
+<li><strong>Blue-M</strong>: a file that is already under version control that has been modified.</li>
+<li><strong>Orange-?</strong>: a file that is not under version control (yet…)</li>
+<li><strong>Green-A</strong>: a file that was not under version control, but which has been staged to be committed.</li>
+<li><strong>Red-D</strong>: a file under version control has been deleted. To make it really disappear, you have to stage its disappearance and commit.</li>
+<li><strong>Purple-R</strong> a file that was renamed. (Note that git in Rstudio seems to be figuring this out on its own.)</li>
+</ul></li>
+</ul>
+<h3>The Diff window</h3>
+<ul>
+<li>Shows what has changed between the last committed version of a file and its current state.</li>
+<li>Holy smokes this is convenient</li>
+<li>(Note: all this output is available from the command line, but the Rstudio interface is very nice, IMHO)</li>
+</ul>
+<h3>Making a Commit</h3>
+<ul>
+<li>Super easy:
+<ul>
+<li>After staging the files you want to commit…</li>
+<li>Write a brief message (first line short, then as much after that as you want) and hit the commit button.</li>
+</ul></li>
+</ul>
+<h3>The History window</h3>
+<ul>
+<li>Easy inspection past commits.</li>
+<li>See what changes were made at each commit.</li>
+</ul>
+<h2 id="git-play">Go for it everyone!</h2>
+<ul>
+<li>Make some changes and commit them yourselves.<br /></li>
+<li>Add some new files to the project, and commit those.</li>
+<li>Get familiar with the diff window.</li>
+<li>Check the history after a few commits.</li>
+</ul>
+<h2 id="git-how">How does git store and keep track of things</h2>
+<ul>
+<li>Everything is stored in the .git folder inside the RStudio project.</li>
+<li>The “working copy” gets checkout out of there</li>
+<li>Committed changes are recorded to the directory</li>
+</ul>
+<h3>What is inside of the .git directory?</h3>
+<p>We can use R to list the files. My <code>rep-res-course</code> repository that hold all the materials for this course looks like this:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># check out this file-system command in R</span>
+<span class="kw">dir</span>(<span class="dt">path =</span> <span class="st">&quot;.git&quot;</span>, <span class="dt">all.files =</span> <span class="ot">TRUE</span>, <span class="dt">recursive =</span> <span class="ot">TRUE</span>)</code></pre>
+<p>The output from that command looks something like this:</p>
+<pre><code>  [1] &quot;#MERGE_MSG#&quot;                                       &quot;COMMIT_EDITMSG&quot;                                   
+  [3] &quot;COMMIT_EDITMSG~&quot;                                   &quot;config&quot;                                           
+  [5] &quot;description&quot;                                       &quot;FETCH_HEAD&quot;                                       
+  [7] &quot;HEAD&quot;                                              &quot;hooks/applypatch-msg.sample&quot;                      
+  [9] &quot;hooks/commit-msg.sample&quot;                           &quot;hooks/post-update.sample&quot;                         
+ [11] &quot;hooks/pre-applypatch.sample&quot;                       &quot;hooks/pre-commit.sample&quot;                          
+ [13] &quot;hooks/pre-push.sample&quot;                             &quot;hooks/pre-rebase.sample&quot;                          
+ [15] &quot;hooks/prepare-commit-msg.sample&quot;                   &quot;hooks/update.sample&quot;                              
+ [17] &quot;index&quot;                                             &quot;info/exclude&quot;                                     
+ [19] &quot;logs/HEAD&quot;                                         &quot;logs/refs/heads/gh-pages&quot;                         
+ [21] &quot;logs/refs/heads/master&quot;                            &quot;logs/refs/remotes/origin/gh-pages&quot;                
+ [23] &quot;logs/refs/remotes/origin/master&quot;                   &quot;objects/00/906f99e192ff64b4e9e9a0e5745b0a4f841cbd&quot;
+ [25] &quot;objects/01/ab18d4ce04fb06532bb06ed579218fef89d478&quot; &quot;objects/02/74554e0b574b9beb2144f26ad3925830056870&quot;
+ [27] &quot;objects/03/2d224bf78798e8b9765af6d8768ade14694a9d&quot; &quot;objects/04/03d552ab37b0bcaeebed0ac3068d669261c456&quot;
+ [29] &quot;objects/04/4a12f8ccc12a4a5ba84ab2bf5a1ae751feea6f&quot; &quot;objects/04/9ec3065bb0434ded671fa83af5ade803bc11a1&quot;
+ [31] &quot;objects/04/ea8efb1367727b081dea87e63818be0a4d02f0&quot; &quot;objects/05/b22ecc373d5058e36d7ca773a4475c46daef77&quot;
+ [33] &quot;objects/07/8831b46c9b63e8c2d50b79304ed05de9274c28&quot; &quot;objects/07/b57af2a0cbd0545a6cd3e93f10cc5d768e42ba&quot;
+ [35] &quot;objects/08/674e6e4d534b3424e2629510d20bb6d1b0be94&quot; &quot;objects/08/8b282d5b978dc1ff6eef3871d3fb3a9256246a&quot;
+ [37] &quot;objects/09/565dcd10d7adc0551783b443e8fd71486b3997&quot; &quot;objects/09/6828a0cfb96f30d6e99cfc04a5c1686b9e318c&quot;
+ [39] &quot;objects/0a/30fe678abc342c58daab0ad42163b371babda0&quot; &quot;objects/0a/b71109dae6e5711755feddfb06b81b13766496&quot;
+ [41] &quot;objects/0b/442fdfc183783537985c17151ae3483fa00cf6&quot; &quot;objects/0b/c0451fd0e7081a7db05fdd38b12870bdcabd13&quot;
+ [43] &quot;objects/0c/0f7cf8c73d901795dad4bd5f504c53c3bf2093&quot; &quot;objects/0d/14a7a2a19ffc3b9820f011e3270c965a5fefce&quot;
+ [45] &quot;objects/0e/35cfb4d55e52d27083b8d2eccab9296b920d76&quot; &quot;objects/0e/7bba5882077a8b00a76d3eabe6b23cadc658e6&quot;
+ [47] &quot;objects/0e/8abf4cc0885a727ee2459fdbb272828e267cc4&quot; &quot;objects/0f/1f3f7be7787d5d44dc1155f3b7a44eddc9f0be&quot;
+ [49] &quot;objects/10/54d2e7a9baf61618521c522b15db40855b3431&quot; &quot;objects/11/7d874e1616500b5fba51b9f0ee1e8d0fbe1dc2&quot;
+ [51] &quot;objects/11/c33cc1d5c8de7c7cbf7257b7d32f7ca3d458ef&quot; &quot;objects/14/1ccea514e106e20eef47b791a23e036d1fa1d2&quot;
+ [53] &quot;objects/15/cc3a6f15dadb3446ad0af34a3ecde8d81d65f9&quot; &quot;objects/15/ddaf45bf00c3ef2d8f499ebd6dc3a86bf9c3ab&quot;
+ [55] &quot;objects/16/0c9386dfa9707d81fbbbcc52f0c7638703f9a9&quot; &quot;objects/16/8ee93b6a4612dbd76bc06a49460df9f9f6c41b&quot;</code></pre>
+<p><strong>Yikes!</strong></p>
+<h3>How does git know a file has changed?</h3>
+<ul>
+<li>Does it just look at the modification date?</li>
+<li>NO! It “fingerprints” every file, so it knows when it has changed from the most recent committed version.
+<ul>
+<li>Demonstration. Change a file. Save, then undo the change and save again…Git knows the file has been changed back to its “former self”</li>
+</ul></li>
+<li>SHA-1 hashes. We will learn more about those later.<br /></li>
+<li>You will see things like <code>ed00c10ae6cf7bcc35d335d2edad7e71bc0f6770</code> all over in Git-land.</li>
+<li>You can treat them as very specific names for different commits.</li>
+</ul>
+<h3>What should I keep under version control?</h3>
+<ul>
+<li>General rule: don’t keep derived products.
+<ul>
+<li>i.e. If you have and Rmd file that creates an html file, there isn’t much need to put the html file under version control with git, because you can just regenerate it by Knitting the Rmd file.</li>
+</ul></li>
+</ul>
+<h3>How can I make git ignore certain files?</h3>
+<ul>
+<li>The <code>.gitignore</code> file!</li>
+<li>File names (and patterns) in the <code>.gitignore</code> file are ignored <em>recursively</em> (down into subdirectories), by default.</li>
+<li>Files won’t be ignored if they are already in the repository.</li>
+<li>Example: <code>*.html</code></li>
+</ul>
+
+          <hr>
+           <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'rep-res-course'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    
+        </div>
+      </div>
+
+            <div class="footer">
+        <hr>
+        <p>
+          <small>
+            Authored by Eric C. Anderson working as a Federal employee.  Content on this website is a government work in the public domain in the U.S. and under the CC0 1.0 internationally. Templates and plugins to build the site are modified from Hadley Wickham's <a href="https://github.com/hadley/adv-r/">Advanced R</a> website. Powered by <a href="http://jekyllrb.com/">jekyll</a>,
+          <a href="http://yihui.name/knitr/">knitr</a>, and
+          <a href="http://johnmacfarlane.net/pandoc/">pandoc</a>. Source
+          available on <a href="https://github.com/eriqande/rep-res-course/">github</a>.
+          </small>
+        </p>
+      </div>
+
+
+    </div> <!-- /container -->
+
+  <script src="//code.jquery.com/jquery.js"></script>
+  <script src="http://eriqande.github.io/rep-res-web/www/bootstrap.min.js"></script>
+  <script src="http://eriqande.github.io/rep-res-web/www/toc.js"></script>
+  <script type="text/javascript"
+    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  </body>
+</html>
+

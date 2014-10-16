@@ -175,5 +175,27 @@ name: flora cordoleani
 github: floracordoleani
 email: fcordole@ucsc.edu
 
+name: Martha Arciniega
+github: MarthaMykiss
+email: Martha.Arciniega@noaa.gov
 
+name: Mark Henderson
+github: mjhend
+email: markjhend@gmail.com
+
+name: Nicholas Demetras
+github: ndemetras
+email: nicholas.demetras@noaa.gov
+
+name: Rosemary Kosaka
+github: rakosaka
+email: rosemary.kosaka@noaa.gov
+
+name: Stella Villegas
+github: stellavillegas
+email: stella.villegas@gmail.com
+
+name: Abram B. Fleishman
+github: abfleishman
+email: abfleishman@gmail.com
 
