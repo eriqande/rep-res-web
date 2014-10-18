@@ -91,19 +91,27 @@
 <pre><code>git checkout -b ex-test</code></pre>
 and hit RETURN.</li>
 </ol></li>
-<li><strong>Within RStudio, open the file <code>exercises/trial_homework.rmd</code> and add your answers</strong>
+<li><strong>Within RStudio, open the file <code>exercises/trial_homework.rmd</code>. And knit it on your computer</strong>
+<ul>
+<li>Doing this will give you a nice file with a quick table of contents to get to any of the specific exercises/problems.</li>
+</ul></li>
+<li><strong>Write your answers into the <code>submit_answer</code> functions in the file <code>exercises/trial_homework.rmd</code>.</strong>
 <ol style="list-style-type: decimal">
 <li>(see “<strong>How to Write Answers</strong>” below)</li>
 <li>Note that you can knit the whole document to see your answers given. You can also evaluate all the R code in a chunk to get the objects in it loaded into your R global environment. See the options under the menu item <code>Code --&gt; Run Region</code> and get familiar with the keyboard shortcuts.</li>
 </ol></li>
-<li><strong>Commit your completed homework file, and push your</strong> <code>ex-test</code> <strong>branch up to your fork of Eric’s</strong> <code>rep-res-course</code> <strong>repository</strong>.
+<li><strong>Commit your completed homework file</strong>
+<ol style="list-style-type: decimal">
+<li>When you are finished entering your answers to your satisfaction, commit the file <code>exercises/trial_homework.rmd</code>. Don’t commit changes in any other files, and don’t add the html file or any other intermediates to the repository. Remember, you should be on the branch named <code>ex-test</code>.</li>
+</ol></li>
+<li><strong>Push your <code>ex-test</code> branch up to to your fork of Eric’s <code>rep-res-course</code> repository</strong>.
 <ol style="list-style-type: decimal">
 <li><em>If you have not already done so, create a fork of the</em> <code>rep-res-course</code> <em>repository on your own GitHub account</em>:
 <ul>
 <li>Go to <a href="https://github.com/" class="uri">https://github.com/</a> and make sure you are signed in with your username. (If you aren’t signed in it will ask you to do so.)</li>
 <li>Go to the <code>rep-res-course</code> on GitHub: <a href="https://github.com/eriqande/rep-res-course" class="uri">https://github.com/eriqande/rep-res-course</a> and hit the <strong>Fork</strong> button in the upper right.</li>
 </ul></li>
-<li><p><em>If you have not already done so, tell git on your computer to link your</em> <code>ex-test</code> <em>branch with your forked version of the <code>rep-res-course</code> repository</em>. Use Tools –&gt; Shell… to get a command prompt, then replace GITHUBNAME with your GitHub username in the following:</p>
+<li><p><em>If you have not already done so, tell git on your computer to establish your forked version of the <code>rep-res-course</code> repository (on GitHub) as a remote repository that git on your computer can link to through the name <code>my_rr_fork</code></em>. Use Tools –&gt; Shell… to get a command prompt, then replace GITHUBNAME with your GitHub username in the following:</p>
 <pre><code>git remote add my_rr_fork https://github.com/GITHUBNAME/rep-res-course.git</code></pre>
 You shouldn’t have to do this more than once this quarter.</li>
 <li><p>Push your answers up to your fork of the repository. Give this command in the “Tools –&gt; Shell” command shell:</p>
