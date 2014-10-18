@@ -11,12 +11,12 @@
 ./assign/assign-3.rmd: assignment-3
 ./blogs.rmd: []
 ./contribute.rmd: []
-./exercise_instructions/trial_homework_instructions.rmd: instructions-ex-test
 ./exercises/trial_homework.rmd: ex-test-start
 ./index.rmd:
 - welcome
 - welcome-about-site
 - welcome-links
+./instructions_for_exercises/trial_homework.rmd: []
 ./junk/r_vector_indexing_and_attributes.rmd: []
 ./lectures/atomic-data-types-and-coercion.rmd:
 - r-data-types-and-coercion
