@@ -64,13 +64,15 @@
 
         <div id="content" class="col-sm-8 pull-right">
           <h1>Instructions for “Trial Homework”</h1>
-<p>To do this homework, you have to:</p>
+<p>There are three main steps to doing this homework: I) getting the homework and preparing your R environment, II) writing in the answers, III) turning the homework in.</p>
+<p>Since this is a course on R <em>and</em> git and GitHub, we will be using git and GitHub to do I and III. Detailed instructions follow. The workflow will become familiar eventually.</p>
+<h2 id="get-and-prep">I. Getting the Homework and Prepping</h2>
 <ol style="list-style-type: decimal">
 <li><strong>Pull down the master branch of the rep-res-course repository to get this assignment</strong>:
 <ul>
 <li><em>If you don’t already have a clone of the rep-res-course repository</em>, clone the rep-res-course repository:
 <ol style="list-style-type: decimal">
-<li>Choose File-&gt;New Project</li>
+<li>In RStudio, Choose File-&gt;New Project</li>
 <li>When asked, choose “Create Project from Version Control”</li>
 <li>Then when asked choose “Git”</li>
 <li>For repository URL use this: <a href="https://github.com/eriqande/rep-res-course.git" class="uri">https://github.com/eriqande/rep-res-course.git</a></li>
@@ -78,7 +80,7 @@
 <li>Hit “Create Project”.</li>
 </ol></li>
 <li><em>If you already have a clone of the rep-res-course repository</em>
-<ol style="list-style-type: decimal">
+<ol start="7" style="list-style-type: decimal">
 <li>Open up the RStudio project <code>rep-res-course.Rproj</code></li>
 <li>If you are not on branch <code>master</code> in that project (check the upper right corner of the “Git” pane—if it does not say “master” in small letters you are not on the master branch), then <strong>commit any changes on whatever branch you are on</strong> (If you don’t commit changes on the branch you are on, then they will get carried back to the master branch and could cause problems pulling.), and then checkout the master branch (this can be done by clicking on the branch name in the upper right of the Git pane and choosing <code>master</code>. (But be sure you <strong>do not</strong> choose <code>origin/master</code>)).<br /></li>
 <li>Once on the <code>master</code> branch click the “pull button at the top of the Git pane.</li>
@@ -91,47 +93,24 @@
 <pre><code>git checkout -b ex-test</code></pre>
 and hit RETURN.</li>
 </ol></li>
-<li><strong>Within RStudio, open the file <code>exercises/trial_homework.rmd</code>. And knit it on your computer</strong>
-<ul>
-<li>Doing this will give you a nice file with a quick table of contents to get to any of the specific exercises/problems.</li>
-</ul></li>
-<li><strong>Write your answers into the <code>submit_answer</code> functions in the file <code>exercises/trial_homework.rmd</code>.</strong>
-<ol style="list-style-type: decimal">
-<li>(see “<strong>How to Write Answers</strong>” below)</li>
-<li>Note that you can knit the whole document to see your answers given. You can also evaluate all the R code in a chunk to get the objects in it loaded into your R global environment. See the options under the menu item <code>Code --&gt; Run Region</code> and get familiar with the keyboard shortcuts.</li>
-</ol></li>
-<li><strong>Commit your completed homework file</strong>
-<ol style="list-style-type: decimal">
-<li>When you are finished entering your answers to your satisfaction, commit the file <code>exercises/trial_homework.rmd</code>. Don’t commit changes in any other files, and don’t add the html file or any other intermediates to the repository. Remember, you should be on the branch named <code>ex-test</code>.</li>
-</ol></li>
-<li><strong>Push your <code>ex-test</code> branch up to to your fork of Eric’s <code>rep-res-course</code> repository</strong>.
-<ol style="list-style-type: decimal">
-<li><em>If you have not already done so, create a fork of the</em> <code>rep-res-course</code> <em>repository on your own GitHub account</em>:
-<ul>
-<li>Go to <a href="https://github.com/" class="uri">https://github.com/</a> and make sure you are signed in with your username. (If you aren’t signed in it will ask you to do so.)</li>
-<li>Go to the <code>rep-res-course</code> on GitHub: <a href="https://github.com/eriqande/rep-res-course" class="uri">https://github.com/eriqande/rep-res-course</a> and hit the <strong>Fork</strong> button in the upper right.</li>
-</ul></li>
-<li><p><em>If you have not already done so, tell git on your computer to establish your forked version of the <code>rep-res-course</code> repository (on GitHub) as a remote repository that git on your computer can link to through the name <code>my_rr_fork</code></em>. Use Tools –&gt; Shell… to get a command prompt, then replace GITHUBNAME with your GitHub username in the following:</p>
-<pre><code>git remote add my_rr_fork https://github.com/GITHUBNAME/rep-res-course.git</code></pre>
-You shouldn’t have to do this more than once this quarter.</li>
-<li><p>Push your answers up to your fork of the repository. Give this command in the “Tools –&gt; Shell” command shell:</p>
-<pre><code>git push my_rr_fork ex-test</code></pre>
-You might have to provide your GitHub username and password.</li>
-<li>Go back to your GitHub site and press the large green button asking you if you want to make a pull request.</li>
-<li><p>Sit back and enjoy a moment. You’re done! I’m sure this seems like a crazy sequence of things to do. Do it enough, however, and it starts to feel very natural. Stick with it!</p></li>
-</ol></li>
-</ol>
-<h3>How to write answers</h3>
-<ol style="list-style-type: decimal">
-<li>I have written an R package that facilitates answer submission and collation (and subsquent analysis) of homework responses. You will need that package. To get it, use the <code>devtools</code> package. You will have to install the <code>devtools</code> package only if you don’t already have it. So,
+<li><strong>Make sure you have the necessary packages installed.</strong> I have written an R package, <code>rrhw</code>, that facilitates answer submission and collation (and subsquent analysis) of homework responses. You will need that package. To get it, you will use the <code>devtools</code> package:
 <ul>
 <li><p>issue the following expression in the R console <em>at least once this quarter</em>:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;devtools&quot;</span>)</code></pre></li>
-<li><p>and do this in the R console (only one time) when you start working on the homework:</p>
-<pre class="sourceCode r"><code class="sourceCode r">devtools::<span class="kw">install_github</span>(<span class="st">&quot;eriqande/rrhw&quot;</span>)</code></pre></li>
+<li><p>and do this in the R console (only one time) when you start working on a new homework set:</p>
+<pre class="sourceCode r"><code class="sourceCode r">devtools::<span class="kw">install_github</span>(<span class="st">&quot;eriqande/rrhw&quot;</span>)</code></pre>
+<p>This ensures that you will have the latest version of <code>rrhw</code>.</p></li>
 </ul></li>
-<li>Find the R code blocks within <code>exercises/trial_homework.rmd</code> that follow the sections that look like:<br /><strong>Trial Homework: #3, “problem-name”</strong>.<br />You won’t actually see that text written in <code>exercises/trial_homework.rmd</code> because it is generated automatically. However, you can find the R code chunk that is named, in this case, <code>problem-name</code> by searching for that string in <code>exercises/trial_homework.rmd</code> file.</li>
-<li><p>Read the problem, evaluate the lines in the R code chunk and maybe look at some objects, and read the questions in the comments and then put your answer inside the curly braces within the <code>submit_answer</code> function. For example, a question that looks like this:</p>
+<li><strong>Check that everything is working.</strong> Within RStudio, open the file <code>exercises/trial_homework.rmd</code>. And knit it on your computer
+<ul>
+<li>Doing this will give you a nice file with a quick table of contents to get to any of the specific exercises/problems.</li>
+<li>Notice that the homework problems in the knitted html file are inside R code blocks under headings that look like: <strong>Trial Homework: #3, “problem-name”</strong></li>
+</ul></li>
+</ol>
+<h2>II. Figure out the answers to the problems and write them in</h2>
+<ol style="list-style-type: decimal">
+<li><p>You will be inserting your answers into the appropriate places in the Rmarkdown file <code>exercises/trial_homework.rmd</code>. As stated above, each problem “lives” in an R code block which, <em>in the knitted HTML output</em> is below a heading that might look like <strong>Trial Homework: #3, “problem-name”</strong>. The exact heading string does not appear in the file <code>exercises/trial_homework.rmd</code> because it is generated by some R code. However, you can find the appropriate code chunk by searching for the name of the problem (<code>problem-name</code> in the above example) in the file <code>exercises/trial_homework.rmd</code>.</p></li>
+<li><p>Read the problem in each R-code chunk. Evaluate the lines in the R code chunk and maybe look at some objects, and read the questions in the comments and then <strong>put your answer inside the curly braces within the <code>submit_answer</code> function</strong>. For example, a question that looks like this:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># x is a vector constructed like this:</span>
 x &lt;-<span class="st"> </span><span class="dv">1</span>:<span class="dv">10</span>
 
@@ -164,8 +143,45 @@ x &lt;-<span class="st"> </span><span class="dv">1</span>:<span class="dv">10</s
   x[<span class="kw">c</span>(F,T)] &lt;-<span class="st"> </span>-<span class="dv">99</span>
   x
 })</code></pre>
-<p>Notice how the last line in the entry to <code>submit_answer</code> is <code>x</code>, which returns its value to the <code>submit_answer</code> function.</p></li>
+Notice how the last line in the entry to <code>submit_answer</code> is <code>x</code>, which returns its value to the <code>submit_answer</code> function.</li>
+<li>Some notes:
+<ul>
+<li>Please don’t accidentally erase the curly braces in the <code>submit_answer</code> function.</li>
+<li>You can also evaluate all the R code in a chunk to get the objects in it loaded into your R global environment. And you can evaluate all the R code in <code>exercises/trial_homework.rmd</code> into your R global environment too. See the options under the menu item <code>Code --&gt; Run Region</code> and get familiar with the keyboard shortcuts. This is useful for testing things.</li>
+<li>If you knit the file you can see the value that your answers return in the knitted output.</li>
+</ul></li>
 </ol>
+<h2>III. When Done, Submit the Homework via a GitHub Pull Request</h2>
+<ol style="list-style-type: decimal">
+<li><strong>After writing in all your answers, make sure that <code>exercises/trial_homework.rmd</code> still knits correctly.</strong> Try not to submit homework that you can’t knit without an error.</li>
+<li><strong>Commit your completed homework file</strong>
+<ol style="list-style-type: decimal">
+<li>When you are finished entering your answers to your satisfaction, commit the file <code>exercises/trial_homework.rmd</code>. (i.e. go to the Git pane and stage the file and then hit the commit button, write a message, etc.) <strong>Don’t commit changes in any files other than <code>exercises/trial_homework.rmd</code></strong>, and don’t add the html file or any other intermediates to the repository. Remember, you should be on the branch named <code>ex-test</code>.</li>
+</ol></li>
+<li><strong>Push your <code>ex-test</code> branch up to your fork of Eric’s <code>rep-res-course</code> repository</strong>.
+<ol style="list-style-type: decimal">
+<li><em>If you have not already done so, create a fork of the</em> <code>rep-res-course</code> <em>repository on your own GitHub account</em>:
+<ul>
+<li>Go to <a href="https://github.com/" class="uri">https://github.com/</a> and make sure you are signed in with your username. (If you aren’t signed in it will ask you to do so.)</li>
+<li>Go to the <code>rep-res-course</code> on GitHub: <a href="https://github.com/eriqande/rep-res-course" class="uri">https://github.com/eriqande/rep-res-course</a> and hit the <strong>Fork</strong> button in the upper right.</li>
+</ul></li>
+<li><p><em>If you have not already done so, tell git on your computer to establish your forked version of the <code>rep-res-course</code> repository (on GitHub) as a remote repository that git on your computer can link to through the name <code>my_rr_fork</code></em>. Use <code>Tools --&gt; Shell...</code> in RStudio to get a command prompt, then replace GITHUBNAME with your GitHub username in the following:</p>
+<pre><code>git remote add my_rr_fork https://github.com/GITHUBNAME/rep-res-course.git</code></pre>
+You shouldn’t have to do this more than once this quarter.</li>
+<li><p>Push your answers up to your fork of the repository. Give this command in RStudio’s “Tools –&gt; Shell” command shell:</p>
+<pre><code>git push my_rr_fork ex-test</code></pre>
+You might have to provide your GitHub username and password.</li>
+<li>Go back to <em>your</em> GitHub page and:
+<ol style="list-style-type: decimal">
+<li>find the little green button at the upper left of the page.</li>
+<li>To the right of that green button is a “branch” button. Click it and make sure that you choose the <code>ex-test</code> branch.<br /></li>
+<li>Now, click the little green button.<br /></li>
+<li>Review the changes you have made (shown in the next screen) and click the large “Create Pull Request” button.</li>
+<li>This takes you to a new page where you can write some comments on your pull request, if you want. Then click the large green button (to create the pull request), and Voila! You should be done.</li>
+</ol></li>
+</ol></li>
+</ol>
+<p>I’m sure this seems like a crazy sequence of things to do. Do it enough, however, and it starts to feel very natural. Stick with it!</p>
 
           <hr>
            <div id="disqus_thread"></div>

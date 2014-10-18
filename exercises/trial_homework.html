@@ -63,11 +63,12 @@
         </div>
 
         <div id="content" class="col-sm-8 pull-right">
-          <p><strong>Instructions For completing this homework can be found</strong> <a href="http://eriqande.github.io/rep-res-web/instructions_for_exercises/inst-trial_homework.rmd">HERE</a></p>
+          <p><strong>Instructions For completing this homework can be found</strong> <a href="http://eriqande.github.io/rep-res-web/instructions_for_exercises/inst-trial_homework.html">HERE</a></p>
 <h2 id="ex-test-start">Problems to be done for “Trial Homework”</h2>
-<p>These are just a few easy ones because I want to get this to Anthony quickly</p>
+<p>These are just four fairly basic homework problems to do with indexing. The main focus of this homework is getting all the GitHub logistics worked out.</p>
+<p>Good luck with this. I recommend working in groups and helping each other out.</p>
 <h3 id="word-comps">Trial Homework, #1: “word-comps”</h3>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># here are some github names</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># here are some github names of people taking the course</span>
 gnames &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;cpetrik&quot;</span>, <span class="st">&quot;wildflowermt&quot;</span>, <span class="st">&quot;mad4mocha&quot;</span>, <span class="st">&quot;sjohnson216&quot;</span>, <span class="st">&quot;okisutch99&quot;</span>, <span class="st">&quot;sczTWilliams&quot;</span>, <span class="st">&quot;rbeas&quot;</span>, <span class="st">&quot;mtarjan&quot;</span>, <span class="st">&quot;aaronmams&quot;</span>, <span class="st">&quot;lslefebvre&quot;</span>)
 
 <span class="co"># return a logical vector that gives TRUE for each name that comes after</span>
@@ -104,23 +105,6 @@ ords &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="k
 <span class="co"># return the first 4 github names that were signed up</span>
 <span class="kw">submit_answer</span>({
 
-})</code></pre>
-<h3 id="a-namey-thing">Trial Homework, #5: “a-namey-thing”</h3>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># similar set up as before</span>
-<span class="kw">set.seed</span>(<span class="dv">5</span>) <span class="co"># set random number generator</span>
-<span class="co"># here are some github names</span>
-gnames &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;cpetrik&quot;</span>, <span class="st">&quot;wildflowermt&quot;</span>, <span class="st">&quot;mad4mocha&quot;</span>, <span class="st">&quot;sjohnson216&quot;</span>, <span class="st">&quot;okisutch99&quot;</span>, <span class="st">&quot;sczTWilliams&quot;</span>, <span class="st">&quot;rbeas&quot;</span>, <span class="st">&quot;mtarjan&quot;</span>, <span class="st">&quot;aaronmams&quot;</span>, <span class="st">&quot;lslefebvre&quot;</span>)
-<span class="co"># here is the simulated order in which they signed up for GitHub</span>
-ords &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="kw">length</span>(gnames))
-
-<span class="co"># but this time we put names on the ord vector:</span>
-<span class="kw">names</span>(ords) &lt;-<span class="st"> </span>gnames
-
-<span class="co"># now, not using the gnames vector directly, but rather</span>
-<span class="co"># the vector names(ord), give me all the github names</span>
-<span class="co"># that signed up after the first 4</span>
-<span class="kw">submit_answer</span>({
-  
 })</code></pre>
 
           <hr>
