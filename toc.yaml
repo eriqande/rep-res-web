@@ -4,12 +4,14 @@
 - blog-head-around-forking
 - blog-fork-commline
 ./_posts/2014-10-05-configurable-options-for-website.rmd: []
+./_posts/2014-10-17-managing-100s-of-pull-requests-for-homeworks.rmd: trying-git-pulls
 ./assign/assign-0.rmd: assignment-0
 ./assign/assign-1.rmd: assignment-1
 ./assign/assign-2.rmd: assignment-2
 ./assign/assign-3.rmd: assignment-3
 ./blogs.rmd: []
 ./contribute.rmd: []
+./exercise_instructions/trial_homework_instructions.rmd: instructions-ex-test
 ./exercises/trial_homework.rmd: ex-test-start
 ./index.rmd:
 - welcome
