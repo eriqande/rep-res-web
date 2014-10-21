@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Thoughts on Trial Homework &middot; Reproducible Research.</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="http://eriqande.github.io/rep-res-web/www/bootstrap.min.css" rel="stylesheet">
+    <link href="http://eriqande.github.io/rep-res-web/www/highlight.css" rel="stylesheet">
+
+    <link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700'
+      rel='stylesheet' type='text/css'>
+  </head>
+
+  <body>
+    <div class="navbar navbar-default navbar-static-top">
+ <div class="navbar-header"><a class="navbar-brand" href="http://eriqande.github.io/rep-res-web">RepResCourse</a>
+      <a class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="http://eriqande.github.io/rep-res-web/syllabus.html">Syllabus</a></li>
+        <li><a href="http://eriqande.github.io/rep-res-web/resources.html">Resources</a></li>
+        <li><a href="http://eriqande.github.io/rep-res-web/blogs.html">Instructor Blog</a></li>
+        <li><a href="#">Results/Gallery</a></li>
+      </ul>
+      <div class="navbar-right">
+    	<p class="navbar-text">I'm navbar-fixed-top</p>
+  	  </div>
+    </div>
+</div>
+
+
+    <div class="container">
+            <!-- The title and stuff is here -->
+      <div class="masthead">
+        <p> </p>
+        <p> </p>
+        <h3 class="muted"><a href="http://eriqande.github.io/rep-res-web/">Reproducible Research Course</a> <small>by Eric C. Anderson for (NOAA/SWFSC)</small></h3>
+        <hr>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-3" id="nav">
+          <div class="well">
+  How's this site built? See all sources at the course <a href="http://github.com/eriqande/rep-res-course">repository</a> on GitHub.
+  <p><hr></p>
+  <p><a class="btn btn-primary" href="https://raw.githubusercontent.com/eriqande/rep-res-course/master/lectures/trial-homework-thoughts.rmd">Raw on GitHub</a></p>
+</div>
+
+<h4>Page Contents</h4>
+<ul class="list-unstyled" id="toc"></ul>
+
+<hr>
+<p><a href="http://eriqande.github.io/rep-res-web/contribute.html">How to contribute</a></p>
+<p><a class="btn btn-primary" href="https://github.com/eriqande/rep-res-course/edit/master/lectures/trial-homework-thoughts.rmd">Edit this page</a></p>
+
+
+        </div>
+
+        <div id="content" class="col-sm-8 pull-right">
+          <h1 id="trial-homework-thoughts">Comments and thoughts on Homework #1 (Trial Homework)</h1>
+<h2>Preliminaries</h2>
+<h3>First off!</h3>
+<ol style="list-style-type: decimal">
+<li>Woo-hoo! Way to go everyone who got those in!</li>
+<li>Woo-hoo! Way to go everyone who is still working on it!</li>
+</ol>
+<p>I’m pumped by how many people made their first pull request.</p>
+<h3>What does a pull request look like to me?</h3>
+<ul>
+<li>Check it out!
+<ul>
+<li>I get an email and gmail is github-aware</li>
+<li>I can see the chnanges that you have made</li>
+<li>I can comment, etc.</li>
+</ul></li>
+<li>You can all do this too! Just go to <a href="https://github.com/eriqande/rep-res-course">https://github.com/eriqande/rep-res-course</a> and find the pull requests button.
+<ul>
+<li>In fact, if you aren’t sure how to do the homework or what the best answer is, feel free to browse what other people have done and get ideas.
+<ul>
+<li>I don’t consider this cheating—especially if you view everyone’s responses with a scientific attitude. You’ll be learning about GitHub and reviewing lots of R code.</li>
+<li>Keep in mind that some suggested answers you see from other people might not be optimal.</li>
+<li>If you see that someone has made a mistake and want to let them know, just comment on their commit.</li>
+</ul></li>
+</ul></li>
+<li>Note, please keep your pull requests <strong>Open</strong>. That way my scripts can fetch your work easily.</li>
+<li>I will <strong>Close</strong> them when we are done with them. You can always Re-open them.</li>
+</ul>
+<h3>What if I want to change an answer?</h3>
+<ul>
+<li>By all means, feel free. This is where GitHub really excels.</li>
+<li>Just make your changes, commit them, and push them up and the pull request should be automatically updated (I think…)</li>
+</ul>
+<h3>My responses data base</h3>
+<p>Show it to them. View(ans)</p>
+<h2>General comments from what I saw</h2>
+<p>It is great to have everyone’s responses. Here are some comments that should be helpful to everyone.</p>
+<h3>Strive for Economy of characters</h3>
+<p>When you are writing code, usually, but not always) shorter is going to be</p>
+<ol style="list-style-type: decimal">
+<li>easier to read</li>
+<li>easier to debug</li>
+<li>easier to maintain</li>
+</ol>
+<p>As long as it clearly expresses the intent of the program.</p>
+<p>Along those lines, (intermixed with some of my OCD code-style ideas) some guidelines are:</p>
+<ol style="list-style-type: decimal">
+<li><p>You don’t have to define intermediate variables. Sometimes it is helpful to break up long calculation with some intermediates, but not always. So:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># this is preferred</span>
+gnames &gt;<span class="st"> &quot;github&quot;</span>
+
+<span class="co"># this makes unnecessary variable assignments</span>
+a &lt;-<span class="st"> &quot;github&quot;</span>
+b &lt;-<span class="st"> </span>a &lt;<span class="st"> </span>gnames
+b
+
+<span class="co"># this also makes unnecessary variable assignments</span>
+y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;github&quot;</span>)
+x &lt;-<span class="st"> </span>gnames &gt;<span class="st"> </span>y
+x</code></pre>
+The important take home is that an <em>expression</em> basically behaves like a <em>variable</em> anywhere in R.</li>
+<li><p>Character vectors don’t have to be a single character, so you can say what you want!</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># this is preferred</span>
+gnames &gt;<span class="st"> &quot;github&quot;</span>
+
+<span class="co"># this is not so precise.  Might work in a certain</span>
+<span class="co"># problem, but is not general:</span>
+gnames &gt;<span class="st"> &quot;g&quot;</span></code></pre></li>
+<li><p>You don’t have to repeat the question in the answer:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># here are some github names of people taking the course</span>
+gnames &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;cpetrik&quot;</span>, <span class="st">&quot;wildflowermt&quot;</span>, <span class="st">&quot;mad4mocha&quot;</span>, <span class="st">&quot;sjohnson216&quot;</span>, <span class="st">&quot;okisutch99&quot;</span>, <span class="st">&quot;sczTWilliams&quot;</span>, <span class="st">&quot;rbeas&quot;</span>, <span class="st">&quot;mtarjan&quot;</span>, <span class="st">&quot;aaronmams&quot;</span>, <span class="st">&quot;lslefebvre&quot;</span>)
+
+<span class="co"># return a logical vector that gives TRUE for each name that comes after</span>
+<span class="co"># the word &quot;github&quot; alphabetically</span>
+<span class="kw">submit_answer</span>({
+gnames &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;cpetrik&quot;</span>, <span class="st">&quot;wildflowermt&quot;</span>, <span class="st">&quot;mad4mocha&quot;</span>, <span class="st">&quot;sjohnson216&quot;</span>, <span class="st">&quot;okisutch99&quot;</span>, <span class="st">&quot;sczTWilliams&quot;</span>, <span class="st">&quot;rbeas&quot;</span>, <span class="st">&quot;mtarjan&quot;</span>, <span class="st">&quot;aaronmams&quot;</span>, <span class="st">&quot;lslefebvre&quot;</span>)
+b &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;github&quot;</span>)
+gnames &gt;<span class="st"> </span>b
+})</code></pre></li>
+<li><p>If doing comparisons, put the variable on the left and the constant (if there is one) on the right:</p>
+<pre class="sourceCode r"><code class="sourceCode r">gnames &gt;<span class="st"> &quot;github&quot;</span>  <span class="co"># eric prefers this</span>
+<span class="st">&quot;github&quot;</span> &lt;<span class="st"> </span>gnames  <span class="co"># rather than this</span></code></pre></li>
+<li>Some things aren’t necessary. They aren’t wrong, but they are not economical and make code harder to read. The top few from the last homework:
+<ol style="list-style-type: decimal">
+<li><p>If it is a vector, you don’t have to put <code>c()</code> around it to make it a vector:</p>
+<pre class="sourceCode r"><code class="sourceCode r">y &lt;-<span class="st"> </span><span class="kw">c</span>(gnames[x])  <span class="co"># gnames[x] is a vector already.</span>
+y &lt;-<span class="st"> </span>gnames[x]     <span class="co"># same things as above, but preferred</span></code></pre>
+The <code>c()</code> function is for <em>catenating</em> vectors, (but beware of “growing vectors”, see below.)</li>
+<li><p>Logical vectors index as logical vectors. They don’t have to be wrapped in <code>which()</code>. The function <code>which(LL)</code> returns the indexes for which the logical vector <code>LL</code> is <code>TRUE</code>. Many people wrap their logical vectors in it. Don’t.</p>
+<pre class="sourceCode r"><code class="sourceCode r">gnames[<span class="kw">which</span>(gnames &gt;<span class="st"> &quot;github&quot;</span>)] &lt;-<span class="st"> &quot;zzz&quot;</span>  <span class="co"># unnecessary which</span>
+gnames[gnames &gt;<span class="st"> &quot;github&quot;</span>] &lt;-<span class="st"> &quot;zzz&quot;</span>   <span class="co"># same thing and simpler</span></code></pre></li>
+<li><p>Also, if it is a logical vector, you need not coerce it to a logical—it already is:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">as.logical</span>(gnames &gt;<span class="st"> &quot;github&quot;</span>)  <span class="co"># unnecessary coercion</span>
+gnames &gt;<span class="st"> &quot;github&quot;</span> <span class="co"># the &gt; comparison operator returns a logical vector anyway</span></code></pre></li>
+<li><p>Get comfortable with precedence</p>
+<pre class="sourceCode r"><code class="sourceCode r">isAfterGithub &lt;-<span class="st"> </span>(gnames &gt;<span class="st"> &quot;github&quot;</span>) <span class="co"># parentheses unnecessary</span>
+isAfterGithub &lt;-<span class="st"> </span>gnames &gt;<span class="st"> &quot;github&quot;</span>   <span class="co"># same as above but easier to read</span>
+gnames &gt;<span class="st"> &quot;github&quot;</span>  <span class="co"># best: no intermediate assignment when not needed</span></code></pre></li>
+</ol></li>
+</ol>
+<h3>Don’t use a for loop if the vectorized operation will get you there</h3>
+<p>This was one of the hardest things for me as a C programmer, and I suspect that python programmers might find it a difficult too.</p>
+<ul>
+<li><p>Remember. R is a vectorized language. If you give it a vector it wants to operate elementwise on every element in that vector. This means that quite often you needn’t write for loops for operations that you do have to write for loops for in C or python.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># this is concise and precise (and computationlly efficient)</span>
+gnames &lt;<span class="st"> &quot;github&quot;</span>
+
+<span class="co"># this is how a C programmer things about it:</span>
+x &lt;-<span class="st"> </span><span class="kw">c</span>()   <span class="co"># make an empty vector</span>
+for (name in gnames) { <span class="co"># let name cycle over the values in gname</span>
+    if (name &gt;<span class="st"> &quot;github&quot;</span>)  <span class="co"># test each value</span>
+        x &lt;-<span class="st"> </span><span class="kw">c</span>(x, <span class="ot">TRUE</span>) <span class="co"># if it is true, &quot;grow&quot;&quot; x with a TRUE</span>
+    else x &lt;-<span class="st"> </span><span class="kw">c</span>(x, <span class="ot">FALSE</span>) <span class="co"># if it if FALSE &quot;grow&quot; x with a FALSE</span>
+}
+x <span class="co"># return x</span></code></pre>
+The latter is clearly harder to write, harder to maintain, and easier to hide bugs in than the former.</li>
+<li>BUT, did you know that it is also orders of magnitude slower in R?
+<ul>
+<li>Try this at home, comparing 10^5 numbers:</li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="dv">10</span>^<span class="dv">5</span>, <span class="dt">mean=</span><span class="fl">1.0</span>, <span class="dt">sd=</span><span class="dv">5</span>)  <span class="co"># make 10^5 numbers</span>
+
+<span class="co"># test if any are greater than 2.</span>
+
+<span class="co"># the fast, vectorized way</span>
+g2_fast &lt;-<span class="st"> </span>x &gt;<span class="st"> </span><span class="dv">2</span>
+
+<span class="co"># slower for-loop way</span>
+gt_slow &lt;-<span class="st"> </span><span class="kw">c</span>() 
+for(i in <span class="dv">1</span>:<span class="kw">length</span>(x)) {
+  gt_slow &lt;-<span class="st"> </span><span class="kw">c</span>(gt_slow, x[i]&gt;<span class="dv">2</span>)
+}
+
+<span class="co"># see that you get the same result with either method:</span>
+<span class="kw">all</span>(g2_fast ==<span class="st"> </span>gt_slow)
+<span class="co"># but clearly the vectorized operation is faster</span></code></pre>
+<p>The much maligned “slowness” of R, is sometimes attributable to not doing vectorized operations.</p></li>
+</ul>
+
+          <hr>
+           <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'rep-res-course'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    
+        </div>
+      </div>
+
+            <div class="footer">
+        <hr>
+        <p>
+          <small>
+            Authored by Eric C. Anderson working as a Federal employee.  Content on this website is a government work in the public domain in the U.S. and under the CC0 1.0 internationally. Templates and plugins to build the site are modified from Hadley Wickham's <a href="https://github.com/hadley/adv-r/">Advanced R</a> website. Powered by <a href="http://jekyllrb.com/">jekyll</a>,
+          <a href="http://yihui.name/knitr/">knitr</a>, and
+          <a href="http://johnmacfarlane.net/pandoc/">pandoc</a>. Source
+          available on <a href="https://github.com/eriqande/rep-res-course/">github</a>.
+          </small>
+        </p>
+      </div>
+
+
+    </div> <!-- /container -->
+
+  <script src="//code.jquery.com/jquery.js"></script>
+  <script src="http://eriqande.github.io/rep-res-web/www/bootstrap.min.js"></script>
+  <script src="http://eriqande.github.io/rep-res-web/www/toc.js"></script>
+  <script type="text/javascript"
+    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  </body>
+</html>
+

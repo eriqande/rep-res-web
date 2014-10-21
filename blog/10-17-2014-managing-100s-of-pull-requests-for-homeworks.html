@@ -164,6 +164,25 @@ hint: If you are planning to push out a new local branch that
 hint: will track its remote counterpart, you may want to use
 hint: &quot;git push -u&quot; to set the upstream config as you push.</code></pre>
 <p>That is not so great.</p>
+<h3>A Function</h3>
+<p>It is a few days later, but this seemed a good place to put this. Here is some R code showing a function I wrote that will grab data on open pull requests and put them in a data frame:</p>
+<pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span>open.ex.test &lt;-<span class="st"> </span>rrhw::<span class="kw">grab_open_pull_requests</span>(<span class="st">&quot;^ex-test$&quot;</span>)
+
+Updating eriqande/rep-res-course
+Checking for forks in need of fetching
+Open Pull Requests for eriqande/rep-res-course
+<span class="dv">10</span>   <span class="dv">10</span>/<span class="dv">19</span> My homework from <span class="dv">19</span> Oct <span class="dv">2014</span>        abfleishman:ex-test                               
+<span class="dv">9</span>    <span class="dv">10</span>/<span class="dv">19</span> All the answers                     dtsavage:ex-test                                  
+Read <span class="dv">1</span> item
+Read <span class="dv">1</span> item
+
+&gt;<span class="st"> </span>open.ex.test
+  state pr_num pr_date        user  branch                                   commit num_files        files
+<span class="dv">6</span>  open     <span class="dv">10</span>   <span class="dv">10</span>/<span class="dv">19</span> abfleishman ex-test 9c986fc668765102a2210d17bb99b57ebaa63123         <span class="dv">1</span> lectures....
+<span class="dv">7</span>  open      <span class="dv">9</span>   <span class="dv">10</span>/<span class="dv">19</span>    dtsavage ex-test 42ceffd2340f9ee19cfd4e2f87ce0f47e378bb25         <span class="dv">1</span> lectures....</code></pre>
+<h3>Retake on checking stuff out</h3>
+<p>So, as long as I am using git-pulls I don’t have to define any extra remotes to the student forks. It turns out that they all go into a file like <code>.git/refs/pr/abfleishman/rep-res-course/ex-test</code> where <code>abfleishman</code> is the github name of the student. I can just check these out simply like this:</p>
+<pre><code>git checkout -b abfleishman-ex-test refs/pr/abfleishman/rep-res-course/ex-test </code></pre>
 <h2>Notifying students</h2>
 <p>Check this out. I can email stuff to my noaa gmail account like this:</p>
 <pre><code>echo &quot;gotta check this out &quot; | mail -s &quot;testing mail&quot; eric.anderson@noaa.gov</code></pre>

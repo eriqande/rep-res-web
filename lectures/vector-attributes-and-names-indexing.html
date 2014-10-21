@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Length and names &middot; Reproducible Research.</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="http://eriqande.github.io/rep-res-web/www/bootstrap.min.css" rel="stylesheet">
+    <link href="http://eriqande.github.io/rep-res-web/www/highlight.css" rel="stylesheet">
+
+    <link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700'
+      rel='stylesheet' type='text/css'>
+  </head>
+
+  <body>
+    <div class="navbar navbar-default navbar-static-top">
+ <div class="navbar-header"><a class="navbar-brand" href="http://eriqande.github.io/rep-res-web">RepResCourse</a>
+      <a class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="http://eriqande.github.io/rep-res-web/syllabus.html">Syllabus</a></li>
+        <li><a href="http://eriqande.github.io/rep-res-web/resources.html">Resources</a></li>
+        <li><a href="http://eriqande.github.io/rep-res-web/blogs.html">Instructor Blog</a></li>
+        <li><a href="#">Results/Gallery</a></li>
+      </ul>
+      <div class="navbar-right">
+    	<p class="navbar-text">I'm navbar-fixed-top</p>
+  	  </div>
+    </div>
+</div>
+
+
+    <div class="container">
+            <!-- The title and stuff is here -->
+      <div class="masthead">
+        <p> </p>
+        <p> </p>
+        <h3 class="muted"><a href="http://eriqande.github.io/rep-res-web/">Reproducible Research Course</a> <small>by Eric C. Anderson for (NOAA/SWFSC)</small></h3>
+        <hr>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-3" id="nav">
+          <div class="well">
+  How's this site built? See all sources at the course <a href="http://github.com/eriqande/rep-res-course">repository</a> on GitHub.
+  <p><hr></p>
+  <p><a class="btn btn-primary" href="https://raw.githubusercontent.com/eriqande/rep-res-course/master/lectures/vector-attributes-and-names-indexing.rmd">Raw on GitHub</a></p>
+</div>
+
+<h4>Page Contents</h4>
+<ul class="list-unstyled" id="toc"></ul>
+
+<hr>
+<p><a href="http://eriqande.github.io/rep-res-web/contribute.html">How to contribute</a></p>
+<p><a class="btn btn-primary" href="https://github.com/eriqande/rep-res-course/edit/master/lectures/vector-attributes-and-names-indexing.rmd">Edit this page</a></p>
+
+
+        </div>
+
+        <div id="content" class="col-sm-8 pull-right">
+          <h1 id="attr-length-names">Object (vector) <em>attributes</em>. <em>length</em>, <em>names</em>.</h1>
+<h2 id="object-attributes">Object Attributes</h2>
+<ul>
+<li>Before we can talk about indexing with <em>names</em> we have to talk about the fact that any object can possess <em>attributes</em>.</li>
+<li>Every R object has two <em>intrinsic</em> attributes: <code>mode</code> and <code>length</code></li>
+<li>For atomic vectors, possible modes are: (fill in the blanks)</li>
+<li>The functions <code>mode(x)</code> and <code>length(x)</code> return these attributes for <code>x</code></li>
+</ul>
+<h3>The <em>mode()</em> function</h3>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">6</span>)
+x &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dt">x =</span> letters, <span class="dt">size =</span> <span class="dv">10</span>)
+
+<span class="co"># a vector of letters:</span>
+x
+<span class="co">#&gt;  [1] &quot;p&quot; &quot;x&quot; &quot;g&quot; &quot;i&quot; &quot;r&quot; &quot;u&quot; &quot;t&quot; &quot;o&quot; &quot;j&quot; &quot;b&quot;</span>
+<span class="co"># what mode is it?</span>
+<span class="kw">mode</span>(x)
+<span class="co">#&gt; [1] &quot;character&quot;</span>
+
+<span class="co"># a vector of complex numbers</span>
+y &lt;-<span class="st"> </span><span class="dv">1</span>:<span class="dv">10</span> +<span class="st"> </span><span class="dv">0</span>+3i
+y
+<span class="co">#&gt;  [1]  1+3i  2+3i  3+3i  4+3i  5+3i  6+3i  7+3i  8+3i  9+3i 10+3i</span>
+
+<span class="co"># what mode is it?</span>
+<span class="kw">mode</span>(y)
+<span class="co">#&gt; [1] &quot;complex&quot;</span></code></pre>
+<h3>The <em>length()</em> function</h3>
+<ul>
+<li>You are more likely to use <code>length()</code> than the <code>mode()</code> function. In fact, you will use it all the time.</li>
+<li><p>As you might guess, it returns the <em>length</em> of an object (like a vector) as an integer.</p>
+<pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dt">by=</span>.<span class="dv">67</span>)
+x
+<span class="co">#&gt; [1] 1.00 1.67 2.34 3.01 3.68 4.35</span>
+
+<span class="co"># how long is that?</span>
+<span class="kw">length</span>(x)
+<span class="co">#&gt; [1] 6</span>
+
+<span class="co"># how can we pick out just the last element?</span>
+x[<span class="kw">length</span>(x)]
+<span class="co">#&gt; [1] 4.35</span>
+
+<span class="co"># how can we return a vector of everything but the last element?</span>
+x[-<span class="kw">length</span>(x)]
+<span class="co">#&gt; [1] 1.00 1.67 2.34 3.01 3.68</span></code></pre></li>
+</ul>
+<h3>The replacement form of the <em>length()</em> function</h3>
+<ul>
+<li>Check out this little bit of syntactic sugar: To change the length of an object called <code>obj</code>, say, you can do like this:</li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">length</span>(obj) &lt;-<span class="st"> </span><span class="dv">16</span></code></pre>
+<ul>
+<li>It will chop off the end if the new value is smaller than the old value</li>
+<li><p>It will pad the end with NAs if the the new value is larger than the old value</p>
+<pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="fl">6.5</span>, <span class="fl">8.8</span>, <span class="dt">length.out =</span> <span class="dv">15</span>)
+x
+<span class="co">#&gt;  [1] 6.500 6.664 6.829 6.993 7.157 7.321 7.486 7.650 7.814 7.979 8.143</span>
+<span class="co">#&gt; [12] 8.307 8.471 8.636 8.800</span>
+
+<span class="co"># make it longer</span>
+<span class="kw">length</span>(x) &lt;-<span class="st"> </span><span class="dv">25</span>    
+x
+<span class="co">#&gt;  [1] 6.500 6.664 6.829 6.993 7.157 7.321 7.486 7.650 7.814 7.979 8.143</span>
+<span class="co">#&gt; [12] 8.307 8.471 8.636 8.800    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="co">#&gt; [23]    NA    NA    NA</span>
+
+<span class="co"># now, chop it off if you want:</span>
+<span class="kw">length</span>(x) &lt;-<span class="st"> </span><span class="dv">7</span></code></pre></li>
+</ul>
+<h2>A few problems for thought</h2>
+<h3 id="middle-extracto">Length and names lecture, #1: “middle-extracto”</h3>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># here is a vector:</span>
+y &lt;-<span class="st"> </span><span class="kw">seq</span>(pi, <span class="dv">15</span>*pi, <span class="dt">by=</span>pi)
+
+<span class="co"># give me all the elements from the 4th up to the 3rd from the last:</span></code></pre>
+<h3 id="gimme-n-of-something">Length and names lecture, #2: “gimme-n-of-something”</h3>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">10</span>)
+<span class="co"># here are a certain number of letters:</span>
+alpha &lt;-<span class="st"> </span><span class="kw">sample</span>(letters, <span class="dt">size =</span> <span class="kw">as.integer</span>(<span class="kw">runif</span>(<span class="dv">1</span>, <span class="dt">min=</span><span class="dv">4</span>, <span class="dt">max=</span><span class="dv">20</span>)))
+
+<span class="co"># simulate a random normal deviate for each one (using rnorm)</span></code></pre>
+<h2 id="names-attribute">The <em>names</em> Attribute of a Vector</h2>
+<ul>
+<li>R gives you the option of having a name for every element of a vector</li>
+<li>You can set the <em>names</em> attribute of a vector with the <em>replacement form</em> of the <code>names()</code> function.</li>
+<li>You can query the <em>names</em> attribute with the <code>names()</code> function (it returns a character vector).</li>
+<li>You can index a vector that has a <em>names</em> attribute with names!</li>
+</ul>
+<h3>Setting the <em>names</em> of a vector</h3>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># here&#39;s a vector</span>
+x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">7</span>,<span class="dv">8</span>)
+
+<span class="co"># here we set its names to whatever we want</span>
+<span class="kw">names</span>(x) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;first&quot;</span>, <span class="st">&quot;second&quot;</span>, <span class="st">&quot;third&quot;</span>, <span class="st">&quot;boing&quot;</span>)
+
+<span class="co"># when we (auto)print the vector, the names are included above the value:</span>
+x
+<span class="co">#&gt;  first second  third  boing </span>
+<span class="co">#&gt;      5      4      7      8</span></code></pre>
+<h3>Reading names in vector output</h3>
+<ul>
+<li>This can take some getting used to. For the first 10 years I worked with R I always got confused about what was a name and what was a value in the output.<br /></li>
+<li>And I thought it was friggin’ ugly to have all those names on there sometime</li>
+<li><p>And it “can” strain the eyeballs if the names are long. Consider this ridiculous example:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># values = the first 17 values of the alphabet</span>
+ab &lt;-<span class="st"> </span>letters[<span class="dv">1</span>:<span class="dv">17</span>]
+ab  <span class="co"># not so hard to look at</span>
+<span class="co">#&gt;  [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot; &quot;f&quot; &quot;g&quot; &quot;h&quot; &quot;i&quot; &quot;j&quot; &quot;k&quot; &quot;l&quot; &quot;m&quot; &quot;n&quot; &quot;o&quot; &quot;p&quot; &quot;q&quot;</span>
+
+<span class="co"># the sha1 hashes for each of the 17 letters</span>
+<span class="kw">library</span>(digest)
+hashes &lt;-<span class="st"> </span><span class="kw">unname</span>(<span class="kw">sapply</span>(ab, digest, <span class="dt">algo =</span> <span class="st">&quot;sha1&quot;</span>))
+hashes  <span class="co"># sort of ugly to look at</span>
+<span class="co">#&gt;  [1] &quot;1f9928593251410322823fefea8c3ef79b4d0254&quot;</span>
+<span class="co">#&gt;  [2] &quot;ee6e7fdb03a0d35b3a6f499d0f8f610686551d51&quot;</span>
+<span class="co">#&gt;  [3] &quot;8e7f9fe32c49050c5ca146150fc58b93fbeea245&quot;</span>
+<span class="co">#&gt;  [4] &quot;e59165f73b7dc7e0d6ae94ec9aac9e8e95fd8a2c&quot;</span>
+<span class="co">#&gt;  [5] &quot;7f608bde8f0e308aa8866d737ddebbfae9674163&quot;</span>
+<span class="co">#&gt;  [6] &quot;86e99e22d003547538a5f446165488f7861fa2c3&quot;</span>
+<span class="co">#&gt;  [7] &quot;ce27dce0e84ad90d3e90e9b571a73720d0fb4890&quot;</span>
+<span class="co">#&gt;  [8] &quot;221799200137b7d72dfc4a618465bec71333a58b&quot;</span>
+<span class="co">#&gt;  [9] &quot;13b5c7533cccc95d2f7cd18df78ea78ed9111c02&quot;</span>
+<span class="co">#&gt; [10] &quot;88b7c7c5f6921ec9e914488067552829a17a42a4&quot;</span>
+<span class="co">#&gt; [11] &quot;6127e4cdbf02f18898554c037f0d4acb95c608ab&quot;</span>
+<span class="co">#&gt; [12] &quot;984ca0fd9ed47ac08a31aeb88f9c9a5f905aeaa2&quot;</span>
+<span class="co">#&gt; [13] &quot;954da0ea9a5d0aa42516beebc5542c638161934c&quot;</span>
+<span class="co">#&gt; [14] &quot;7d1e34387808d9f726efbb1c8eb0819a115afb52&quot;</span>
+<span class="co">#&gt; [15] &quot;2e21764867596d832896d9d28d6e6489a0b27249&quot;</span>
+<span class="co">#&gt; [16] &quot;666881f1f74c498e0292ccf3d9d26089ee79dae7&quot;</span>
+<span class="co">#&gt; [17] &quot;966dbbe6cf1c43ac784a8257b57896db9fd3f357&quot;</span>
+
+<span class="co"># name each element in ab with its hash</span>
+<span class="kw">names</span>(ab) &lt;-<span class="st"> </span>hashes
+ab  <span class="co"># print it out now...Really hard to look at</span>
+<span class="co">#&gt; 1f9928593251410322823fefea8c3ef79b4d0254 </span>
+<span class="co">#&gt;                                      &quot;a&quot; </span>
+<span class="co">#&gt; ee6e7fdb03a0d35b3a6f499d0f8f610686551d51 </span>
+<span class="co">#&gt;                                      &quot;b&quot; </span>
+<span class="co">#&gt; 8e7f9fe32c49050c5ca146150fc58b93fbeea245 </span>
+<span class="co">#&gt;                                      &quot;c&quot; </span>
+<span class="co">#&gt; e59165f73b7dc7e0d6ae94ec9aac9e8e95fd8a2c </span>
+<span class="co">#&gt;                                      &quot;d&quot; </span>
+<span class="co">#&gt; 7f608bde8f0e308aa8866d737ddebbfae9674163 </span>
+<span class="co">#&gt;                                      &quot;e&quot; </span>
+<span class="co">#&gt; 86e99e22d003547538a5f446165488f7861fa2c3 </span>
+<span class="co">#&gt;                                      &quot;f&quot; </span>
+<span class="co">#&gt; ce27dce0e84ad90d3e90e9b571a73720d0fb4890 </span>
+<span class="co">#&gt;                                      &quot;g&quot; </span>
+<span class="co">#&gt; 221799200137b7d72dfc4a618465bec71333a58b </span>
+<span class="co">#&gt;                                      &quot;h&quot; </span>
+<span class="co">#&gt; 13b5c7533cccc95d2f7cd18df78ea78ed9111c02 </span>
+<span class="co">#&gt;                                      &quot;i&quot; </span>
+<span class="co">#&gt; 88b7c7c5f6921ec9e914488067552829a17a42a4 </span>
+<span class="co">#&gt;                                      &quot;j&quot; </span>
+<span class="co">#&gt; 6127e4cdbf02f18898554c037f0d4acb95c608ab </span>
+<span class="co">#&gt;                                      &quot;k&quot; </span>
+<span class="co">#&gt; 984ca0fd9ed47ac08a31aeb88f9c9a5f905aeaa2 </span>
+<span class="co">#&gt;                                      &quot;l&quot; </span>
+<span class="co">#&gt; 954da0ea9a5d0aa42516beebc5542c638161934c </span>
+<span class="co">#&gt;                                      &quot;m&quot; </span>
+<span class="co">#&gt; 7d1e34387808d9f726efbb1c8eb0819a115afb52 </span>
+<span class="co">#&gt;                                      &quot;n&quot; </span>
+<span class="co">#&gt; 2e21764867596d832896d9d28d6e6489a0b27249 </span>
+<span class="co">#&gt;                                      &quot;o&quot; </span>
+<span class="co">#&gt; 666881f1f74c498e0292ccf3d9d26089ee79dae7 </span>
+<span class="co">#&gt;                                      &quot;p&quot; </span>
+<span class="co">#&gt; 966dbbe6cf1c43ac784a8257b57896db9fd3f357 </span>
+<span class="co">#&gt;                                      &quot;q&quot;</span>
+
+<span class="co"># but note that we can index with the names (as strings)</span>
+ab[<span class="st">&quot;221799200137b7d72dfc4a618465bec71333a58b&quot;</span>]
+<span class="co">#&gt; 221799200137b7d72dfc4a618465bec71333a58b </span>
+<span class="co">#&gt;                                      &quot;h&quot;</span>
+
+<span class="co"># in the above, output, what is the value and what is the name?</span></code></pre></li>
+</ul>
+<h3>Get rid of those damn names so I can read the thing</h3>
+<p>Sometimes you just want to get rid of the names to read stuff, or you might have another legitimate reason to do so. A handy way to do this is with the <code>unname()</code> function</p>
+<pre class="sourceCode r"><code class="sourceCode r">ab  <span class="co"># whoa horribly ugly named output</span>
+<span class="co">#&gt; 1f9928593251410322823fefea8c3ef79b4d0254 </span>
+<span class="co">#&gt;                                      &quot;a&quot; </span>
+<span class="co">#&gt; ee6e7fdb03a0d35b3a6f499d0f8f610686551d51 </span>
+<span class="co">#&gt;                                      &quot;b&quot; </span>
+<span class="co">#&gt; 8e7f9fe32c49050c5ca146150fc58b93fbeea245 </span>
+<span class="co">#&gt;                                      &quot;c&quot; </span>
+<span class="co">#&gt; e59165f73b7dc7e0d6ae94ec9aac9e8e95fd8a2c </span>
+<span class="co">#&gt;                                      &quot;d&quot; </span>
+<span class="co">#&gt; 7f608bde8f0e308aa8866d737ddebbfae9674163 </span>
+<span class="co">#&gt;                                      &quot;e&quot; </span>
+<span class="co">#&gt; 86e99e22d003547538a5f446165488f7861fa2c3 </span>
+<span class="co">#&gt;                                      &quot;f&quot; </span>
+<span class="co">#&gt; ce27dce0e84ad90d3e90e9b571a73720d0fb4890 </span>
+<span class="co">#&gt;                                      &quot;g&quot; </span>
+<span class="co">#&gt; 221799200137b7d72dfc4a618465bec71333a58b </span>
+<span class="co">#&gt;                                      &quot;h&quot; </span>
+<span class="co">#&gt; 13b5c7533cccc95d2f7cd18df78ea78ed9111c02 </span>
+<span class="co">#&gt;                                      &quot;i&quot; </span>
+<span class="co">#&gt; 88b7c7c5f6921ec9e914488067552829a17a42a4 </span>
+<span class="co">#&gt;                                      &quot;j&quot; </span>
+<span class="co">#&gt; 6127e4cdbf02f18898554c037f0d4acb95c608ab </span>
+<span class="co">#&gt;                                      &quot;k&quot; </span>
+<span class="co">#&gt; 984ca0fd9ed47ac08a31aeb88f9c9a5f905aeaa2 </span>
+<span class="co">#&gt;                                      &quot;l&quot; </span>
+<span class="co">#&gt; 954da0ea9a5d0aa42516beebc5542c638161934c </span>
+<span class="co">#&gt;                                      &quot;m&quot; </span>
+<span class="co">#&gt; 7d1e34387808d9f726efbb1c8eb0819a115afb52 </span>
+<span class="co">#&gt;                                      &quot;n&quot; </span>
+<span class="co">#&gt; 2e21764867596d832896d9d28d6e6489a0b27249 </span>
+<span class="co">#&gt;                                      &quot;o&quot; </span>
+<span class="co">#&gt; 666881f1f74c498e0292ccf3d9d26089ee79dae7 </span>
+<span class="co">#&gt;                                      &quot;p&quot; </span>
+<span class="co">#&gt; 966dbbe6cf1c43ac784a8257b57896db9fd3f357 </span>
+<span class="co">#&gt;                                      &quot;q&quot;</span>
+
+<span class="kw">unname</span>(ab)  <span class="co"># returns its argument, but with the names attribute stripped off</span>
+<span class="co">#&gt;  [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot; &quot;f&quot; &quot;g&quot; &quot;h&quot; &quot;i&quot; &quot;j&quot; &quot;k&quot; &quot;l&quot; &quot;m&quot; &quot;n&quot; &quot;o&quot; &quot;p&quot; &quot;q&quot;</span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">x[<span class="kw">c</span>(<span class="st">&quot;boing&quot;</span>, <span class="st">&quot;second&quot;</span>)] <span class="co"># note names are retained in result </span>
+<span class="co">#&gt;  boing second </span>
+<span class="co">#&gt;      8      4</span>
+
+x[<span class="kw">c</span>(<span class="st">&quot;third&quot;</span>, <span class="st">&quot;boing&quot;</span>, <span class="st">&quot;oops&quot;</span>, <span class="st">&quot;first&quot;</span>, <span class="st">&quot;first&quot;</span>)] <span class="co"># note NA in result</span>
+<span class="co">#&gt; third boing  &lt;NA&gt; first first </span>
+<span class="co">#&gt;     7     8    NA     5     5</span></code></pre>
+<h3>Return the names as a vector</h3>
+<p>This is super important:</p>
+<p>The names attribute of a vector is just a <em>vector</em> itself of mode character.</p>
+<pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">7</span>,<span class="dv">8</span>)  <span class="co"># here is a vector</span>
+
+<span class="co"># here we give it a names attribute, thus providing a name</span>
+<span class="co"># for every element in it</span>
+<span class="kw">names</span>(x) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;first&quot;</span>, <span class="st">&quot;second&quot;</span>, <span class="st">&quot;third&quot;</span>, <span class="st">&quot;boing&quot;</span>)
+x <span class="co"># see it printed with the names</span>
+<span class="co">#&gt;  first second  third  boing </span>
+<span class="co">#&gt;      5      4      7      8</span>
+
+<span class="co"># now, we can do this to get the names back as a vector</span>
+<span class="kw">names</span>(x)
+<span class="co">#&gt; [1] &quot;first&quot;  &quot;second&quot; &quot;third&quot;  &quot;boing&quot;</span>
+
+<span class="co"># super important!  We can even index it directly.</span>
+<span class="co"># for example: get all the names for which the value</span>
+<span class="co"># of x is greater than 6:</span>
+<span class="kw">names</span>(x)[x&gt;<span class="dv">6</span>]
+<span class="co">#&gt; [1] &quot;third&quot; &quot;boing&quot;</span></code></pre>
+<h3>You can index with names!</h3>
+<p>Though it might not seem, at first, to be super useful, this is incredibly useful. You can do something like this <code>x[c(&quot;boing&quot;, &quot;second&quot;)]</code> to extract elements from a named vector.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># same setup as before:</span>
+x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">7</span>,<span class="dv">8</span>) 
+<span class="kw">names</span>(x) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;first&quot;</span>, <span class="st">&quot;second&quot;</span>, <span class="st">&quot;third&quot;</span>, <span class="st">&quot;boing&quot;</span>)
+
+<span class="co"># behold the power!</span>
+x[<span class="kw">c</span>(<span class="st">&quot;boing&quot;</span>, <span class="st">&quot;first&quot;</span>)]
+<span class="co">#&gt; boing first </span>
+<span class="co">#&gt;     8     5</span></code></pre>
+<h3>Assignment Form names Indexing</h3>
+<p>When you use the <em>assignment form of the indexing operator</em>, and you include a name that doesn’t exist, it expands the vector beyond its current length</p>
+<pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">7</span>,<span class="dv">8</span>)
+
+<span class="kw">names</span>(x) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;first&quot;</span>, <span class="st">&quot;second&quot;</span>, <span class="st">&quot;third&quot;</span>, <span class="st">&quot;boing&quot;</span>)
+x
+<span class="co">#&gt;  first second  third  boing </span>
+<span class="co">#&gt;      5      4      7      8</span>
+
+x[<span class="kw">c</span>(<span class="st">&quot;first&quot;</span>, <span class="st">&quot;third&quot;</span>, <span class="st">&quot;oofdah&quot;</span>, <span class="st">&quot;squawk&quot;</span>)] &lt;-<span class="st"> </span><span class="kw">c</span>(-<span class="dv">1</span>,-<span class="dv">2</span>,-<span class="dv">3</span>,-<span class="dv">4</span>)
+x
+<span class="co">#&gt;  first second  third  boing oofdah squawk </span>
+<span class="co">#&gt;     -1      4     -2      8     -3     -4</span></code></pre>
+<h3>Using names indexing as an associative array</h3>
+<p>The power of names indexing really comes through when you want to return a value for every unique name or identifier. This sort of construction occurs all the time.</p>
+<p>Here is a contrived example:</p>
+<ul>
+<li><p>You are studying fish behavior and you have 16 fish that you have labelled <code>A</code> through <code>P</code>, and you have tagged them so you can tell who they are when you see them.</p>
+<pre class="sourceCode r"><code class="sourceCode r">IDs &lt;-<span class="st"> </span>LETTERS[<span class="dv">1</span>:<span class="dv">16</span>]</code></pre></li>
+<li><p>You have recorded the fork length of each fish to the nearest mm</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">16</span>)
+fklen &lt;-<span class="st"> </span><span class="kw">floor</span>(<span class="kw">rnorm</span>(<span class="kw">length</span>(IDs), <span class="dt">mean =</span> <span class="dv">150</span>, <span class="dt">sd =</span> <span class="dv">15</span>))</code></pre></li>
+<li><p>You also have watched them all day and you have recorded the order in which they have been jumping all day long. There have been 487 fish jumps recorded today and you have recorded the sequence:</p>
+<pre class="sourceCode r"><code class="sourceCode r">sequence &lt;-<span class="st"> </span><span class="kw">sample</span>(IDs, <span class="dv">487</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)</code></pre></li>
+</ul>
+<p>Now, what you are really interested in is whether big fish are more likely to jump after big fish than small fish, so you really need a vector which gives the sequence of the <em>fork lengths</em> of the fish that were jumping. Can you see how to do that using names? Go for it.</p>
+<h3>Other non-intrinsic Attributes (can be skipped for now…)</h3>
+<ul>
+<li>Any object in R can have a number of different <em>attributes</em> these are <em>not</em> the data contained in the object, but they may affect how the object is treated.<br /></li>
+<li>Attributes are fairly central to the operation of R.</li>
+<li><p>Relevant functions:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">attributes</span>(x)  <span class="co"># list all non-intrinsic attributes of x</span>
+
+<span class="kw">attributes</span>(x) &lt;-<span class="st"> </span>value <span class="co"># set all attributes of x  (seldom used)</span>
+<span class="kw">attr</span>(x, <span class="st">&quot;boing&quot;</span>) <span class="co"># return value of x&#39;s &quot;boing&quot; attribute</span>
+<span class="kw">attr</span>(x, <span class="st">&quot;boing&quot;</span>) &lt;-<span class="st"> </span>value <span class="co"># set x&#39;s &quot;boing&quot; attribute to value</span></code></pre>
+<p>Common attributes accessed via various convenience functions</p></li>
+</ul>
+
+          <hr>
+           <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'rep-res-course'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    
+        </div>
+      </div>
+
+            <div class="footer">
+        <hr>
+        <p>
+          <small>
+            Authored by Eric C. Anderson working as a Federal employee.  Content on this website is a government work in the public domain in the U.S. and under the CC0 1.0 internationally. Templates and plugins to build the site are modified from Hadley Wickham's <a href="https://github.com/hadley/adv-r/">Advanced R</a> website. Powered by <a href="http://jekyllrb.com/">jekyll</a>,
+          <a href="http://yihui.name/knitr/">knitr</a>, and
+          <a href="http://johnmacfarlane.net/pandoc/">pandoc</a>. Source
+          available on <a href="https://github.com/eriqande/rep-res-course/">github</a>.
+          </small>
+        </p>
+      </div>
+
+
+    </div> <!-- /container -->
+
+  <script src="//code.jquery.com/jquery.js"></script>
+  <script src="http://eriqande.github.io/rep-res-web/www/bootstrap.min.js"></script>
+  <script src="http://eriqande.github.io/rep-res-web/www/toc.js"></script>
+  <script type="text/javascript"
+    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  </body>
+</html>
+
