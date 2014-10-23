@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Branch and Merge &middot; Reproducible Research.</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="http://eriqande.github.io/rep-res-web/www/bootstrap.min.css" rel="stylesheet">
+    <link href="http://eriqande.github.io/rep-res-web/www/highlight.css" rel="stylesheet">
+
+    <link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700'
+      rel='stylesheet' type='text/css'>
+  </head>
+
+  <body>
+    <div class="navbar navbar-default navbar-static-top">
+ <div class="navbar-header"><a class="navbar-brand" href="http://eriqande.github.io/rep-res-web">RepResCourse</a>
+      <a class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="http://eriqande.github.io/rep-res-web/syllabus.html">Syllabus</a></li>
+        <li><a href="http://eriqande.github.io/rep-res-web/resources.html">Resources</a></li>
+        <li><a href="http://eriqande.github.io/rep-res-web/blogs.html">Instructor Blog</a></li>
+        <li><a href="#">Results/Gallery</a></li>
+      </ul>
+      <div class="navbar-right">
+    	<p class="navbar-text">I'm navbar-fixed-top</p>
+  	  </div>
+    </div>
+</div>
+
+
+    <div class="container">
+            <!-- The title and stuff is here -->
+      <div class="masthead">
+        <p> </p>
+        <p> </p>
+        <h3 class="muted"><a href="http://eriqande.github.io/rep-res-web/">Reproducible Research Course</a> <small>by Eric C. Anderson for (NOAA/SWFSC)</small></h3>
+        <hr>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-3" id="nav">
+          <div class="well">
+  How's this site built? See all sources at the course <a href="http://github.com/eriqande/rep-res-course">repository</a> on GitHub.
+  <p><hr></p>
+  <p><a class="btn btn-primary" href="https://raw.githubusercontent.com/eriqande/rep-res-course/master/lectures/git-branch-and-merge.rmd">Raw on GitHub</a></p>
+</div>
+
+<h4>Page Contents</h4>
+<ul class="list-unstyled" id="toc"></ul>
+
+<hr>
+<p><a href="http://eriqande.github.io/rep-res-web/contribute.html">How to contribute</a></p>
+<p><a class="btn btn-primary" href="https://github.com/eriqande/rep-res-course/edit/master/lectures/git-branch-and-merge.rmd">Edit this page</a></p>
+
+
+        </div>
+
+        <div id="content" class="col-sm-8 pull-right">
+          <h1 id="branch-and-merge">Branching and Merging</h1>
+<h2 id="whats-a-branch">What the heck is a branch?</h2>
+<ul>
+<li><p>Note that the motto for git is “<em>local branching on the cheap</em>,” so branches must be important</p>
+<p><img src="diagrams/git.png" alt="branching on the cheap" /></p></li>
+<li>A branch is a “lightweight pointer to a commit”…What?</li>
+<li><p>Let’s refresh our memory on what commits, trees, and blobs are.</p></li>
+</ul>
+<h3>Data structure within the .git folder</h3>
+<ul>
+<li><p><em>Note: the next four diagrams are from Scott Chacon’s <a href="http://git-scm.com/book/en/">ProGit</a> book and are used under the <a href="https://creativecommons.org/licenses/by-nc/3.0/us/">CC Noncommercial 3.0 Attribution license</a>. I took them from <a href="https://github.com/progit/progit/tree/master/figures">here</a></em></p>
+<p><img src="diagrams/18333fig0301-tn.png" alt="A commit" /></p></li>
+<li>Contents of (different versions of) files in your repository are stored in blobs</li>
+<li>(Sub)directory structure (locations of files in your repository) stored in trees
+<ul>
+<li>The tree and the blobs referenced in it constitute the “snapshot” of the repository.</li>
+</ul></li>
+<li>Commits: for a given snapshot, points to a tree, has a comment, an author, a committer, <strong>and</strong>
+<ul>
+<li>Unless it is the first commit, it has a pointer to a parent.</li>
+</ul></li>
+</ul>
+<hr />
+<hr />
+<h3>A chain or sequence of commits</h3>
+<ul>
+<li><p>Commits form a chain by connecting to their parents.</p>
+<p><img src="diagrams/18333fig0302-tn.png" alt="A commit" /></p></li>
+<li>The arrows between commits point to parents. Thus the later commits are on the right, and the earlier commits on the left.</li>
+<li>This is critical: every commit knows where it came from (the previous commit).</li>
+<li><p>Just as a genealogy (i.e., links to parents) gives your family history, so too do the commits <em>and the links from each commit to its parent(s)</em> constitute the <strong>version history</strong> of your repository.</p></li>
+</ul>
+<hr />
+<hr />
+<h3>Easy access to commits</h3>
+<ul>
+<li>Commits would not be useful if they were just stored in the .git directory of your repository with no way to access them.</li>
+<li>Branches are how you access commits so that you can:
+<ul>
+<li>Check them out (be able to access their contents)</li>
+<li>Modify the contents and make a new commit</li>
+</ul></li>
+<li>They are “lightweight” in that they don’t take up much space (each branch is just a file with the sha-1 hash of a commit in it)</li>
+<li><p>Upon initialization, every repository gets a branch called <em>master</em></p>
+<p><img src="diagrams/18333fig0303-tn.png" alt="A commit" /></p></li>
+<li><p>It is customary to let <em>master</em> be where your <em>stable</em>, deployable code is kept.</p></li>
+</ul>
+<hr />
+<hr />
+<h3>What it means to be <em>on a branch</em></h3>
+<ul>
+<li>If you are on a branch, (say <em>master</em> for the sake of argument) that means that
+<ol style="list-style-type: decimal">
+<li>There is a commit pointed to by <em>master</em>. (Let’s say it is 8e334ab3)</li>
+<li>Any changes you make, <strong>when staged and committed</strong> will create a new commit whose parent (in this case) is 8e334ab3.</li>
+</ol></li>
+<li><p>In git, if you are on a branch, then the HEAD points to that branch.</p>
+<p><img src="diagrams/18333fig0305-tn.png" alt="A commit" /></p></li>
+<li>Hey, there are two branches pointing to the same commit!
+<ul>
+<li>That is just fine. You can have as many branches as you want pointing to a commit.</li>
+<li>Question. If changes are committed now, what happens to the two branches? This is crucial…</li>
+</ul></li>
+</ul>
+<h2 id="creating-and-using-branches">Creating and using branches</h2>
+<h3>Creating a branch called “testing”</h3>
+<ul>
+<li><p>In the shell, when you type</p>
+<pre class="sourceCode r"><code class="sourceCode r">git branch some-name</code></pre>
+git will make a new branch for you named <code>some-name</code>.</li>
+<li><strong>It will point to whatever commit HEAD currently points to.</strong> (i.e. the branch that you are currently on.)</li>
+<li>Let’s do this together.
+<ol style="list-style-type: decimal">
+<li>Create a new rstudio project with version control:
+<ul>
+<li>File -&gt; New Project -&gt; New Directory -&gt; Empty Project</li>
+<li>Let the directory name be <code>branchy</code> and make it a subdirectory of Desktop.</li>
+<li><em>Important:</em> check the box to <strong>“create a git repository”</strong></li>
+</ul></li>
+<li>At this point there are no commits. Stage <code>.gitignore</code> and <code>branchy.Rproj</code> and commit them.</li>
+<li><p>Look at the “diff” / History window, and notice that there is one commit and <em>HEAD</em> and <em>master</em> are at it:</p>
+<p><img src="diagrams/rs-git-hist-1.png" alt="rstudio git hist" /></p></li>
+<li><p>Let’s “move <em>master</em> forward” by making a new .Rmd file called <code>simple.Rmd</code> and committing it. Now our history looks like:</p>
+<p><img src="diagrams/rs-git-hist-2.png" alt="rstudio git hist" /></p></li>
+<li><p>Now, let’s make a new branch called <em>testing</em>. In the shell (in the correct directory):</p>
+<pre class="sourceCode r"><code class="sourceCode r">git branch testing</code></pre></li>
+</ol>
+<ul>
+<li><p>Notice that RStudio’s git-history shows us that <em>HEAD</em>, <em>master</em>, and <em>testing</em>, all now point to the same commit. (<strong>You might have to hit the refresh button</strong>). They all have the same parent and history too.</p>
+<p><img src="diagrams/testy-master.png" alt="branches" /></p></li>
+<li><strong>However</strong> the visual there doesn’t tell us which branch we are one (where <em>HEAD</em> is attached.)
+<ul>
+<li><p>No worries, upper right of the git pane tells us. We should still be on <em>master</em> because we have not “checked-out” the <em>testing</em> branch yet.</p>
+<p><img src="diagrams/branch-indicator.png" alt="branch indicator" /></p></li>
+</ul></li>
+</ul></li>
+</ul>
+<h3>Checking out a branch</h3>
+<ul>
+<li><p>If we want to be <em>on a branch</em> we need to “check that branch out”. Either:</p>
+<pre class="sourceCode r"><code class="sourceCode r">git checkout testing</code></pre>
+in the shell, or use the dropdown menu by clicking on the <strong>Branch Indicator</strong> in RStudio.</li>
+<li>In this case nothing exciting happened because <em>testing</em> and <em>master</em> both point to the same commit.</li>
+<li>If <em>testing</em> had pointed to a different commit, the state of the files in your working area might have changed.</li>
+<li>What if you had uncommitted changes on some of the files that changed?!!
+<ul>
+<li>Thankfully, git does not let you overwrite unstored changes when you switch branches. (More on this later.)</li>
+</ul></li>
+</ul>
+<h3>Make some changes on the <em>testing</em> branch</h3>
+<ol style="list-style-type: decimal">
+<li>Make sure you are the <em>testing</em> branch</li>
+<li>Add some text to the bottom of simple.Rmd</li>
+<li>Stage that file and commit it</li>
+<li>Don’t stage the “simple.html” file.</li>
+</ol>
+<h3>Make <strong>some more</strong> changes to the <em>testing</em> branch</h3>
+<ol style="list-style-type: decimal">
+<li>Add some more text to the bottom. Stage and commit.</li>
+<li>Don’t stage the html file.</li>
+</ol>
+<h3>Make even more changes to the <em>testing</em> branch</h3>
+<ol style="list-style-type: decimal">
+<li>Modify the <code>.gitignore</code> file so git ignores all files that end in <code>.html</code> in your repo.</li>
+</ol>
+<h3>Now look at your commit history</h3>
+<ul>
+<li><p>Your <em>testing</em> branch has left <em>master</em> in the dust!</p>
+<p><img src="diagrams/master-in-the-dust.png" alt="master in the dust" /></p></li>
+<li>What if, after all of this, we decide that our <em>testing</em> branch is good stuff and we want to add the changes in <em>testing</em> to <em>master</em> so we can deploy it, etc?</li>
+<li><p>This is where merging comes in.</p></li>
+</ul>
+<h2 id="merging-branches">Merging branches</h2>
+<p>The basic idea of a merge:</p>
+<ol style="list-style-type: decimal">
+<li>Switch to the branch that you want to add the stuff into</li>
+<li>Tell it to merge in changes from another branch (or branches)</li>
+</ol>
+<ul>
+<li>Sometimes this is easy (<em>fast-forward merges</em>)</li>
+<li>Sometimes it is more complicated, if both branches have changed from their common parent. But, git takes care of most of the details</li>
+</ul>
+<h3>Simplest case = Fast-forward merge</h3>
+<ul>
+<li>To merge <em>testing</em> into <em>master</em> is simple because <em>master</em> is a <strong>direct</strong> ancestor of <em>testing</em>.</li>
+<li>Here is how you do it:
+<ol style="list-style-type: decimal">
+<li>Switch to the master branch (best to make sure your working area is clean)</li>
+<li><p>In the shell (in a directory within the <code>branchy</code> repo) type this:</p>
+<pre class="sourceCode r"><code class="sourceCode r">git merge testing</code></pre></li>
+</ol></li>
+<li><p>git should tell you that it must made a fast-forward merge:</p>
+<pre><code>Updating 9f5b2cf..51503c5
+Fast-forward
+ .gitignore |  1 +
+ simple.Rmd | 24 ++++++++++++++++++++++++
+ 2 files changed, 25 insertions(+)</code></pre></li>
+</ul>
+<h3>Look at your history diagram again</h3>
+<ul>
+<li>You might have to hit the “Refresh” button in the “RStudio: Review Changes” window.</li>
+<li>See that all that happened is that the <em>master</em> branch has been brought up to where the <em>testing</em> branch is.<br /></li>
+<li><p><strong>No new commits were generated</strong></p>
+<p><img src="diagrams/fast-forward-result.png" alt="fast-forward-result" /></p></li>
+</ul>
+<h3>We can delete <em>testing</em> now if we want</h3>
+<p><em>master</em> points to the same place, so it is redundant.</p>
+<pre><code>git branch -d testing</code></pre>
+<p>If a branch is not redundant, git won’t let you delete it with the <code>-d</code> option (have to use <code>-D</code>, but be careful you don’t lose track of work that you would like to merge in at some point.)</p>
+<h3>Harder case, both branches in the merge have moved forward</h3>
+<ul>
+<li>Requires a “3-way-merge”
+<ul>
+<li>3 commits involved: the two branches and their common ancestor.</li>
+</ul></li>
+<li>Git takes care of the difficulties here (finding the “merge base”, etc.)</li>
+<li>This creates a new commit. This is as it must and should be!</li>
+</ul>
+<h3>Let’s create the need for a 3-way merge</h3>
+<p>Note, through all of this, <strong>do not</strong> be amending your previous commits.</p>
+<ol style="list-style-type: decimal">
+<li>Make a new branch called <em>changes-on-bottom</em> and check it out.
+<ul>
+<li><p>Note: if you want to simultaneously create a new branch named <em>changes-on-bottom</em> <strong>and</strong> check it out at the current HEAD location. You can just do this:</p>
+<pre class="sourceCode r"><code class="sourceCode r">git checkout -b changes-on-bottom</code></pre></li>
+</ul></li>
+<li>Add stuff to <code>simple.Rmd</code> to the bottom of the file. Commit.</li>
+<li>Delete some of the stuff you just added. Commit.</li>
+<li>Add even more to the bottom of the file. Commit.</li>
+<li>Now checkout <em>master</em> to make changes on the <em>master</em> branch. Notice that your file has been “rolled back” to its state on the <em>master</em> branch.</li>
+<li>Add some stuff to the <strong>top</strong> part of the file. commit.</li>
+<li>Remove half of what you just added. Commit.</li>
+<li>Add some more to the top. Commit.</li>
+</ol>
+<h3>Now, look at your history</h3>
+<ul>
+<li><p>Be sure to choose “all branches” to the right of the “History” button:</p>
+<p><img src="diagrams/needs-3-way-merge.png" alt="needs-3-way-merge" /></p></li>
+<li><strong>It sort of looks like <em>master</em> is ahead of <em>changes-on-bottom</em></strong> but it isn’t.</li>
+<li><p>They are diverging <em>independently</em></p></li>
+</ul>
+<h3>Will we be able to merge these?</h3>
+<ul>
+<li>Both branches change the same file, <strong>BUT</strong>,</li>
+<li>That is not a problem <em>unless the same line in the same file has been changed</em> in the different branches being merged.</li>
+</ul>
+<h3>Let’s merge them <strong>into</strong> the <em>master</em> branch</h3>
+<ul>
+<li>The command is the same:
+<ul>
+<li>Make sure you are on the <em>master</em> branch</li>
+<li><p>Use the <code>git merge</code> command:</p>
+<pre class="sourceCode r"><code class="sourceCode r">git merge changes-on-bottom</code></pre></li>
+</ul></li>
+<li>It will pop up an editor for you to write a commit message
+<ul>
+<li>This might fail if you don’t have an editor set up.</li>
+<li>If you get emacs and are unfamiliar with it, this will take some explanation.</li>
+</ul></li>
+<li>You need to write a commit message because this is a non-trivial merge—it has to make a new commit because it is not equivalent to any previous commit (unlike in the fast-forward case).</li>
+</ul>
+<h3>Now, check out your history</h3>
+<pre><code>![after the merge](diagrams/after-the-merge.png)</code></pre>
+<ul>
+<li>There is a new commit in there and it has two parents.</li>
+<li>Whoa! The <em>changes-on-bottom</em> branch <strong>did not</strong> move forward.</li>
+<li>You could delete <em>changes-on-bottom</em> now, OR you could continue to modify it (it won’t have the changes you did on <em>master</em>) and merge those in later. Let that me a fun weekend mission for the motivated…explore what happens.</li>
+</ul>
+<h2 id="for-next-time">For next git session</h2>
+<ul>
+<li>When git won’t let you checkout a branch
+<ul>
+<li>Stashing</li>
+</ul></li>
+<li>Merge conflicts, and resolving them</li>
+<li>Remotes</li>
+</ul>
+<h3>If we have time today</h3>
+<ul>
+<li>It is really fun to browse the version history for <a href="https://github.com/hadley/adv-r.git">Hadley’s advanced R book</a>.
+<ul>
+<li>For fun: make a new project that is a clone of it and look at its history and try to understand it.</li>
+</ul></li>
+</ul>
+
+          <hr>
+           <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'rep-res-course'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    
+        </div>
+      </div>
+
+            <div class="footer">
+        <hr>
+        <p>
+          <small>
+            Authored by Eric C. Anderson working as a Federal employee.  Content on this website is a government work in the public domain in the U.S. and under the CC0 1.0 internationally. Templates and plugins to build the site are modified from Hadley Wickham's <a href="https://github.com/hadley/adv-r/">Advanced R</a> website. Powered by <a href="http://jekyllrb.com/">jekyll</a>,
+          <a href="http://yihui.name/knitr/">knitr</a>, and
+          <a href="http://johnmacfarlane.net/pandoc/">pandoc</a>. Source
+          available on <a href="https://github.com/eriqande/rep-res-course/">github</a>.
+          </small>
+        </p>
+      </div>
+
+
+    </div> <!-- /container -->
+
+  <script src="//code.jquery.com/jquery.js"></script>
+  <script src="http://eriqande.github.io/rep-res-web/www/bootstrap.min.js"></script>
+  <script src="http://eriqande.github.io/rep-res-web/www/toc.js"></script>
+  <script type="text/javascript"
+    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  </body>
+</html>
+
