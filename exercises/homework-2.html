@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Homework 2 &middot; Reproducible Research.</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="http://eriqande.github.io/rep-res-web/www/bootstrap.min.css" rel="stylesheet">
+    <link href="http://eriqande.github.io/rep-res-web/www/highlight.css" rel="stylesheet">
+
+    <link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700'
+      rel='stylesheet' type='text/css'>
+  </head>
+
+  <body>
+    <div class="navbar navbar-default navbar-static-top">
+ <div class="navbar-header"><a class="navbar-brand" href="http://eriqande.github.io/rep-res-web">RepResCourse</a>
+      <a class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="http://eriqande.github.io/rep-res-web/syllabus.html">Syllabus</a></li>
+        <li><a href="http://eriqande.github.io/rep-res-web/resources.html">Resources</a></li>
+        <li><a href="http://eriqande.github.io/rep-res-web/blogs.html">Instructor Blog</a></li>
+        <li><a href="#">Results/Gallery</a></li>
+      </ul>
+      <div class="navbar-right">
+    	<p class="navbar-text">I'm navbar-fixed-top</p>
+  	  </div>
+    </div>
+</div>
+
+
+    <div class="container">
+            <!-- The title and stuff is here -->
+      <div class="masthead">
+        <p> </p>
+        <p> </p>
+        <h3 class="muted"><a href="http://eriqande.github.io/rep-res-web/">Reproducible Research Course</a> <small>by Eric C. Anderson for (NOAA/SWFSC)</small></h3>
+        <hr>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-3" id="nav">
+          <div class="well">
+  How's this site built? See all sources at the course <a href="http://github.com/eriqande/rep-res-course">repository</a> on GitHub.
+  <p><hr></p>
+  <p><a class="btn btn-primary" href="https://raw.githubusercontent.com/eriqande/rep-res-course/master/exercises/homework-2.rmd">Raw on GitHub</a></p>
+</div>
+
+<h4>Page Contents</h4>
+<ul class="list-unstyled" id="toc"></ul>
+
+<hr>
+<p><a href="http://eriqande.github.io/rep-res-web/contribute.html">How to contribute</a></p>
+<p><a class="btn btn-primary" href="https://github.com/eriqande/rep-res-course/edit/master/exercises/homework-2.rmd">Edit this page</a></p>
+
+
+        </div>
+
+        <div id="content" class="col-sm-8 pull-right">
+          <h2 id="hw2-start">Problems to be done for “Homework Set 2”</h2>
+<p>These are a selection of exercises on coercion, recycling, and indexing, including indexing with names. For each problem, evaluate all the code in the code chunk (highlight it and hit CMD-Enter (or cntrl-Enter on a PC)) and then have a look at each of the variables involved before writing your answer.</p>
+<p>Make sure your document still knits successfully before submitting.</p>
+<p><strong>Instructions For completing this homework can be found</strong> <a href="http://eriqande.github.io/rep-res-web/instructions_for_exercises/inst-homework-2.html">HERE</a></p>
+<h3 id="coerce-and-multiply">Homework Set 2, #1: “coerce-and-multiply”</h3>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Joe R. Newbie is trying to compute the componentwise product of two </span>
+<span class="co"># vectors x and y,  but is running into trouble.  Here is what he has</span>
+<span class="co"># done so far:</span>
+x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">9</span>, <span class="dv">12</span>, <span class="st">&quot;16&quot;</span>, <span class="fl">11.4</span>)
+y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">15</span>, <span class="dv">10</span>, <span class="dv">7</span>, <span class="dv">5</span>)
+
+<span class="co"># when he tries to multiply these he gets an error.  Use an `as.` function</span>
+<span class="co"># to coerce x appropriately and then return the product of x and y.</span>
+<span class="kw">submit_answer</span>({
+  
+})</code></pre>
+<p>For the following, recall from <a href="{#missing-data}">this lecture</a> how to test for missing data.</p>
+<h3 id="do-stuff-with-NAs">Homework Set 2, #2: “do-stuff-with-NAs”</h3>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># z is a vector with some missing data values, and w is </span>
+<span class="co"># a vector of the same length with no missing data:</span>
+<span class="kw">set.seed</span>(<span class="dv">5</span>)
+w &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">20</span>, <span class="dv">10</span>)
+z &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">20</span>, <span class="dv">10</span>)
+z[<span class="kw">sample</span>(<span class="dv">1</span>:<span class="kw">length</span>(z), <span class="dv">4</span>)] &lt;-<span class="st"> </span><span class="ot">NA</span>
+
+
+<span class="co"># return a vector that has all the non-NA values in z in the </span>
+<span class="co"># order in which they occur in z.</span>
+<span class="kw">submit_answer</span>({
+              <span class="co">#  &lt;- put your answer to the left of the #. </span>
+}, <span class="dt">subprob =</span> <span class="st">&quot;-a&quot;</span>)
+
+<span class="co"># In the above, don&#39;t worry about the &quot;subprob&quot; argument.  That is just</span>
+<span class="co"># part of the problem naming and numbering system.</span>
+
+<span class="co"># Another exercise:  Return all the values in w that</span>
+<span class="co"># occur at the same position as the NAs in z.</span>
+<span class="kw">submit_answer</span>({
+             
+}, <span class="dt">subprob =</span> <span class="st">&quot;-b&quot;</span>)
+
+<span class="co"># Another exercise: Return a vector which is like z, but in which all</span>
+<span class="co"># the non-missing values have been multiplied by 2.5 and all the missing</span>
+<span class="co"># values (NAs) have been turned into -1&#39;s</span>
+<span class="kw">submit_answer</span>({
+             
+}, <span class="dt">subprob =</span> <span class="st">&quot;-c&quot;</span>)
+
+<span class="co"># Last subproblem: Modify z so that every NA gets replaced by the value</span>
+<span class="co"># in the same position in the vector w</span>
+<span class="kw">submit_answer</span>({
+             
+}, <span class="dt">subprob =</span> <span class="st">&quot;-d&quot;</span>)</code></pre>
+<h2 id="about-euclid-dist">About Euclidean distance</h2>
+<p>If you have two vectors <span class="math"><em>p</em> = (<em>p</em><sub>1</sub>, …, <em>p</em><sub><em>n</em></sub>)</span> and <span class="math"><em>q</em> = (<em>q</em><sub>1</sub>, …, <em>q</em><sub><em>n</em></sub>)</span> that describe two points in an <span class="math"><em>n</em></span>-dimensional space, the Euclidean Distance between the points is defined as: <br /><span class="math">$$
+d(p,q) = \biggl( \sum_{i=1}^n (p_i - q_i)^2 \biggr)^{\frac{1}{2}}
+$$</span><br /> The next problem asks you to compute Euclidean distance between two vectors.</p>
+<h3 id="euclidean-distance">Homework Set 2, #3: “euclidean-distance”</h3>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Let p and q be two vectors defining points in a 20-dimensional space:</span>
+<span class="kw">set.seed</span>(<span class="dv">10</span>)
+p &lt;-<span class="st"> </span><span class="kw">c</span>(-<span class="dv">1</span>,<span class="dv">1</span>) *<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dt">mean=</span><span class="dv">6</span>, <span class="dt">sd=</span><span class="dv">2</span>)
+q &lt;-<span class="st"> </span><span class="kw">c</span>(-<span class="dv">1</span>,<span class="dv">1</span>) *<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dt">mean=</span><span class="dv">6</span>, <span class="dt">sd=</span><span class="dv">2</span>)
+
+<span class="co"># return the Euclidean distance between p and q.  Note that if you are</span>
+<span class="co"># not familiar with the sum() function you should read about it in the </span>
+<span class="co"># help files by typing &quot;?sum&quot; at your R prompt.</span>
+<span class="kw">submit_answer</span>({
+             
+})</code></pre>
+<h3 id="bin-comp-combo">Homework Set 2, #4: “bin-comp-combo”</h3>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># let a, b, and c be the following vectors:</span>
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+a &lt;-<span class="st"> </span><span class="kw">sample</span>(letters, <span class="dv">100</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)
+b &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">100</span>)
+c &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">1000</span>, <span class="dv">100</span>)
+
+<span class="co"># return all the values in c that correspond to positions in </span>
+<span class="co"># the vectors where:  </span>
+<span class="co">#   values in a are between &quot;g&quot; and &quot;m&quot;, inclusive, alphabetically</span>
+<span class="co"># AND</span>
+<span class="co">#   values in b are less than -1.5 or greater than 1.0</span>
+
+<span class="co"># For checking, your result should have length 6.</span>
+<span class="kw">submit_answer</span>({
+             
+})</code></pre>
+<h3 id="indexing-and-recycling">Homework Set 2, #5: “indexing-and-recycling”</h3>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># f is capital letters of the alphabet</span>
+f &lt;-<span class="st"> </span>LETTERS
+
+<span class="co"># Index f with a logical vector (using recycling) to return every</span>
+<span class="co"># third element in f (i.e. elements 3, 6, 9,...)</span>
+<span class="kw">submit_answer</span>({
+
+}, <span class="dt">subprob =</span> <span class="st">&quot;-a&quot;</span>)
+
+<span class="co"># Use recycling with a logical vector</span>
+<span class="co"># to return every 3rd element in f, starting on element number 2 (i.e.</span>
+<span class="co"># get elements 2, 5, 8, ...)</span>
+<span class="kw">submit_answer</span>({
+
+}, <span class="dt">subprob =</span> <span class="st">&quot;-b&quot;</span>)
+
+
+<span class="co"># A new problem: Given the vector:</span>
+g &lt;-<span class="st"> </span><span class="dv">10</span>:<span class="dv">21</span>
+
+<span class="co"># Multiply every odd number in g by 2 and every even number </span>
+<span class="co"># in g by 3.  Use recycling.  Write as short an expression as</span>
+<span class="co"># possible</span>
+<span class="kw">submit_answer</span>({
+
+}, <span class="dt">subprob =</span> <span class="st">&quot;-c&quot;</span>)</code></pre>
+<h3 id="using-names">Homework Set 2, #6: “using-names”</h3>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># here are some names of salmon populations in CA and OR:</span>
+pops &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Eel_R&quot;</span>, <span class="st">&quot;Russian_R&quot;</span>, <span class="st">&quot;Klamath_IGH_fa&quot;</span>, <span class="st">&quot;Trinity_H_sp&quot;</span>, <span class="st">&quot;Smith_R&quot;</span>, <span class="st">&quot;Chetco_R&quot;</span>, <span class="st">&quot;Cole_Rivers_H&quot;</span>, <span class="st">&quot;Applegate_Cr&quot;</span>, <span class="st">&quot;Coquille_R&quot;</span>, <span class="st">&quot;Umpqua_sp&quot;</span>, <span class="st">&quot;Siuslaw_R&quot;</span>)
+
+<span class="co"># each one of these populations belongs to a so-called </span>
+<span class="co"># &quot;reporting-unit&quot; which may include multiple populations.</span>
+<span class="co"># Here are the reporting units corrsponding to the populations in pops:</span>
+repunits &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;CaliforniaCoast&quot;</span>, <span class="st">&quot;CaliforniaCoast&quot;</span>, <span class="st">&quot;KlamathR&quot;</span>, <span class="st">&quot;KlamathR&quot;</span>, <span class="st">&quot;NCaliforniaSOregonCoast&quot;</span>, <span class="st">&quot;NCaliforniaSOregonCoast&quot;</span>, <span class="st">&quot;RogueR&quot;</span>, <span class="st">&quot;RogueR&quot;</span>, <span class="st">&quot;MidOregonCoast&quot;</span>, <span class="st">&quot;MidOregonCoast&quot;</span>, <span class="st">&quot;MidOregonCoast&quot;</span>)
+
+<span class="co"># here are the populations-of-origin for 25 fish caught</span>
+<span class="co"># in a fishery off the coast of california:</span>
+<span class="kw">set.seed</span>(<span class="dv">12</span>)
+fish_seq &lt;-<span class="st"> </span><span class="kw">sample</span>(pops, <span class="dv">25</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)
+
+<span class="co"># Problem (a): Instead of knowing the sequence of salmon populations, some</span>
+<span class="co"># fishery managers want you to give them the sequence of *reporting units*.</span>
+<span class="co"># Return a vector of length 25 (same length as fish_seq) that gives the sequence of reporting units</span>
+<span class="co"># of the fish in fish_seq.  Do this by setting the names attribute of </span>
+<span class="co"># repunits to be the pops and then indexing that vector with fish_seq.</span>
+<span class="kw">submit_answer</span>({
+
+}, <span class="dt">subprob =</span> <span class="st">&quot;-a&quot;</span>)
+
+
+<span class="co"># Now, 20 more fish were caught and their lengths measured in mm.  Those</span>
+<span class="co"># lengths are recorded in fish_len, and the populations from which those</span>
+<span class="co"># fish came from are recorded in the names attribute of fish_len</span>
+<span class="kw">set.seed</span>(<span class="dv">2</span>)
+fish_len &lt;-<span class="st"> </span><span class="kw">floor</span>(<span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dt">mean =</span> <span class="dv">700</span>, <span class="dt">sd =</span> <span class="dv">90</span>))
+<span class="kw">names</span>(fish_len) &lt;-<span class="st"> </span><span class="kw">sample</span>(pops, <span class="dv">20</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)
+
+<span class="co"># Problem (b): Create a new vector equal to fish_len, but give it</span>
+<span class="co"># names that are the reporting units corresponding to the</span>
+<span class="co"># fish_len populations. Call it fish_lr, and, after creating it</span>
+<span class="co"># return it.</span>
+<span class="kw">submit_answer</span>({
+
+}, <span class="dt">subprob =</span> <span class="st">&quot;-b&quot;</span>)
+
+
+<span class="co"># Problem (c): Extract the lengths of the 9 fish from the MidOregonCoast</span>
+<span class="co"># reporting unit.  Don&#39;t do this by hand! Use a tidy expression (like indexing</span>
+<span class="co"># on the basis of a comparison of the names attribute of fish_lr)</span>
+<span class="kw">submit_answer</span>({
+
+}, <span class="dt">subprob =</span> <span class="st">&quot;-c&quot;</span>)
+
+<span class="co"># Bonus question: Why can&#39;t you get those 9 fish lengths by doing this: fish_len[&quot;MidOregonCoast&quot;] ?</span></code></pre>
+<h2 id="sorting-in-r">Sorting in R</h2>
+<p>We are going to talk briefly about sorting in R. There are two main functions used for sorting: <code>sort</code> and <code>order</code>.</p>
+<p>The <code>sort</code> function returns a sorted version of its input vector. For example:</p>
+<pre class="sourceCode r"><code class="sourceCode r">r &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">7</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">12</span>) <span class="co"># not sorted</span>
+
+<span class="kw">sort</span>(r)  <span class="co"># returns all the elements of r in sorted order</span>
+<span class="co">#&gt; [1]  1  3  4  7 12</span></code></pre>
+<p>This is useful when all you want to do is sort a single vector on the basis of its elements. However, much of the time when one is sorting data, you will be sorting one vector <em>on the basis of a different vector</em>. The <code>sort</code> function is not useful for that. Instead you can use the <code>order</code> function.</p>
+<p>The <code>order</code> function returns the indices which, if used to index its argument, would put it in sorted order. So, for example:</p>
+<pre class="sourceCode r"><code class="sourceCode r">r &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">7</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">12</span>) <span class="co"># not sorted (same vector as above)</span>
+
+<span class="kw">order</span>(r) <span class="co"># indices that would extract elements from r in sorted order</span>
+<span class="co">#&gt; [1] 3 4 1 2 5</span>
+
+<span class="co"># note that you can achieve the same things as sort(r) with</span>
+<span class="co"># r[order(r)]:</span>
+<span class="kw">sort</span>(r)
+<span class="co">#&gt; [1]  1  3  4  7 12</span>
+
+r[<span class="kw">order</span>(r)]
+<span class="co">#&gt; [1]  1  3  4  7 12</span></code></pre>
+<p><code>order</code> is considerably more versatile. We’ll do a quick problem on it.</p>
+<h3 id="using-order">Homework Set 2, #7: “using-order”</h3>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Imagine you have measured the weights (in kg) and lengths (in mm) of</span>
+<span class="co"># 20 fish and recorded them in the variables wt and len.</span>
+<span class="kw">set.seed</span>(<span class="dv">3</span>)
+wt &lt;-<span class="st"> </span><span class="kw">round</span>(<span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dt">mean =</span> <span class="dv">15</span>, <span class="dt">sd =</span> <span class="dv">3</span>), <span class="dt">digits =</span> <span class="dv">1</span>)
+len &lt;-<span class="st"> </span>wt *<span class="st"> </span><span class="dv">53</span> +<span class="st"> </span><span class="kw">floor</span>(<span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sd =</span> <span class="dv">50</span>))
+
+<span class="co"># and let the population from which the fish arrive come be recorded in</span>
+<span class="co"># the variable wpop</span>
+wpop &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="kw">c</span>(<span class="st">&quot;Eel_R&quot;</span>, <span class="st">&quot;Russian_R&quot;</span>, <span class="st">&quot;Klamath_IGH_fa&quot;</span>, <span class="st">&quot;Trinity_H_sp&quot;</span>, <span class="st">&quot;Smith_R&quot;</span>, <span class="st">&quot;Chetco_R&quot;</span>, <span class="st">&quot;Cole_Rivers_H&quot;</span>, <span class="st">&quot;Applegate_Cr&quot;</span>, <span class="st">&quot;Coquille_R&quot;</span>, <span class="st">&quot;Umpqua_sp&quot;</span>, <span class="st">&quot;Siuslaw_R&quot;</span>), <span class="dv">20</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)
+
+<span class="co"># Problem (a): Return the vector wt sorted alphabetically</span>
+<span class="co"># on the population that each fish came from.</span>
+<span class="kw">submit_answer</span>({
+
+}, <span class="dt">subprob =</span> <span class="st">&quot;-a&quot;</span>)
+
+<span class="co"># Problem (b): Return len sorted in DECREASING order of the</span>
+<span class="co"># weight of each fish.  (do ?order to learn about sorting in increasing</span>
+<span class="co"># vs decreasing order.)</span>
+<span class="kw">submit_answer</span>({
+
+}, <span class="dt">subprob =</span> <span class="st">&quot;-b&quot;</span>)</code></pre>
+
+          <hr>
+           <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'rep-res-course'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    
+        </div>
+      </div>
+
+            <div class="footer">
+        <hr>
+        <p>
+          <small>
+            Authored by Eric C. Anderson working as a Federal employee.  Content on this website is a government work in the public domain in the U.S. and under the CC0 1.0 internationally. Templates and plugins to build the site are modified from Hadley Wickham's <a href="https://github.com/hadley/adv-r/">Advanced R</a> website. Powered by <a href="http://jekyllrb.com/">jekyll</a>,
+          <a href="http://yihui.name/knitr/">knitr</a>, and
+          <a href="http://johnmacfarlane.net/pandoc/">pandoc</a>. Source
+          available on <a href="https://github.com/eriqande/rep-res-course/">github</a>.
+          </small>
+        </p>
+      </div>
+
+
+    </div> <!-- /container -->
+
+  <script src="//code.jquery.com/jquery.js"></script>
+  <script src="http://eriqande.github.io/rep-res-web/www/bootstrap.min.js"></script>
+  <script src="http://eriqande.github.io/rep-res-web/www/toc.js"></script>
+  <script type="text/javascript"
+    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  </body>
+</html>
+
