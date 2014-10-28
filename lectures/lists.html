@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Lists &middot; Reproducible Research.</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="http://eriqande.github.io/rep-res-web/www/bootstrap.min.css" rel="stylesheet">
+    <link href="http://eriqande.github.io/rep-res-web/www/highlight.css" rel="stylesheet">
+
+    <link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700'
+      rel='stylesheet' type='text/css'>
+  </head>
+
+  <body>
+    <div class="navbar navbar-default navbar-static-top">
+ <div class="navbar-header"><a class="navbar-brand" href="http://eriqande.github.io/rep-res-web">RepResCourse</a>
+      <a class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="http://eriqande.github.io/rep-res-web/syllabus.html">Syllabus</a></li>
+        <li><a href="http://eriqande.github.io/rep-res-web/resources.html">Resources</a></li>
+        <li><a href="http://eriqande.github.io/rep-res-web/blogs.html">Instructor Blog</a></li>
+        <li><a href="#">Results/Gallery</a></li>
+      </ul>
+      <div class="navbar-right">
+    	<p class="navbar-text">I'm navbar-fixed-top</p>
+  	  </div>
+    </div>
+</div>
+
+
+    <div class="container">
+            <!-- The title and stuff is here -->
+      <div class="masthead">
+        <p> </p>
+        <p> </p>
+        <h3 class="muted"><a href="http://eriqande.github.io/rep-res-web/">Reproducible Research Course</a> <small>by Eric C. Anderson for (NOAA/SWFSC)</small></h3>
+        <hr>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-3" id="nav">
+          <div class="well">
+  How's this site built? See all sources at the course <a href="http://github.com/eriqande/rep-res-course">repository</a> on GitHub.
+  <p><hr></p>
+  <p><a class="btn btn-primary" href="https://raw.githubusercontent.com/eriqande/rep-res-course/master/lectures/lists.rmd">Raw on GitHub</a></p>
+</div>
+
+<h4>Page Contents</h4>
+<ul class="list-unstyled" id="toc"></ul>
+
+<hr>
+<p><a href="http://eriqande.github.io/rep-res-web/contribute.html">How to contribute</a></p>
+<p><a class="btn btn-primary" href="https://github.com/eriqande/rep-res-course/edit/master/lectures/lists.rmd">Edit this page</a></p>
+
+
+        </div>
+
+        <div id="content" class="col-sm-8 pull-right">
+          <h1 id="lists-lecture">Lists (aka “recursive vectors”)</h1>
+<h2 id="intro-to-lists">Introduction to Lists</h2>
+<ul>
+<li>A <em>list</em> in R is a special type of vector.<br /></li>
+<li>Previously we have seen <em>atomic vectors</em> in which each element is a scalar/singleton and all elements must be of the same mode.</li>
+<li>In a list, each <em>component</em> can be <em>any object of any sort</em>! So, a single component of a list can be an atomic vector, or another list, or a function, or an array, or a data frame, etc.<br /></li>
+<li>No restriction that the different components of a list be of the same <code>mode</code>, or <code>length</code>, or <code>class</code> or <em>anything</em>!</li>
+<li>This makes the <code>list</code> class <em>very powerful (!!)</em> and makes lists a <em>very important</em> type of object in R.</li>
+<li>Most high level functions (like <code>lm</code> or <code>hist</code>, etc.) return their results in lists
+<ul>
+<li>So, you really need to know how to:
+<ol style="list-style-type: decimal">
+<li>Recognize lists when you see them</li>
+<li>Access elements from lists</li>
+<li>Operate upon the components of lists</li>
+</ol></li>
+<li>You will also want to know how to create and use <em>lists</em> yourself.</li>
+</ul></li>
+</ul>
+<h3>Creating Lists</h3>
+<p>You use the <code>list()</code> function to create a list.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># make L an empty list</span>
+L &lt;-<span class="st"> </span><span class="kw">list</span>()  
+L
+<span class="co">#&gt; list()</span>
+
+
+<span class="co"># make a list of two components</span>
+M &lt;-<span class="st"> </span><span class="kw">list</span>( <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">6</span>), <span class="kw">c</span>(<span class="st">&quot;a&quot;</span>,<span class="st">&quot;b&quot;</span>) )
+M
+<span class="co">#&gt; [[1]]</span>
+<span class="co">#&gt; [1] 2 4 6</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[2]]</span>
+<span class="co">#&gt; [1] &quot;a&quot; &quot;b&quot;</span>
+
+
+<span class="co"># make a list of three components</span>
+N &lt;-<span class="st"> </span><span class="kw">list</span>( <span class="dv">12</span>, <span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">4</span>), <span class="kw">c</span>(T,T,T,F))
+N
+<span class="co">#&gt; [[1]]</span>
+<span class="co">#&gt; [1] 12</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[2]]</span>
+<span class="co">#&gt; [1] 3 4</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[3]]</span>
+<span class="co">#&gt; [1]  TRUE  TRUE  TRUE FALSE</span></code></pre>
+<h3>How R prints lists</h3>
+<ul>
+<li>Notice that the i-th component is printed after a <code>[[i]]</code> in R’s output.
+<ul>
+<li>Shortly we will see that this explicitly tells us how we can extract these values from the list.</li>
+</ul></li>
+<li><p>What if a list includes another list as a component?</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># make a list that has another list as a component</span>
+Q &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>),
+          <span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;d&quot;</span>),
+          <span class="kw">list</span>(<span class="st">&quot;squish&quot;</span>,
+               <span class="kw">list</span>(<span class="st">&quot;whizz-bang&quot;</span>,
+                    <span class="kw">c</span>(F, F, T)
+                    )
+               )
+          )
+Q
+<span class="co">#&gt; [[1]]</span>
+<span class="co">#&gt; [1] 1 2 3 4 5 6</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[2]]</span>
+<span class="co">#&gt; [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[3]]</span>
+<span class="co">#&gt; [[3]][[1]]</span>
+<span class="co">#&gt; [1] &quot;squish&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[3]][[2]]</span>
+<span class="co">#&gt; [[3]][[2]][[1]]</span>
+<span class="co">#&gt; [1] &quot;whizz-bang&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[3]][[2]][[2]]</span>
+<span class="co">#&gt; [1] FALSE FALSE  TRUE</span></code></pre></li>
+</ul>
+<h3>Names for list components</h3>
+<ul>
+<li>Just as we saw atomic vectors with a <code>names</code> attribute, so too can lists have names.</li>
+<li>You can pass names in to the <code>list()</code> function:
+<ul>
+<li><code>list()</code> takes arguments that are have a <code>value</code> or <code>tag=value</code> format.<br /></li>
+<li><p>The <code>tag</code>s are recorded in the <code>names</code> attribute of the list.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># list of 2 named components and one unnamed one</span>
+a &lt;-<span class="st"> </span><span class="kw">list</span>( <span class="dt">foo =</span> <span class="kw">c</span>(<span class="st">&quot;q&quot;</span>,<span class="st">&quot;w&quot;</span>), <span class="dt">bar =</span> <span class="st">&quot;MINE!&quot;</span>, <span class="dv">3+5</span>*1i )
+
+
+<span class="co"># note that the names of the components are stored in the </span>
+<span class="co"># list&#39;s names attribute. Accessible with the names function</span>
+<span class="kw">names</span>(a)  <span class="co"># the names are stored in this attribute</span>
+<span class="co">#&gt; [1] &quot;foo&quot; &quot;bar&quot; &quot;&quot;</span></code></pre></li>
+</ul></li>
+</ul>
+<h3>Backtrack: you can do the same with <em>c()</em></h3>
+<ul>
+<li><p>In the last lecture, we may not have noted that <code>names</code> can be assigned to the elements of atomic vectors during assignment with <code>c()</code>, just like one can with <code>list()</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># example of assigning names and values with c() </span>
+weights &lt;-<span class="st"> </span><span class="kw">c</span>( <span class="dt">onefish =</span> <span class="dv">90</span>, 
+              <span class="dt">twofish =</span> <span class="dv">101</span>,
+              <span class="dt">redfish =</span> <span class="dv">112</span>, 
+              <span class="dt">bluefish =</span> <span class="dv">107</span>
+              )
+weights
+<span class="co">#&gt;  onefish  twofish  redfish bluefish </span>
+<span class="co">#&gt;       90      101      112      107</span>
+
+<span class="co"># check out the names:</span>
+<span class="kw">names</span>(weights)
+<span class="co">#&gt; [1] &quot;onefish&quot;  &quot;twofish&quot;  &quot;redfish&quot;  &quot;bluefish&quot;</span></code></pre></li>
+</ul>
+<h3>How R prints complex lists with names</h3>
+<p>Let’s recreate our Q list from above, but put a few names on it (and call it Z):</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># make a list that has another list as a component</span>
+Z &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">screaming =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>),
+          <span class="dt">yellow =</span> <span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;d&quot;</span>),
+          <span class="dt">zonkers =</span> <span class="kw">list</span>(<span class="st">&quot;squish&quot;</span>,
+                         <span class="dt">second =</span> <span class="kw">list</span>(<span class="dt">a.name =</span> <span class="st">&quot;whizz-bang&quot;</span>,
+                                       <span class="kw">c</span>(F, F, T)
+                                       )
+                         )
+          )
+Z
+<span class="co">#&gt; $screaming</span>
+<span class="co">#&gt; [1] 1 2 3 4 5 6</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $yellow</span>
+<span class="co">#&gt; [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $zonkers</span>
+<span class="co">#&gt; $zonkers[[1]]</span>
+<span class="co">#&gt; [1] &quot;squish&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $zonkers$second</span>
+<span class="co">#&gt; $zonkers$second$a.name</span>
+<span class="co">#&gt; [1] &quot;whizz-bang&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $zonkers$second[[2]]</span>
+<span class="co">#&gt; [1] FALSE FALSE  TRUE</span></code></pre>
+<h2 id="single-chomp">Accessing Parts of Lists with [ ]</h2>
+<h3>The Boxcar analogy</h3>
+<p>Someone had a nice way of thinking about lists:</p>
+<ul>
+<li>You can think of a list as a train.</li>
+<li>Each component of a list is a boxcar.</li>
+<li>What that component holds is the contents of the boxcar.</li>
+</ul>
+<p>The weird thing about this is that inside a boxcar you can have a whole ’nuther train…</p>
+<ul>
+<li>However, it provides a nice way of thinking about the indexing lists with the different list indexing operators.</li>
+</ul>
+<h3>List indexing operators</h3>
+<ul>
+<li>There are <code>[ ]</code> and ’[[ ]]<code>and</code>$`.<br /></li>
+<li>We will talk about <code>[ ]</code> first</li>
+</ul>
+<h3><em>L[ vec ]</em> — The “standard” indexing operator</h3>
+<ul>
+<li>This is what we have been using on atomic vectors.</li>
+<li>When applied to a list the <code>[ ]</code> indexing operator
+<ul>
+<li>Returns a list, stil!</li>
+<li>Effectively just picks out boxcars from the original list (i.e. original train) and links them up (in the order prescribed by the indexing operator) into a new train.</li>
+</ul></li>
+<li>I like to call it the “single-chomp” indexing operator—it’s like a pair of jaws that just rips off a chunk of the list but doesn’t “chew” into the boxcars at all.</li>
+</ul>
+<h3>A diagram might help</h3>
+<ul>
+<li>Here is the list <code>Z</code> from above. It is a train with three boxcars:</li>
+</ul>
+<p><img src="diagrams/list-train.png" alt="list-train.png" /></p>
+<ul>
+<li><p>Never mind that the boxcar named “zonkers” has a lot of complicated stuff in it.</p></li>
+<li><strong>Now, this is crucial:</strong> From the perspective of the <code>[ ]</code> indexing operator the train is just a bunch of boxcars.
+<ul>
+<li>The <code>[ ]</code> is agnostic to the contents of the boxcars…</li>
+<li>When you index it with <code>[ ]</code>, the <code>[ ]</code> does just what it would do with an atomic vector, it just happens that the elements of a <em>list</em> can be thought of as singleton <em>lists</em>, themselves (instead of <em>logicals</em> or <em>numerics</em>, etc.)</li>
+</ul></li>
+</ul>
+<h3>The way <em>[ ]</em> sees a list:</h3>
+<p>So, to the <code>[ ]</code> (“single-chomp” indexing operator) the list <code>Z</code> really looks like this:</p>
+<p><img src="diagrams/list-train-agnostic.png" alt="list-train-agnostic.png" /></p>
+<p>Hence if do this <code>Z[c(3,1)]</code> you get a list back that looks like:</p>
+<p><img src="diagrams/list-train-agnostic-3-1.png" alt="list-train-agnostic-3-1.png" /></p>
+<p>And if you had X-ray eyes and were able to peek into each of the boxcars of the list <code>Z[c(3,1)]</code>, the list would look like this:</p>
+<p><img src="diagrams/list-train-3-1.png" alt="list-train-3-1.png" /></p>
+<h3>Examples of indexing with <em>[vec]</em> on lists in code</h3>
+<ul>
+<li>Consider indexing a list with <code>[vec]</code></li>
+<li>As before, <code>vec</code> is a vector that is positive numeric, negative numeric, logical, or character (names) (recall the four main ways of indexing a vector…)</li>
+<li>So, let’s see what it looks like when we index some of the lists we created up above:</li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># first play around with the list N</span>
+N
+<span class="co">#&gt; [[1]]</span>
+<span class="co">#&gt; [1] 12</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[2]]</span>
+<span class="co">#&gt; [1] 3 4</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[3]]</span>
+<span class="co">#&gt; [1]  TRUE  TRUE  TRUE FALSE</span>
+
+
+N[<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">1</span>)]
+<span class="co">#&gt; [[1]]</span>
+<span class="co">#&gt; [1]  TRUE  TRUE  TRUE FALSE</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[2]]</span>
+<span class="co">#&gt; [1] 12</span>
+
+
+N[-<span class="dv">1</span>]
+<span class="co">#&gt; [[1]]</span>
+<span class="co">#&gt; [1] 3 4</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[2]]</span>
+<span class="co">#&gt; [1]  TRUE  TRUE  TRUE FALSE</span>
+
+
+<span class="co"># now index the list a</span>
+a
+<span class="co">#&gt; $foo</span>
+<span class="co">#&gt; [1] &quot;q&quot; &quot;w&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $bar</span>
+<span class="co">#&gt; [1] &quot;MINE!&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[3]]</span>
+<span class="co">#&gt; [1] 3+5i</span>
+
+
+a[<span class="kw">c</span>(T,T)]
+<span class="co">#&gt; $foo</span>
+<span class="co">#&gt; [1] &quot;q&quot; &quot;w&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $bar</span>
+<span class="co">#&gt; [1] &quot;MINE!&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[3]]</span>
+<span class="co">#&gt; [1] 3+5i</span>
+
+
+a[<span class="kw">c</span>(<span class="st">&quot;foo&quot;</span>, <span class="st">&quot;bar&quot;</span>)]
+<span class="co">#&gt; $foo</span>
+<span class="co">#&gt; [1] &quot;q&quot; &quot;w&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $bar</span>
+<span class="co">#&gt; [1] &quot;MINE!&quot;</span>
+
+
+a[<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">2</span>)]
+<span class="co">#&gt; [[1]]</span>
+<span class="co">#&gt; [1] 3+5i</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $bar</span>
+<span class="co">#&gt; [1] &quot;MINE!&quot;</span></code></pre>
+<h3>Summary</h3>
+<ul>
+<li>When you index a variable <code>L</code> with <code>[ ]</code>, then
+<ul>
+<li>If <code>L</code> is a list, the result is a list.</li>
+<li>If <code>L</code> is an atomic vector, the result is an atomic vector.</li>
+</ul></li>
+</ul>
+<h2 id="double-chomp">Accessing Single Components of Lists with [[ ]]</h2>
+<ul>
+<li>Indexing with <code>[ ]</code> is all fine and dandy if all we ever want to do is shuffle boxcars around.</li>
+<li>But, typically, “the goods” are <em>inside the boxcars!</em></li>
+<li>How can we get at what is <em>in the boxcars</em>?</li>
+<li>Enter the <code>[[ ]]</code> indexing operator.</li>
+<li>If we do <code>L[[i]]</code>, then,
+<ol style="list-style-type: decimal">
+<li>We go to boxcar <em>i</em></li>
+<li>We open the door of boxcar <em>i</em>, pull out <em>its contents</em>, and return the contents (but not the boxcar “shell”)</li>
+</ol></li>
+</ul>
+<h3>Call it a two-chomp extractor…</h3>
+<p>I think of <code>[[ ]]</code> as the “two-chomp” extractor. (which is what it looks like…if <code>[ ]</code> is the one-chomp extractor) + The first chomp grabs a boxcar + The second one chews on the boxcar to “crunch off” its outer shell.</p>
+<h3><em>[[ i ]]</em> only works with single indexes</h3>
+<p>Here is how I think of it: * Because <code>[[ ]]</code> is “chewing” (to crunch into the boxcar) it can’t take too big of a bite * In fact, it can only chew on a single component of a list (single boxcar) at a time * So <code>i</code> in <code>[[i]]</code> can be only: + a single positive integer, <strong>OR</strong> + a single <em>name</em> of a component. * “Crunching off” its outer shell means it returns the <em>contents</em> of the component, and <em>not</em> a list that contains that component. + However, if the contents of the boxcar <em>is</em> another list (for example the “zonkers” component in <code>Z</code>), then, of course that list gets returned as a list. + i.e., it only chews through the outermost boxcar.</p>
+<pre class="sourceCode r"><code class="sourceCode r">N[<span class="dv">2</span>]  <span class="co"># single chomp</span>
+<span class="co">#&gt; [[1]]</span>
+<span class="co">#&gt; [1] 3 4</span>
+
+
+N[[<span class="dv">2</span>]] <span class="co"># two chomps (one bite, one chew!)</span>
+<span class="co">#&gt; [1] 3 4</span>
+
+
+a[<span class="st">&quot;foo&quot;</span>] <span class="co"># single chomp</span>
+<span class="co">#&gt; $foo</span>
+<span class="co">#&gt; [1] &quot;q&quot; &quot;w&quot;</span>
+
+
+a[[<span class="st">&quot;foo&quot;</span>]] <span class="co"># two chomps</span>
+<span class="co">#&gt; [1] &quot;q&quot; &quot;w&quot;</span></code></pre>
+<h4>These would not work</h4>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># indexer for [[ ]] must be of length 1</span>
+a[[ <span class="kw">c</span>(<span class="st">&quot;foo&quot;</span>, <span class="st">&quot;bar&quot;</span>)]]
+
+a[[<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>)]]
+
+<span class="co"># indexer for [[ ]] cannot be negative</span>
+a[[-<span class="dv">1</span>]]
+
+<span class="co"># indexer for [[ ]] oughtn&#39;t be a logical vector</span>
+a[[ <span class="ot">TRUE</span> ]]  <span class="co"># this only works because TRUE</span>
+             <span class="co"># gets coerced to 1</span>
+
+a[[<span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="ot">TRUE</span>)]] <span class="co"># this returns &quot;q&quot;.  Weird subtetly. </span>
+                   <span class="co"># not recommended!</span>
+
+a[[<span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="ot">FALSE</span>)]]  <span class="co"># fails appropriately</span></code></pre>
+<ul>
+<li><strong>N.B.</strong> The <code>[[ ]]</code> can be used with atomic vectors, but seldom is, as it offers nothing over <code>[ ]</code> in the atomic vector case.</li>
+</ul>
+<h2 id="dollar-sign">The $ Two-Chomp Extractor</h2>
+<p>If you have names on your list, you can use the <code>$</code> to extract <em>the contents</em> of single components like so:</p>
+<pre class="sourceCode r"><code class="sourceCode r">a$foo
+<span class="co">#&gt; [1] &quot;q&quot; &quot;w&quot;</span>
+
+a$bar
+<span class="co">#&gt; [1] &quot;MINE!&quot;</span></code></pre>
+<p>Which is convenient if you are typing the name since you don’t have to use quotation marks. But it does not work with names that are stored in objects:</p>
+<pre class="sourceCode r"><code class="sourceCode r">i &lt;-<span class="st"> &quot;foo&quot;</span>
+
+
+a$i  <span class="co"># NULL! no component named i</span>
+<span class="co">#&gt; NULL</span>
+
+
+a[[i]] <span class="co"># this returns the same as a$foo</span>
+<span class="co">#&gt; [1] &quot;q&quot; &quot;w&quot;</span></code></pre>
+<h3>Class Activity:</h3>
+<p>Given our list Z:</p>
+<pre class="sourceCode r"><code class="sourceCode r">Z
+<span class="co">#&gt; $screaming</span>
+<span class="co">#&gt; [1] 1 2 3 4 5 6</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $yellow</span>
+<span class="co">#&gt; [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $zonkers</span>
+<span class="co">#&gt; $zonkers[[1]]</span>
+<span class="co">#&gt; [1] &quot;squish&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $zonkers$second</span>
+<span class="co">#&gt; $zonkers$second$a.name</span>
+<span class="co">#&gt; [1] &quot;whizz-bang&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $zonkers$second[[2]]</span>
+<span class="co">#&gt; [1] FALSE FALSE  TRUE</span></code></pre>
+<p>How can you extract the part whose value is: <code>&quot;whizz-bang&quot;</code>.</p>
+<p>Do that with <em>names</em>, and with <em>integer indices</em>, and also do it with <code>$</code> and with `<code>[[ ]]</code> and with a combination of both.</p>
+<p>Recall that R prints lists with headers that show how you could access each element.</p>
+<h3>The $ extractor might need quotes</h3>
+<ul>
+<li>If the names of the list don’t satisfy the requirements for names of symbols in the R language, then you need to quote them</li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r">b &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;my bonny&quot;</span> =<span class="st"> </span><span class="dv">1</span>:<span class="dv">3</span>, <span class="st">&quot;lies-over&quot;</span> =<span class="st"> </span><span class="dv">4</span>:<span class="dv">9</span>, <span class="st">&quot;the.ocean&quot;</span> =<span class="st"> </span><span class="dv">10</span>:<span class="dv">14</span>)
+
+<span class="co"># note when you print it you see the single backticks:</span>
+b
+<span class="co">#&gt; $`my bonny`</span>
+<span class="co">#&gt; [1] 1 2 3</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`lies-over`</span>
+<span class="co">#&gt; [1] 4 5 6 7 8 9</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $the.ocean</span>
+<span class="co">#&gt; [1] 10 11 12 13 14</span>
+
+<span class="co"># so, this will work:</span>
+b$<span class="st">`</span><span class="dt">lies-over</span><span class="st">`</span>
+<span class="co">#&gt; [1] 4 5 6 7 8 9</span>
+
+<span class="co"># but it might be preferable to do</span>
+b[[<span class="st">&quot;lies-over&quot;</span>]]
+<span class="co">#&gt; [1] 4 5 6 7 8 9</span>
+
+<span class="co"># this would fail:  b$lies-over</span>
+
+<span class="co"># Oddly, this works:</span>
+b$my
+<span class="co">#&gt; [1] 1 2 3</span>
+
+<span class="co"># Why?</span></code></pre>
+<h3>$ and name matching</h3>
+<ul>
+<li>If the name given to $ is the unique prefix of name in the list, then it will automagically expand to that</li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r">silly &lt;-<span class="st"> </span><span class="kw">list</span>( <span class="dt">here.is.a.stupid.long.name =</span> <span class="kw">c</span>(F, T, T),
+               <span class="dt">here.is.another.stupid.long.name =</span> <span class="dv">4</span>:<span class="dv">8</span>
+               )
+
+silly$here.is.a.  <span class="co"># this works for here.is.a.stupid.long.name</span>
+<span class="co">#&gt; [1] FALSE  TRUE  TRUE</span>
+
+silly$here.is.an  <span class="co"># this works for here.is.another.stupid.long.name</span>
+<span class="co">#&gt; [1] 4 5 6 7 8</span>
+
+<span class="co"># these return NULL</span>
+silly$here.is.a
+<span class="co">#&gt; NULL</span>
+
+silly$here
+<span class="co">#&gt; NULL</span>
+
+silly$something.completely.different
+<span class="co">#&gt; NULL</span>
+
+silly[[<span class="st">&quot;what.is.going.on.here?&quot;</span>]]
+<span class="co">#&gt; NULL</span></code></pre>
+<h2 id="list-add-or-change">Adding or Changing Components</h2>
+<h3>You can add a component to a list using <em>[[ ]]</em> or $:</h3>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">length</span>(a)  <span class="co"># number of components</span>
+<span class="co">#&gt; [1] 3</span>
+
+
+a[[<span class="st">&quot;boing&quot;</span>]] &lt;-<span class="st"> </span><span class="dv">1</span>:<span class="dv">24</span>
+
+
+<span class="kw">length</span>(a) <span class="co"># it is now one component longer</span>
+<span class="co">#&gt; [1] 4</span>
+
+
+a$another &lt;-<span class="st"> </span><span class="dv">1</span>:<span class="dv">24</span> &gt;<span class="st"> </span><span class="dv">8</span> &amp;<span class="st"> </span><span class="dv">1</span>:<span class="dv">24</span> &lt;<span class="st"> </span><span class="dv">13</span>
+
+
+a[[<span class="dv">10</span>]] &lt;-<span class="st"> &quot;this is way out there&quot;</span></code></pre>
+<p>Adding an element to a list that is beyond its current length pads the rest with <code>NULL</code>s</p>
+<h3>You can also <em>replace</em> a component using <em>[[ ]]</em> or <em>$</em></h3>
+<pre class="sourceCode r"><code class="sourceCode r">a
+<span class="co">#&gt; $foo</span>
+<span class="co">#&gt; [1] &quot;q&quot; &quot;w&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $bar</span>
+<span class="co">#&gt; [1] &quot;MINE!&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[3]]</span>
+<span class="co">#&gt; [1] 3+5i</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $boing</span>
+<span class="co">#&gt;  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23</span>
+<span class="co">#&gt; [24] 24</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $another</span>
+<span class="co">#&gt;  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE</span>
+<span class="co">#&gt; [12]  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE</span>
+<span class="co">#&gt; [23] FALSE FALSE</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[6]]</span>
+<span class="co">#&gt; NULL</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[7]]</span>
+<span class="co">#&gt; NULL</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[8]]</span>
+<span class="co">#&gt; NULL</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[9]]</span>
+<span class="co">#&gt; NULL</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[10]]</span>
+<span class="co">#&gt; [1] &quot;this is way out there&quot;</span>
+
+
+a$bar &lt;-<span class="st"> &quot;YOURS&quot;</span>
+
+a
+<span class="co">#&gt; $foo</span>
+<span class="co">#&gt; [1] &quot;q&quot; &quot;w&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $bar</span>
+<span class="co">#&gt; [1] &quot;YOURS&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[3]]</span>
+<span class="co">#&gt; [1] 3+5i</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $boing</span>
+<span class="co">#&gt;  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23</span>
+<span class="co">#&gt; [24] 24</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $another</span>
+<span class="co">#&gt;  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE</span>
+<span class="co">#&gt; [12]  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE</span>
+<span class="co">#&gt; [23] FALSE FALSE</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[6]]</span>
+<span class="co">#&gt; NULL</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[7]]</span>
+<span class="co">#&gt; NULL</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[8]]</span>
+<span class="co">#&gt; NULL</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[9]]</span>
+<span class="co">#&gt; NULL</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[10]]</span>
+<span class="co">#&gt; [1] &quot;this is way out there&quot;</span></code></pre>
+<h2 id="list-essentials">Various List Essentials</h2>
+<h3>Catenating lists</h3>
+<ul>
+<li>You can use the <code>c()</code> operator to catenate lists. If any argument is a list, then it creates a list</li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">c</span>(a,N) <span class="co"># stick those in there</span>
+<span class="co">#&gt; $foo</span>
+<span class="co">#&gt; [1] &quot;q&quot; &quot;w&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $bar</span>
+<span class="co">#&gt; [1] &quot;YOURS&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[3]]</span>
+<span class="co">#&gt; [1] 3+5i</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $boing</span>
+<span class="co">#&gt;  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23</span>
+<span class="co">#&gt; [24] 24</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $another</span>
+<span class="co">#&gt;  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE</span>
+<span class="co">#&gt; [12]  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE</span>
+<span class="co">#&gt; [23] FALSE FALSE</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[6]]</span>
+<span class="co">#&gt; NULL</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[7]]</span>
+<span class="co">#&gt; NULL</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[8]]</span>
+<span class="co">#&gt; NULL</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[9]]</span>
+<span class="co">#&gt; NULL</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[10]]</span>
+<span class="co">#&gt; [1] &quot;this is way out there&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[11]]</span>
+<span class="co">#&gt; [1] 12</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[12]]</span>
+<span class="co">#&gt; [1] 3 4</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[13]]</span>
+<span class="co">#&gt; [1]  TRUE  TRUE  TRUE FALSE</span>
+
+<span class="kw">c</span>(a,<span class="kw">c</span>(<span class="st">&quot;oops&quot;</span>, <span class="st">&quot;this&quot;</span>, <span class="st">&quot;atomic&quot;</span>, <span class="st">&quot;vector&quot;</span>, <span class="st">&quot;gets&quot;</span>, <span class="st">&quot;listized!&quot;</span>))
+<span class="co">#&gt; $foo</span>
+<span class="co">#&gt; [1] &quot;q&quot; &quot;w&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $bar</span>
+<span class="co">#&gt; [1] &quot;YOURS&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[3]]</span>
+<span class="co">#&gt; [1] 3+5i</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $boing</span>
+<span class="co">#&gt;  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23</span>
+<span class="co">#&gt; [24] 24</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $another</span>
+<span class="co">#&gt;  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE</span>
+<span class="co">#&gt; [12]  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE</span>
+<span class="co">#&gt; [23] FALSE FALSE</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[6]]</span>
+<span class="co">#&gt; NULL</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[7]]</span>
+<span class="co">#&gt; NULL</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[8]]</span>
+<span class="co">#&gt; NULL</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[9]]</span>
+<span class="co">#&gt; NULL</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[10]]</span>
+<span class="co">#&gt; [1] &quot;this is way out there&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[11]]</span>
+<span class="co">#&gt; [1] &quot;oops&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[12]]</span>
+<span class="co">#&gt; [1] &quot;this&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[13]]</span>
+<span class="co">#&gt; [1] &quot;atomic&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[14]]</span>
+<span class="co">#&gt; [1] &quot;vector&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[15]]</span>
+<span class="co">#&gt; [1] &quot;gets&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[16]]</span>
+<span class="co">#&gt; [1] &quot;listized!&quot;</span></code></pre>
+<ul>
+<li>Note how different this is than trying to catenate with <code>list()</code></li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r">z &lt;-<span class="st"> </span><span class="kw">list</span>(a,N)  <span class="co"># this makes a new list with two components that are lists!</span>
+
+z[[<span class="dv">1</span>]]$another;  <span class="co"># two two-bites!</span>
+<span class="co">#&gt;  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE</span>
+<span class="co">#&gt; [12]  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE</span>
+<span class="co">#&gt; [23] FALSE FALSE</span>
+z[[<span class="dv">1</span>]][[<span class="dv">5</span>]][<span class="dv">11</span>]  <span class="co"># two two-bites and a one-bite!</span>
+<span class="co">#&gt; [1] TRUE</span></code></pre>
+<h3>Coercing To/Away From List</h3>
+<ul>
+<li><code>as.list()</code> to coerce an atomic vector to be a list with each component being a scalar:</li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r">w &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;this&quot;</span>, <span class="st">&quot;is&quot;</span>, <span class="st">&quot;only&quot;</span>, <span class="st">&quot;a&quot;</span>, <span class="st">&quot;test&quot;</span>)
+
+<span class="kw">as.list</span>(w)  <span class="co"># make a list of the vector</span>
+<span class="co">#&gt; [[1]]</span>
+<span class="co">#&gt; [1] &quot;this&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[2]]</span>
+<span class="co">#&gt; [1] &quot;is&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[3]]</span>
+<span class="co">#&gt; [1] &quot;only&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[4]]</span>
+<span class="co">#&gt; [1] &quot;a&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[5]]</span>
+<span class="co">#&gt; [1] &quot;test&quot;</span>
+<span class="kw">names</span>(w) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;one&quot;</span>, <span class="st">&quot;two&quot;</span>, <span class="st">&quot;three&quot;</span>, <span class="st">&quot;four&quot;</span>, <span class="st">&quot;fish&quot;</span>)
+<span class="kw">as.list</span>(w)  <span class="co"># names are preserved</span>
+<span class="co">#&gt; $one</span>
+<span class="co">#&gt; [1] &quot;this&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $two</span>
+<span class="co">#&gt; [1] &quot;is&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $three</span>
+<span class="co">#&gt; [1] &quot;only&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $four</span>
+<span class="co">#&gt; [1] &quot;a&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $fish</span>
+<span class="co">#&gt; [1] &quot;test&quot;</span></code></pre>
+<ul>
+<li><code>unlist()</code> to “flatten” a list into an atomic vector, coercing mode to the most general. Note that <code>names</code> if present get prepended to indexes, and NULL components are omitted:</li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">unlist</span>(a)
+<span class="co">#&gt;                    foo1                    foo2                     bar </span>
+<span class="co">#&gt;                     &quot;q&quot;                     &quot;w&quot;                 &quot;YOURS&quot; </span>
+<span class="co">#&gt;                                          boing1                  boing2 </span>
+<span class="co">#&gt;                  &quot;3+5i&quot;                     &quot;1&quot;                     &quot;2&quot; </span>
+<span class="co">#&gt;                  boing3                  boing4                  boing5 </span>
+<span class="co">#&gt;                     &quot;3&quot;                     &quot;4&quot;                     &quot;5&quot; </span>
+<span class="co">#&gt;                  boing6                  boing7                  boing8 </span>
+<span class="co">#&gt;                     &quot;6&quot;                     &quot;7&quot;                     &quot;8&quot; </span>
+<span class="co">#&gt;                  boing9                 boing10                 boing11 </span>
+<span class="co">#&gt;                     &quot;9&quot;                    &quot;10&quot;                    &quot;11&quot; </span>
+<span class="co">#&gt;                 boing12                 boing13                 boing14 </span>
+<span class="co">#&gt;                    &quot;12&quot;                    &quot;13&quot;                    &quot;14&quot; </span>
+<span class="co">#&gt;                 boing15                 boing16                 boing17 </span>
+<span class="co">#&gt;                    &quot;15&quot;                    &quot;16&quot;                    &quot;17&quot; </span>
+<span class="co">#&gt;                 boing18                 boing19                 boing20 </span>
+<span class="co">#&gt;                    &quot;18&quot;                    &quot;19&quot;                    &quot;20&quot; </span>
+<span class="co">#&gt;                 boing21                 boing22                 boing23 </span>
+<span class="co">#&gt;                    &quot;21&quot;                    &quot;22&quot;                    &quot;23&quot; </span>
+<span class="co">#&gt;                 boing24                another1                another2 </span>
+<span class="co">#&gt;                    &quot;24&quot;                 &quot;FALSE&quot;                 &quot;FALSE&quot; </span>
+<span class="co">#&gt;                another3                another4                another5 </span>
+<span class="co">#&gt;                 &quot;FALSE&quot;                 &quot;FALSE&quot;                 &quot;FALSE&quot; </span>
+<span class="co">#&gt;                another6                another7                another8 </span>
+<span class="co">#&gt;                 &quot;FALSE&quot;                 &quot;FALSE&quot;                 &quot;FALSE&quot; </span>
+<span class="co">#&gt;                another9               another10               another11 </span>
+<span class="co">#&gt;                  &quot;TRUE&quot;                  &quot;TRUE&quot;                  &quot;TRUE&quot; </span>
+<span class="co">#&gt;               another12               another13               another14 </span>
+<span class="co">#&gt;                  &quot;TRUE&quot;                 &quot;FALSE&quot;                 &quot;FALSE&quot; </span>
+<span class="co">#&gt;               another15               another16               another17 </span>
+<span class="co">#&gt;                 &quot;FALSE&quot;                 &quot;FALSE&quot;                 &quot;FALSE&quot; </span>
+<span class="co">#&gt;               another18               another19               another20 </span>
+<span class="co">#&gt;                 &quot;FALSE&quot;                 &quot;FALSE&quot;                 &quot;FALSE&quot; </span>
+<span class="co">#&gt;               another21               another22               another23 </span>
+<span class="co">#&gt;                 &quot;FALSE&quot;                 &quot;FALSE&quot;                 &quot;FALSE&quot; </span>
+<span class="co">#&gt;               another24                         </span>
+<span class="co">#&gt;                 &quot;FALSE&quot; &quot;this is way out there&quot;</span></code></pre>
+
+          <hr>
+           <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'rep-res-course'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    
+        </div>
+      </div>
+
+            <div class="footer">
+        <hr>
+        <p>
+          <small>
+            Authored by Eric C. Anderson working as a Federal employee.  Content on this website is a government work in the public domain in the U.S. and under the CC0 1.0 internationally. Templates and plugins to build the site are modified from Hadley Wickham's <a href="https://github.com/hadley/adv-r/">Advanced R</a> website. Powered by <a href="http://jekyllrb.com/">jekyll</a>,
+          <a href="http://yihui.name/knitr/">knitr</a>, and
+          <a href="http://johnmacfarlane.net/pandoc/">pandoc</a>. Source
+          available on <a href="https://github.com/eriqande/rep-res-course/">github</a>.
+          </small>
+        </p>
+      </div>
+
+
+    </div> <!-- /container -->
+
+  <script src="//code.jquery.com/jquery.js"></script>
+  <script src="http://eriqande.github.io/rep-res-web/www/bootstrap.min.js"></script>
+  <script src="http://eriqande.github.io/rep-res-web/www/toc.js"></script>
+  <script type="text/javascript"
+    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  </body>
+</html>
+
