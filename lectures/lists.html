@@ -300,15 +300,12 @@ a
 <span class="co">#&gt; [1] 3+5i</span>
 
 
-a[<span class="kw">c</span>(T,T)]
+a[<span class="kw">c</span>(T,T,F)]
 <span class="co">#&gt; $foo</span>
 <span class="co">#&gt; [1] &quot;q&quot; &quot;w&quot;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $bar</span>
 <span class="co">#&gt; [1] &quot;MINE!&quot;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[3]]</span>
-<span class="co">#&gt; [1] 3+5i</span>
 
 
 a[<span class="kw">c</span>(<span class="st">&quot;foo&quot;</span>, <span class="st">&quot;bar&quot;</span>)]
@@ -346,9 +343,31 @@ a[<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">2</span>)
 </ol></li>
 </ul>
 <h3>Call it a two-chomp extractor…</h3>
-<p>I think of <code>[[ ]]</code> as the “two-chomp” extractor. (which is what it looks like…if <code>[ ]</code> is the one-chomp extractor) + The first chomp grabs a boxcar + The second one chews on the boxcar to “crunch off” its outer shell.</p>
+<ul>
+<li>I think of <code>[[ ]]</code> as the “two-chomp” extractor. (which is what it looks like…if <code>[ ]</code> is the one-chomp extractor)
+<ul>
+<li>The first chomp grabs a boxcar</li>
+<li>The second one chews on the boxcar to “crunch off” its outer shell.</li>
+</ul></li>
+</ul>
 <h3><em>[[ i ]]</em> only works with single indexes</h3>
-<p>Here is how I think of it: * Because <code>[[ ]]</code> is “chewing” (to crunch into the boxcar) it can’t take too big of a bite * In fact, it can only chew on a single component of a list (single boxcar) at a time * So <code>i</code> in <code>[[i]]</code> can be only: + a single positive integer, <strong>OR</strong> + a single <em>name</em> of a component. * “Crunching off” its outer shell means it returns the <em>contents</em> of the component, and <em>not</em> a list that contains that component. + However, if the contents of the boxcar <em>is</em> another list (for example the “zonkers” component in <code>Z</code>), then, of course that list gets returned as a list. + i.e., it only chews through the outermost boxcar.</p>
+<p>Here is how I think of it:</p>
+<ul>
+<li>Because <code>[[ ]]</code> is “chewing” (to crunch into the boxcar) it can’t take too big of a bite</li>
+<li>In fact, it can only chew on a single component of a list (single boxcar) at a time</li>
+<li>So <code>i</code> in <code>[[i]]</code> can be only:
+<ul>
+<li>a single positive integer, <strong>OR</strong></li>
+<li>a single <em>name</em> of a component.</li>
+</ul></li>
+<li>“Crunching off” its outer shell means it returns the <em>contents</em> of the component, and <em>not</em> a list that contains that component.
+<ul>
+<li>However, if the contents of the boxcar <em>is</em> another list (for example the “zonkers” component in <code>Z</code>), then, of course that list gets returned as a list.
+<ul>
+<li>i.e., it only chews through the outermost boxcar.</li>
+</ul></li>
+</ul></li>
+</ul>
 <pre class="sourceCode r"><code class="sourceCode r">N[<span class="dv">2</span>]  <span class="co"># single chomp</span>
 <span class="co">#&gt; [[1]]</span>
 <span class="co">#&gt; [1] 3 4</span>

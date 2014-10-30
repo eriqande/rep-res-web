@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Conflicts, stashing, remotes &middot; Reproducible Research.</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="http://eriqande.github.io/rep-res-web/www/bootstrap.min.css" rel="stylesheet">
+    <link href="http://eriqande.github.io/rep-res-web/www/highlight.css" rel="stylesheet">
+
+    <link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700'
+      rel='stylesheet' type='text/css'>
+  </head>
+
+  <body>
+    <div class="navbar navbar-default navbar-static-top">
+ <div class="navbar-header"><a class="navbar-brand" href="http://eriqande.github.io/rep-res-web">RepResCourse</a>
+      <a class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="http://eriqande.github.io/rep-res-web/syllabus.html">Syllabus</a></li>
+        <li><a href="http://eriqande.github.io/rep-res-web/resources.html">Resources</a></li>
+        <li><a href="http://eriqande.github.io/rep-res-web/blogs.html">Instructor Blog</a></li>
+        <li><a href="#">Results/Gallery</a></li>
+      </ul>
+      <div class="navbar-right">
+    	<p class="navbar-text">I'm navbar-fixed-top</p>
+  	  </div>
+    </div>
+</div>
+
+
+    <div class="container">
+            <!-- The title and stuff is here -->
+      <div class="masthead">
+        <p> </p>
+        <p> </p>
+        <h3 class="muted"><a href="http://eriqande.github.io/rep-res-web/">Reproducible Research Course</a> <small>by Eric C. Anderson for (NOAA/SWFSC)</small></h3>
+        <hr>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-3" id="nav">
+          <div class="well">
+  How's this site built? See all sources at the course <a href="http://github.com/eriqande/rep-res-course">repository</a> on GitHub.
+  <p><hr></p>
+  <p><a class="btn btn-primary" href="https://raw.githubusercontent.com/eriqande/rep-res-course/master/lectures/conflicts-stashing-remotes.rmd">Raw on GitHub</a></p>
+</div>
+
+<h4>Page Contents</h4>
+<ul class="list-unstyled" id="toc"></ul>
+
+<hr>
+<p><a href="http://eriqande.github.io/rep-res-web/contribute.html">How to contribute</a></p>
+<p><a class="btn btn-primary" href="https://github.com/eriqande/rep-res-course/edit/master/lectures/conflicts-stashing-remotes.rmd">Edit this page</a></p>
+
+
+        </div>
+
+        <div id="content" class="col-sm-8 pull-right">
+          <h1 id="conflicts-and-remotes">Conflicts, stashing, remotes</h1>
+<ul>
+<li>Goals for this lecture
+<ol style="list-style-type: decimal">
+<li>Help everyone get there core editor configured for git</li>
+<li>Have everyone create some merge conflicts and resolve them, finding that they really aren’t a big deal.</li>
+<li>Discuss git’s rules to avoid clobbering uncommitted work by checking out new branches and let everyone play around with <em>stashing</em>, git’s convenient way to store uncommitted work.</li>
+<li>Remote brances: learn how git interacts with remote repositories via remote branches. Let everyone set up their very own, distinct repository on GitHub.</li>
+</ol></li>
+</ul>
+<h2 id="intro-to-lists">Configuring your text editor</h2>
+<h3>Git needs messages from you</h3>
+<ul>
+<li>When you make commits, git wants you to comment on them</li>
+<li>If you don’t write a commit message, the commit gets aborted</li>
+<li>Writing comit comments in RStudio is easy: there is a “commit message” box</li>
+<li>When you are merging branches on the command line, git tries to load up a text editor.
+<ul>
+<li>Note that a text editor is any program used to edit text files. Microsoft Word is not a text editor…</li>
+</ul></li>
+<li>On Mac: Popular Unix terminal text editors include <em>emacs</em> and <em>vi</em> or <em>vim</em>
+<ul>
+<li>These can seem mysterious to the unitiated.<br /></li>
+</ul></li>
+<li>On PC: did any people on PC’s have an awkward time writing or saving their commit messages?</li>
+</ul>
+<h3>What editor does git use?</h3>
+<ul>
+<li>You can configure it:
+<ul>
+<li><p>On my system, I can look at the git configurations in effect like this (in the shell)</p>
+<pre class="sourceCode r"><code class="sourceCode r">git config --list
+
+<span class="co"># which tells me this:</span>
+user.name=Eric C. Anderson
+user.email=eric.anderson@noaa.gov
+color.ui=true
+http.sslverify=true
+push.default=matching
+credential.helper=osxkeychain
+diff.tool=opendiff
+difftool.prompt=false
+difftool.twdiff.cmd=<span class="er">/</span>usr/bin/twdiff --wait --resume $LOCAL $REMOTE
+merge.tool=twdiff
+mergetool.prompt=false
+mergetool.twdiff.cmd=<span class="er">/</span>usr/bin/twdiff --wait --resume $LOCAL $REMOTE
+core.repositoryformatversion=<span class="dv">0</span>
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+core.ignorecase=true
+core.precomposeunicode=true
+remote.origin.url=https:<span class="er">//</span>github.com/eriqande/rep-res-course.git
+remote.origin.fetch=+refs/heads/<span class="er">*:</span>refs/remotes/origin/<span class="er">*</span>
+<span class="st">  </span>branch.master.remote=origin
+branch.master.merge=refs/heads/master</code></pre></li>
+</ul></li>
+<li><p>There actually isn’t a <code>core.editor</code> in there, because git uses my Unix system definition:</p>
+<pre class="sourceCode r"><code class="sourceCode r">env |<span class="st"> </span>grep EDITOR
+
+<span class="co"># which gives:</span>
+EDITOR=emacs</code></pre></li>
+</ul>
+<h3>What should you use?</h3>
+<ul>
+<li>In my opinion, the most hassle free terminal editor for newcomers is <code>nano</code> which should already be intsalled on OS X.</li>
+<li><p>If you want a reasonable editor for git, on Mac, do this:</p>
+<pre class="sourceCode r"><code class="sourceCode r">git config --global core.editor nano</code></pre></li>
+<li>Then, when you find git asking you to edit a commit message, you get an editor that has hints about what to do.
+<ul>
+<li>Three steps to saving your commit message after editing it:
+<ol style="list-style-type: decimal">
+<li><code>^X</code> = control-x (to exit file)</li>
+<li><code>Y</code> to save “Yes, save that thing”</li>
+<li><code>RETURN</code> to choose the default name for the file. (Don’t change the name)</li>
+</ol></li>
+<li>Note that your commit message can’t be empty (or git will abort the commit).</li>
+</ul></li>
+</ul>
+<h2 id="no-fear-merge-conflicts">Don’t be afraid of merge conflicts</h2>
+<h3>Conflicts happen</h3>
+<ul>
+<li>Git will report a <em>merge conflict</em> when merging two commits in which the <em>same part</em> of the <em>same file</em> has been modified.</li>
+<li>What is meant by the <em>same part</em> of the <em>same file</em>
+<ul>
+<li>Same line? Same word? Same “paragraph”?, etc.</li>
+</ul></li>
+</ul>
+<h3>Class activity to explore conflicts</h3>
+<p><strong>Here is what I did</strong></p>
+<ol style="list-style-type: decimal">
+<li>Create new RStudio project with a git repository and call it <code>explore_conflict</code></li>
+<li><p>Create a new R file called <code>three_lines.R</code> and fill it with this:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Line 1</span>
+<span class="co"># Line 2</span>
+<span class="co"># Line 3</span></code></pre></li>
+<li>commit that file. After committing you have a <em>master</em> branch.</li>
+<li><p>Immediately make some new branches:</p>
+<pre class="sourceCode r"><code class="sourceCode r">git branch a1
+git branch a3
+git branch a13
+git branch b2</code></pre></li>
+<li><p>Then checkout each of those branches in turn and modify the file <code>three-lines.R</code> in them according to their names (add an <code>a</code> at the end of line 1 in <code>a1</code>, add an <code>a</code> at the end of lines 1 and 3 in <code>a13</code>, etc.), i.e. in <code>a13</code> the file will look like:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Line 1 a</span>
+<span class="co"># Line 2  </span>
+<span class="co"># Line 3 a</span></code></pre>
+<ul>
+<li>After this it is easy to view all those branches in RStudio’s git History viewer.</li>
+</ul></li>
+<li>Now, we don’t want to modify these, but we want to see what we can merge with what else. So, checkout new branches like this:
+<ol style="list-style-type: decimal">
+<li><p>Can we merge b2 into a13 without a conflict?</p>
+<pre class="sourceCode r"><code class="sourceCode r">git checkout a13
+git checkout -b a13-and-b2
+git merge b2  <span class="co"># Lo and behold we get a conflict even though there no changes on the same lines</span></code></pre>
+<ul>
+<li>But, conflicts aren’t necessarily scary. Here is the run down.
+<ol style="list-style-type: decimal">
+<li><p>You get a message that looks like</p>
+<pre class="sourceCode r"><code class="sourceCode r">Auto-merging three_lines.R
+<span class="kw">CONFLICT</span> (content):<span class="st"> </span>Merge conflict in three_lines.R
+Automatic merge failed; fix conflicts and then commit the result.</code></pre></li>
+<li><p>In RStudio’s git panel the files with conflicts appear orange, and the file has this in it:</p>
+<pre class="sourceCode r"><code class="sourceCode r">&lt;<span class="er">&lt;&lt;&lt;&lt;&lt;&lt;</span><span class="st"> </span>HEAD
+<span class="co"># Line 1 a</span>
+<span class="co"># Line 2</span>
+<span class="co"># Line 3 a</span>
+==<span class="er">=====</span>
+<span class="co"># Line 1</span>
+<span class="co"># Line 2 b</span>
+<span class="co"># Line 3</span>
+<span class="er">&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span><span class="st"> </span>b2</code></pre>
+which shows you that year HEAD branch <code>a13-and-b2</code> in this case, has the part above the <code>======</code> and the b2 has the part below the <code>======</code>.</li>
+<li><p>To successfully merge these branches, all you need to do is modfify the file to your liking, stage it and commit it. Maybe it should look like:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Line 1 a</span>
+<span class="co"># Line 2 b</span>
+<span class="co"># Line 3 a</span></code></pre>
+Edit it to look like that and commit it.</li>
+<li><p>What if you get cold feet? At any point in the process before you actually commit the merge, if you do</p>
+<pre class="sourceCode r"><code class="sourceCode r">git merge --abort</code></pre>
+git will return your working directory the way it was before you tried doing the merge.<br /></li>
+</ol></li>
+</ul></li>
+<li><p>How about a3 into a1?</p>
+<pre class="sourceCode r"><code class="sourceCode r">git checkout a1
+git checkout -b a1-with-a3
+git merge a3  <span class="co"># No conflicts!</span></code></pre></li>
+<li>How about a3 into a2? (Conflict!) So, it appears that if you make a change on an adjacent line it gives you a conflict.</li>
+<li>How about if the same change is made in each file? Like a13 onto a1? Success!!</li>
+<li>How about we make a new branch off <em>master</em> called <code>wrap-it</code> and then add stuff to the top and the bottom of the file, but we don’t touch the three lines at all. Will we be able to merge it with <code>b2</code> without conflicts?
+<ul>
+<li>Yes! Git is smart enough to recognize the three lines even though they are no longer the only three lines in the file!</li>
+</ul></li>
+</ol></li>
+</ol>
+<h2 id="no-switchy-branchy">When git doesn’t let me switch branches (or merge)</h2>
+<h3>Git will typically not lot you clobber your working area</h3>
+<ul>
+<li>If your working directory is <em>clean</em>, you can switch branches or <em>merge</em> without git shrieking at you.</li>
+<li><p>If you working directory is <em>dirty</em>, you might see this:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># IF TRYING TO SWITCH BRANCHES</span>
+<span class="dv">2014-10-30</span> <span class="dv">13</span>:<span class="dv">29</span> /explore_conflict/--% (wrap-it-and-b2) git checkout master
+error:<span class="st"> </span>Your local changes to the following files would be overwritten by checkout:
+three_lines.R
+Please, commit your changes or stash them before you can switch branches.
+Aborting
+
+### OR IF TRYING TO MERGE
+<span class="dv">2014-10-30</span> <span class="dv">14</span>:<span class="dv">10</span> /explore_conflict/--% (wrap-it-and-b2) git merge a2
+error:<span class="st"> </span>Your local changes to the following files would be overwritten by merge:
+three_lines.R
+Please, commit your changes or stash them before you can merge.
+Aborting</code></pre></li>
+<li>Remember, a <em>dirty</em> state in your working directory means that there are changes to some files that have not been committed.</li>
+<li>For a detailed discussion of when git will and won’t let you switch branches check out this <a href="http://stackoverflow.com/questions/22053757/git-checkout-another-branch-when-there-are-uncommitted-changes-on-the-current">link</a></li>
+<li><p>Big Note: If uncommitted changes wouldn’t be clobbered by switching to a new branch, then that dirty state gets carried over to the branch you are switching to.</p></li>
+</ul>
+<h3>What can be done when you can’t switch branches</h3>
+<ul>
+<li>First, try to understand just which files will get clobbered.</li>
+<li>Then you have the choice of:
+<ol style="list-style-type: decimal">
+<li>Discarding your changes (easiest to do in the RStudio Diff window)</li>
+<li>Committing your changes</li>
+<li>Stashing your changes.</li>
+</ol></li>
+<li>Number 1 is fine if you are sure you want to toss your changes.</li>
+<li>Number 2 is good if you really want to commit that work</li>
+<li>If neither #1 or #2 are good for you, then #3 is a good choice.</li>
+</ul>
+<h3>What does stashing do?</h3>
+<ul>
+<li>Stashing saves the <em>changes</em> that have been made to the current branch (and the state of the index) AND then wipes them away to return your branch to a clean state.</li>
+<li>Then you can switch branches, work on something else, and when you come back to the original branch you stashed on, you can bring those changes back up.</li>
+<li><p>You can also learn other things about your stashes:</p>
+<pre class="sourceCode r"><code class="sourceCode r">git stash list
+
+git stash show
+
+git stash show -v
+
+git stash show stash@{<span class="dv">1</span>}  <span class="co"># to see stashes other than the most recent</span>
+
+<span class="co"># and finally, if you want to bring your stashed work back to life you can do:</span>
+git stash apply 
+
+<span class="co"># The above restores the last stash you made</span>
+
+<span class="co"># This can restore earlier stashes</span>
+git stash apply stash@{i}  <span class="co"># where i is 0, 1, 2, ... depending on which stash you want.</span></code></pre></li>
+</ul>
+<h3>Applying stashes up on branches they weren’t stashed off of</h3>
+<ul>
+<li>This gets complicated. Not recommended for now.</li>
+<li><p>If you have moved way on from where you stashed, you can do:</p>
+<pre class="sourceCode r"><code class="sourceCode r">git stash new-branch-name
+
+<span class="co"># OR</span>
+
+git stash new-branch-name stash@{i}</code></pre>
+which will give you a whole new branch off of the branch you stashed off of, and all the changes on top.
+<ul>
+<li>Note: it also drops your stash from the list of stashes!</li>
+</ul></li>
+</ul>
+<h2>Remote branches</h2>
+<ul>
+<li>We will leave a full discussion of these points:
+<ul>
+<li>Fetch, Merge, Pull, Push.</li>
+<li>Tracking branches until later.</li>
+</ul></li>
+<li>Until then, let’s have everyone create their own repository on GitHub if there is time.</li>
+</ul>
+<ol style="list-style-type: decimal">
+<li>Make a repository to put on GitHub (just make a new RStudio project with git version control)</li>
+<li>Make a commit on it.</li>
+<li>Go to the GitHub website and click the “+” button…and follow the instructions from there.</li>
+<li>Don’t let them add a README or LICENSE file.</li>
+</ol>
+
+          <hr>
+           <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'rep-res-course'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    
+        </div>
+      </div>
+
+            <div class="footer">
+        <hr>
+        <p>
+          <small>
+            Authored by Eric C. Anderson working as a Federal employee.  Content on this website is a government work in the public domain in the U.S. and under the CC0 1.0 internationally. Templates and plugins to build the site are modified from Hadley Wickham's <a href="https://github.com/hadley/adv-r/">Advanced R</a> website. Powered by <a href="http://jekyllrb.com/">jekyll</a>,
+          <a href="http://yihui.name/knitr/">knitr</a>, and
+          <a href="http://johnmacfarlane.net/pandoc/">pandoc</a>. Source
+          available on <a href="https://github.com/eriqande/rep-res-course/">github</a>.
+          </small>
+        </p>
+      </div>
+
+
+    </div> <!-- /container -->
+
+  <script src="//code.jquery.com/jquery.js"></script>
+  <script src="http://eriqande.github.io/rep-res-web/www/bootstrap.min.js"></script>
+  <script src="http://eriqande.github.io/rep-res-web/www/toc.js"></script>
+  <script type="text/javascript"
+    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  </body>
+</html>
+
