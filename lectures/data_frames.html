@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Data frames &middot; Reproducible Research.</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="http://eriqande.github.io/rep-res-web/www/bootstrap.min.css" rel="stylesheet">
+    <link href="http://eriqande.github.io/rep-res-web/www/highlight.css" rel="stylesheet">
+
+    <link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700'
+      rel='stylesheet' type='text/css'>
+  </head>
+
+  <body>
+    <div class="navbar navbar-default navbar-static-top">
+ <div class="navbar-header"><a class="navbar-brand" href="http://eriqande.github.io/rep-res-web">RepResCourse</a>
+      <a class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="http://eriqande.github.io/rep-res-web/syllabus.html">Syllabus</a></li>
+        <li><a href="http://eriqande.github.io/rep-res-web/resources.html">Resources</a></li>
+        <li><a href="http://eriqande.github.io/rep-res-web/blogs.html">Instructor Blog</a></li>
+        <li><a href="#">Results/Gallery</a></li>
+      </ul>
+      <div class="navbar-right">
+    	<p class="navbar-text">I'm navbar-fixed-top</p>
+  	  </div>
+    </div>
+</div>
+
+
+    <div class="container">
+            <!-- The title and stuff is here -->
+      <div class="masthead">
+        <p> </p>
+        <p> </p>
+        <h3 class="muted"><a href="http://eriqande.github.io/rep-res-web/">Reproducible Research Course</a> <small>by Eric C. Anderson for (NOAA/SWFSC)</small></h3>
+        <hr>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-3" id="nav">
+          <div class="well">
+  How's this site built? See all sources at the course <a href="http://github.com/eriqande/rep-res-course">repository</a> on GitHub.
+  <p><hr></p>
+  <p><a class="btn btn-primary" href="https://raw.githubusercontent.com/eriqande/rep-res-course/master/lectures/data_frames.rmd">Raw on GitHub</a></p>
+</div>
+
+<h4>Page Contents</h4>
+<ul class="list-unstyled" id="toc"></ul>
+
+<hr>
+<p><a href="http://eriqande.github.io/rep-res-web/contribute.html">How to contribute</a></p>
+<p><a class="btn btn-primary" href="https://github.com/eriqande/rep-res-course/edit/master/lectures/data_frames.rmd">Edit this page</a></p>
+
+
+        </div>
+
+        <div id="content" class="col-sm-8 pull-right">
+          <h1 id="data-frame-lecture">Data frames and factors</h1>
+<ul>
+<li>Goals of this lecture:
+<ol style="list-style-type: decimal">
+<li>Introduce <em>data frames</em>! (Possibly the most widely-used and useful data structure in R)
+<ol style="list-style-type: lower-alpha">
+<li>What is a data frame?</li>
+<li>Making data frames</li>
+<li>Viewing data frames in RStudio</li>
+<li>Indexing data frames</li>
+<li>Reading in data frames</li>
+<li>Writing data frames</li>
+</ol></li>
+<li>Introduce, very briefly, <em>factors</em> (A tricky little data structure that probably causes more problems than anything else in R.)
+<ol style="list-style-type: lower-alpha">
+<li>What they are / what they look like.</li>
+<li>Why we talk about them with <em>data frames</em></li>
+<li>How they behave.</li>
+<li>Ways that they are useful.</li>
+</ol></li>
+</ol></li>
+</ul>
+<h2 id="data-frame-basics">Data frames basics</h2>
+<h3>What’s a data frame?</h3>
+<ul>
+<li>A <em>data frame</em> is a <strong>list</strong> that:
+<ul>
+<li>has the <em>class</em> <code>data.frame</code></li>
+<li>has <em>components</em> that are all atomic vectors <strong>of the same length</strong>.</li>
+</ul></li>
+<li>Think of them as a <em>table</em> of data. Where:
+<ul>
+<li>The rows are <em>records</em> and</li>
+<li>The columns are the atomic vectors that contain values of variables.</li>
+</ul></li>
+<li>Probably 90% of the time (or more), what someone might call a <em>data set</em> is something that can be represented in R as a <em>data frame</em>.</li>
+<li><p>Example:</p>
+<pre class="sourceCode r"><code class="sourceCode r">d &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
+  <span class="dt">age =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">3</span>, <span class="dv">4</span>), 
+  <span class="dt">sex =</span> <span class="kw">c</span>(<span class="st">&quot;MALE&quot;</span>, <span class="st">&quot;FEMALE&quot;</span>, <span class="st">&quot;FEMALE&quot;</span>, <span class="st">&quot;MALE&quot;</span>), 
+  <span class="dt">height.inches =</span> <span class="kw">c</span>(<span class="dv">40</span>, <span class="dv">49</span>, <span class="dv">38</span>, <span class="dv">42</span>), 
+  <span class="dt">favorite.sport.or.activity =</span> <span class="kw">c</span>(<span class="st">&quot;soccer&quot;</span>, <span class="st">&quot;soccer&quot;</span>, <span class="st">&quot;martial_arts&quot;</span>, <span class="st">&quot;ballet&quot;</span>)
+)
+<span class="co"># now, print it to the screen</span>
+d
+<span class="co">#&gt;   age    sex height.inches favorite.sport.or.activity</span>
+<span class="co">#&gt; 1   4   MALE            40                     soccer</span>
+<span class="co">#&gt; 2   6 FEMALE            49                     soccer</span>
+<span class="co">#&gt; 3   3 FEMALE            38               martial_arts</span>
+<span class="co">#&gt; 4   4   MALE            42                     ballet</span></code></pre></li>
+<li><p>This thing is shaped like a <em>matrix</em> and can be indexed in special ways (below), but at its core it is a //list//.</p></li>
+</ul>
+<h3>The <em>data.frame()</em> function</h3>
+<ul>
+<li>Syntactically, this is like the <code>list()</code> function, taking “key=value” pairs.
+<ul>
+<li>For example, the first component has the “key”, <code>age</code> and the “value” <code>c(4, 6, 3, 4)</code>.</li>
+<li>The <em>keys</em> become the <em>names</em> attribute of the data frame.</li>
+</ul></li>
+<li><p>But, returns a <code>data.frame</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(d)
+<span class="co">#&gt; [1] &quot;data.frame&quot;</span></code></pre></li>
+</ul>
+<h3>The <em>names</em> / <em>colnames</em> of a <em>data frame</em></h3>
+<ul>
+<li><p>The <em>names</em> attribute of a data frame holds the “column headers”</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(d)
+<span class="co">#&gt; [1] &quot;age&quot;                        &quot;sex&quot;                       </span>
+<span class="co">#&gt; [3] &quot;height.inches&quot;              &quot;favorite.sport.or.activity&quot;</span></code></pre>
+<p>These can also be accessed as the <code>colnames</code> (column names):</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">colnames</span>(d)
+<span class="co">#&gt; [1] &quot;age&quot;                        &quot;sex&quot;                       </span>
+<span class="co">#&gt; [3] &quot;height.inches&quot;              &quot;favorite.sport.or.activity&quot;</span></code></pre>
+<p>Which begs the question, are there _row_names of a data frame? Let’s try:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rownames</span>(d)
+<span class="co">#&gt; [1] &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot;</span></code></pre></li>
+</ul>
+<h3>The <em>rownames</em> of a <em>data frame</em></h3>
+<ul>
+<li>You can assign <em>names</em> to the rows of a <em>data frame</em>.</li>
+<li><p>Use the <code>rownames()</code> function. For example:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rownames</span>(d) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Jon&quot;</span>, <span class="st">&quot;Scarlett&quot;</span>, <span class="st">&quot;Nancy&quot;</span>, <span class="st">&quot;Terry&quot;</span>)
+<span class="co"># then print it out again:</span>
+d
+<span class="co">#&gt;          age    sex height.inches favorite.sport.or.activity</span>
+<span class="co">#&gt; Jon        4   MALE            40                     soccer</span>
+<span class="co">#&gt; Scarlett   6 FEMALE            49                     soccer</span>
+<span class="co">#&gt; Nancy      3 FEMALE            38               martial_arts</span>
+<span class="co">#&gt; Terry      4   MALE            42                     ballet</span></code></pre></li>
+<li><p><em>rownames</em> have to be unique!</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rownames</span>(d) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Jon&quot;</span>, <span class="st">&quot;Scarlett&quot;</span>, <span class="st">&quot;Nancy&quot;</span>, <span class="st">&quot;Jon&quot;</span>)
+<span class="co">#&gt; Warning: non-unique value when setting &#39;row.names&#39;: &#39;Jon&#39;</span>
+<span class="co">#&gt; Error: duplicate &#39;row.names&#39; are not allowed</span></code></pre></li>
+<li><p>…and the right length, too:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rownames</span>(d) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Jon&quot;</span>, <span class="st">&quot;Scarlett&quot;</span>)
+<span class="co">#&gt; Error: invalid &#39;row.names&#39; length</span></code></pre></li>
+<li><p>If you don’t provide them, they will be integers <code>1:nrow(df)</code></p></li>
+</ul>
+<h3>Dimensions of a data frame</h3>
+<ul>
+<li><p>A useful summary of the extent of a data frame is <code>dim</code>. Likewise <code>ncol</code> and <code>nrow</code></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(d)
+<span class="co">#&gt; [1] 4 4</span>
+<span class="kw">nrow</span>(d)
+<span class="co">#&gt; [1] 4</span>
+<span class="kw">ncol</span>(d)
+<span class="co">#&gt; [1] 4</span></code></pre></li>
+</ul>
+<h2 id="data-frame-indexing">Data frame indexing</h2>
+<ul>
+<li><em>data frames</em> can be indexed like <em>lists</em> or like <em>matrices</em></li>
+</ul>
+<h3>Data frame indexing like a list</h3>
+<ul>
+<li><p>Single-chome extractor <code>[  ]</code> with a <em>single vector</em> and <em>no commas</em> picks out the columns, and returns it as another data.frame:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># index with integers</span>
+d[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>)]
+<span class="co">#&gt;          age height.inches</span>
+<span class="co">#&gt; Jon        4            40</span>
+<span class="co">#&gt; Scarlett   6            49</span>
+<span class="co">#&gt; Nancy      3            38</span>
+<span class="co">#&gt; Terry      4            42</span>
+
+<span class="co"># index with colnames</span>
+d[<span class="kw">c</span>(<span class="st">&quot;age&quot;</span>, <span class="st">&quot;sex&quot;</span>)]
+<span class="co">#&gt;          age    sex</span>
+<span class="co">#&gt; Jon        4   MALE</span>
+<span class="co">#&gt; Scarlett   6 FEMALE</span>
+<span class="co">#&gt; Nancy      3 FEMALE</span>
+<span class="co">#&gt; Terry      4   MALE</span></code></pre>
+Note that the <em>rownames</em> get carried along with the result.</li>
+<li><p>Two-chomp extractor <code>$</code> returns the vector itself. (Naked, not as part of a data frame)</p>
+<pre class="sourceCode r"><code class="sourceCode r">d$age
+<span class="co">#&gt; [1] 4 6 3 4</span>
+
+d$height.inches
+<span class="co">#&gt; [1] 40 49 38 42</span></code></pre>
+<p>*Two-chomp extractor <code>[[ ]]</code> does the same as the <code>$</code> but doesn’t do prefix-matching</p>
+<pre class="sourceCode r"><code class="sourceCode r">d[[<span class="st">&quot;age&quot;</span>]]
+<span class="co">#&gt; [1] 4 6 3 4</span></code></pre>
+<p>The <em>rownames</em> don’t come along with the result.</p></li>
+</ul>
+<h3>Matrix-like indexing of <em>data frames</em></h3>
+<ul>
+<li>This is new thing! Subset with <em>two vectors</em> separated by a <em>comma</em>!</li>
+<li>i.e., <code>[row, col]</code> where:
+<ul>
+<li><code>rows</code> is an indexing vector for the rows of row indices or <em>rownames</em> or <em>logical</em> values</li>
+<li><code>cols</code> is an indexing vector for the columns indices, or <em>colnames</em> or logical values</li>
+<li>And…(big note!) the absence of <code>rows</code> or <code>cols</code> means “give me all of them” d[1:2,]</li>
+</ul></li>
+<li><code>rows</code> and <code>cols</code> can be:
+<ul>
+<li>positive integer vectors,</li>
+<li>negative interger vectors,</li>
+<li>character vectors of names,</li>
+<li>logical vectors</li>
+<li>(or mixtures of the two, i.e. <code>rows</code> as one and <code>cols</code> as another</li>
+</ul></li>
+<li><p>Examples:</p>
+<pre class="sourceCode r"><code class="sourceCode r">d[,]  <span class="co"># the whole data frame</span>
+<span class="co">#&gt;          age    sex height.inches favorite.sport.or.activity</span>
+<span class="co">#&gt; Jon        4   MALE            40                     soccer</span>
+<span class="co">#&gt; Scarlett   6 FEMALE            49                     soccer</span>
+<span class="co">#&gt; Nancy      3 FEMALE            38               martial_arts</span>
+<span class="co">#&gt; Terry      4   MALE            42                     ballet</span>
+
+d[,<span class="dv">1</span>:<span class="dv">3</span>] <span class="co"># all rows, first three columns</span>
+<span class="co">#&gt;          age    sex height.inches</span>
+<span class="co">#&gt; Jon        4   MALE            40</span>
+<span class="co">#&gt; Scarlett   6 FEMALE            49</span>
+<span class="co">#&gt; Nancy      3 FEMALE            38</span>
+<span class="co">#&gt; Terry      4   MALE            42</span>
+
+d[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span>), ] <span class="co"># first and fourth rows, all columns</span>
+<span class="co">#&gt;       age  sex height.inches favorite.sport.or.activity</span>
+<span class="co">#&gt; Jon     4 MALE            40                     soccer</span>
+<span class="co">#&gt; Terry   4 MALE            42                     ballet</span>
+
+d[-<span class="dv">1</span>, -<span class="dv">2</span>] <span class="co"># all rows except 1 and all columns except 2</span>
+<span class="co">#&gt;          age height.inches favorite.sport.or.activity</span>
+<span class="co">#&gt; Scarlett   6            49                     soccer</span>
+<span class="co">#&gt; Nancy      3            38               martial_arts</span>
+<span class="co">#&gt; Terry      4            42                     ballet</span>
+
+d[d$sex ==<span class="st"> &quot;MALE&quot;</span>, <span class="kw">c</span>(<span class="st">&quot;age&quot;</span>, <span class="st">&quot;favorite.sport.or.activity&quot;</span>)] <span class="co"># age and favorite activities of MALES</span>
+<span class="co">#&gt;       age favorite.sport.or.activity</span>
+<span class="co">#&gt; Jon     4                     soccer</span>
+<span class="co">#&gt; Terry   4                     ballet</span>
+
+d[d$sex ==<span class="st"> &quot;FEMALE&quot;</span>, <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>)] <span class="co"># ages and heights of  FEMALES</span>
+<span class="co">#&gt;          age height.inches</span>
+<span class="co">#&gt; Scarlett   6            49</span>
+<span class="co">#&gt; Nancy      3            38</span>
+
+d[d$age ==<span class="st"> </span><span class="dv">3</span>, ] <span class="co"># all columns from the one three-year-old</span>
+<span class="co">#&gt;       age    sex height.inches favorite.sport.or.activity</span>
+<span class="co">#&gt; Nancy   3 FEMALE            38               martial_arts</span></code></pre></li>
+</ul>
+<h3>Whoa! What happens when <em>[rows, cols]</em> picks out a single column?</h3>
+<ul>
+<li><p>Beware, if your <code>[rows, cols]</code> extractor picks out just a <em>single column</em>, then by default, R will just return a (unnamed) vector, not a data frame!</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># ages of Jon and Terry... What! Where&#39;s my data frame?</span>
+d[<span class="kw">c</span>(<span class="st">&quot;Jon&quot;</span>, <span class="st">&quot;Terry&quot;</span>), <span class="st">&quot;age&quot;</span>]  
+<span class="co">#&gt; [1] 4 4</span></code></pre></li>
+<li><p>When you want to get a one-column data frame rather than a naked vector, do this:</p>
+<pre class="sourceCode r"><code class="sourceCode r">d[<span class="kw">c</span>(<span class="st">&quot;Jon&quot;</span>, <span class="st">&quot;Terry&quot;</span>), <span class="st">&quot;age&quot;</span>, drop =<span class="st"> </span><span class="ot">FALSE</span>]
+<span class="co">#&gt;       age</span>
+<span class="co">#&gt; Jon     4</span>
+<span class="co">#&gt; Terry   4</span></code></pre></li>
+<li><p>This is <strong>super-important</strong> if you are writing functions that grab variable numbers of columns out of data frames (or matrices)</p></li>
+</ul>
+<h3>Replacement form indexing</h3>
+<ul>
+<li><p>All these indexing measures have replacement forms:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># change Terry&#39;s favorite activity to soccer</span>
+d[<span class="st">&quot;Terry&quot;</span>, <span class="dv">4</span>] &lt;-<span class="st"> &quot;paint-ball&quot;</span>
+<span class="co">#&gt; Warning: invalid factor level, NA generated</span>
+d <span class="co"># print it</span>
+<span class="co">#&gt;          age    sex height.inches favorite.sport.or.activity</span>
+<span class="co">#&gt; Jon        4   MALE            40                     soccer</span>
+<span class="co">#&gt; Scarlett   6 FEMALE            49                     soccer</span>
+<span class="co">#&gt; Nancy      3 FEMALE            38               martial_arts</span>
+<span class="co">#&gt; Terry      4   MALE            42                       &lt;NA&gt;</span>
+
+<span class="co"># what if we tried to change it to &quot;mushroom hunting&quot;?</span>
+d[<span class="st">&quot;Terry&quot;</span>, <span class="dv">4</span>] &lt;-<span class="st"> &quot;mushroom hunting&quot;</span>
+<span class="co">#&gt; Warning: invalid factor level, NA generated</span>
+d
+<span class="co">#&gt;          age    sex height.inches favorite.sport.or.activity</span>
+<span class="co">#&gt; Jon        4   MALE            40                     soccer</span>
+<span class="co">#&gt; Scarlett   6 FEMALE            49                     soccer</span>
+<span class="co">#&gt; Nancy      3 FEMALE            38               martial_arts</span>
+<span class="co">#&gt; Terry      4   MALE            42                       &lt;NA&gt;</span></code></pre>
+Surprise! What happened? (Wait till we talk about <em>factors</em> later.)</li>
+<li><p>Assigning values to columns will recycle to the right length:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># make them all five years old...</span>
+d$age &lt;-<span class="st"> </span><span class="dv">5</span>
+d
+<span class="co">#&gt;          age    sex height.inches favorite.sport.or.activity</span>
+<span class="co">#&gt; Jon        5   MALE            40                     soccer</span>
+<span class="co">#&gt; Scarlett   5 FEMALE            49                     soccer</span>
+<span class="co">#&gt; Nancy      5 FEMALE            38               martial_arts</span>
+<span class="co">#&gt; Terry      5   MALE            42                       &lt;NA&gt;</span></code></pre>
+<h2>Reading, viewing, and writing data frames</h2></li>
+<li>Hooray! We are <em>finally</em> learning what to do to get <em>our own</em> data into R!</li>
+<li>We’ll use some data from Big Creek for examples
+<ul>
+<li>You should pull the <em>master</em> branch of <a href="https://github.com/eriqande/rep-res-course.git" class="uri">https://github.com/eriqande/rep-res-course.git</a> to get a file in the <code>data</code> directory.</li>
+<li>Then go ahead and open up R Studio in that repository if you want to follow along.</li>
+</ul></li>
+<li>I have the first 100 lines of the big-creek data set in the <code>data</code> directory in both
+<ul>
+<li><code>.xlsx</code> format (Ahhh! This is just here if you want to see it. Remember, never house and manipulate the sole copy of your data in Excel!)</li>
+<li><code>.csv</code> format (comma separate values — a decent format for reading into R)</li>
+</ul></li>
+<li><p>Rather than opening .csv files in Excel to look at them, it’s possible to just look at them if they are on GitHub. Try <a href="https://github.com/eriqande/rep-res-course/blob/master/data/big_creek_excerpt.csv">this link</a>.</p></li>
+</ul>
+<h3><em>read.table()</em></h3>
+<ul>
+<li>A function that reads in “table-shaped” data and returns a <em>data frame</em></li>
+<li><code>read.table()</code> is a rather generic function, that lets you specify:
+<ul>
+<li><code>file</code> : the name of the file</li>
+<li><code>header</code> : TRUE/FALSE depending on it the file has a header row for the columns</li>
+<li><code>sep</code> : the character used to separate columns</li>
+<li><code>row.names</code> : column number holding the values to be used for rownames</li>
+<li><code>na.strings</code> : what strings signify values that should be read as <code>NA</code> And many, many others. Do <code>?read.table</code> for the complete list.</li>
+</ul></li>
+</ul>
+<h3><em>read.csv()</em></h3>
+<ul>
+<li>A function identical to <code>read.table()</code> except that the default values are set up to read in CSV files (like those produced by Excel…)</li>
+<li><p>Let’s try it:</p>
+<pre class="sourceCode r"><code class="sourceCode r">bc &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/big_creek_excerpt.csv&quot;</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>, <span class="dt">na.strings =</span> <span class="kw">c</span>(<span class="st">&quot;&quot;</span>))</code></pre></li>
+<li>We are using two extra options:
+<ul>
+<li><code>stringsAsFactors = FALSE</code> (see next lecture)</li>
+<li><code>na.strings = c(&quot;&quot;)</code> : This means count empty cells as missing data</li>
+</ul></li>
+<li><p>Did that work? Check the <code>dim</code> of bc:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(bc)
+<span class="co">#&gt; [1] 100  55</span></code></pre>
+<p>Sweet!</p></li>
+</ul>
+<h3>Looking at our data frame</h3>
+<ul>
+<li>To figure out what is in our data frame, there are several options.
+<ol style="list-style-type: decimal">
+<li>Just print it: <code>bc</code>. If the data frame is large, this produces a bunch of hard to read output
+<ul>
+<li>All rows at as many columns as can fit on the screen…then the next set of columns, etc.</li>
+</ul></li>
+<li>use the <code>head</code> function. i.e., <code>head(bc)</code>. Prints just the first 10, rows. With lots of columns, this is hard to read too.</li>
+<li><p>Use indexing to look at just a small part: i.e.:</p>
+<pre class="sourceCode r"><code class="sourceCode r">bc[<span class="dv">1</span>:<span class="dv">5</span>, <span class="dv">1</span>:<span class="dv">4</span>]
+<span class="co">#&gt;   NMFS_DNA_ID BOX_ID BOX_POSITION         SAMPLE_ID</span>
+<span class="co">#&gt; 1     M035484   M355           1A  5-21-2008-UBC-98</span>
+<span class="co">#&gt; 2     M035485   M355           1B 5-21-2008-UBC-102</span>
+<span class="co">#&gt; 3     M035486   M355           1C 5-21-2008-UBC-103</span>
+<span class="co">#&gt; 4     M035487   M355           1D 5-21-2008-UBC-116</span>
+<span class="co">#&gt; 5     M035488   M355           1E 5-21-2008-UBC-226</span></code></pre></li>
+<li><p>Look at the names:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(bc)
+<span class="co">#&gt;  [1] &quot;NMFS_DNA_ID&quot;         &quot;BOX_ID&quot;              &quot;BOX_POSITION&quot;       </span>
+<span class="co">#&gt;  [4] &quot;SAMPLE_ID&quot;           &quot;TK&quot;                  &quot;BATCH_ID&quot;           </span>
+<span class="co">#&gt;  [7] &quot;PROJECT_NAME&quot;        &quot;GENUS&quot;               &quot;SPECIES&quot;            </span>
+<span class="co">#&gt; [10] &quot;LENGTH&quot;              &quot;WEIGHT&quot;              &quot;SEX&quot;                </span>
+<span class="co">#&gt; [13] &quot;AGE&quot;                 &quot;REPORTED_LIFE_STAGE&quot; &quot;PHENOTYPE&quot;          </span>
+<span class="co">#&gt; [16] &quot;HATCHERY_MARK&quot;       &quot;TAG_NUMBER&quot;          &quot;COLLECTION_DATE&quot;    </span>
+<span class="co">#&gt; [19] &quot;ESTIMATED_DATE&quot;      &quot;PICKER&quot;              &quot;PICK_DATE&quot;          </span>
+<span class="co">#&gt; [22] &quot;LEFTOVER_SAMPLE&quot;     &quot;SAMPLE_COMMENTS&quot;     &quot;NMFS_DNA_ID.1&quot;      </span>
+<span class="co">#&gt; [25] &quot;STATE_F&quot;             &quot;COUNTY_F&quot;            &quot;WATERSHED&quot;          </span>
+<span class="co">#&gt; [28] &quot;TRIB_1&quot;              &quot;TRIB_2&quot;              &quot;WATER_NAME&quot;         </span>
+<span class="co">#&gt; [31] &quot;REACH_SITE&quot;          &quot;HATCHERY&quot;            &quot;STRAIN&quot;             </span>
+<span class="co">#&gt; [34] &quot;LATITUDE_F&quot;          &quot;LONGITUDE_F&quot;         &quot;LOCATION_COMMENTS_F&quot;</span>
+<span class="co">#&gt; [37] &quot;NMFS_DNA_ID.2&quot;       &quot;SNPplate&quot;            &quot;Plate_POS&quot;          </span>
+<span class="co">#&gt; [40] &quot;BOX_ID.1&quot;            &quot;DilPlate&quot;            &quot;SNPplateorder&quot;      </span>
+<span class="co">#&gt; [43] &quot;SNPorder&quot;            &quot;DilSampleOrder&quot;      &quot;DNAbox&quot;             </span>
+<span class="co">#&gt; [46] &quot;DNABoxSampleOrder&quot;   &quot;CONCAT_ID&quot;           &quot;Omy_AldA&quot;           </span>
+<span class="co">#&gt; [49] &quot;Omy_AldA.1&quot;          &quot;SexID&quot;               &quot;SexID.1&quot;            </span>
+<span class="co">#&gt; [52] &quot;SH95489.423&quot;         &quot;SH95489.423.1&quot;       &quot;SH100771.63&quot;        </span>
+<span class="co">#&gt; [55] &quot;SH100771.63.1&quot;</span></code></pre>
+That is a little cumbersome</li>
+<li><p>Perhaps the most information-rich way of looking at it is with the <code>str</code> function, which gives you the __str__ucture of an R object:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(bc)
+<span class="co">#&gt; &#39;data.frame&#39;:    100 obs. of  55 variables:</span>
+<span class="co">#&gt;  $ NMFS_DNA_ID        : chr  &quot;M035484&quot; &quot;M035485&quot; &quot;M035486&quot; &quot;M035487&quot; ...</span>
+<span class="co">#&gt;  $ BOX_ID             : chr  &quot;M355&quot; &quot;M355&quot; &quot;M355&quot; &quot;M355&quot; ...</span>
+<span class="co">#&gt;  $ BOX_POSITION       : chr  &quot;1A&quot; &quot;1B&quot; &quot;1C&quot; &quot;1D&quot; ...</span>
+<span class="co">#&gt;  $ SAMPLE_ID          : chr  &quot;5-21-2008-UBC-98&quot; &quot;5-21-2008-UBC-102&quot; &quot;5-21-2008-UBC-103&quot; &quot;5-21-2008-UBC-116&quot; ...</span>
+<span class="co">#&gt;  $ TK                 : chr  &quot;UBC05210898&quot; &quot;UBC052108102&quot; &quot;UBC052108103&quot; &quot;UBC052108116&quot; ...</span>
+<span class="co">#&gt;  $ BATCH_ID           : int  3038 3038 3038 3038 3038 3038 3038 3038 3038 3038 ...</span>
+<span class="co">#&gt;  $ PROJECT_NAME       : chr  NA NA NA NA ...</span>
+<span class="co">#&gt;  $ GENUS              : chr  &quot;Oncorhynchus&quot; &quot;Oncorhynchus&quot; &quot;Oncorhynchus&quot; &quot;Oncorhynchus&quot; ...</span>
+<span class="co">#&gt;  $ SPECIES            : chr  &quot;mykiss&quot; &quot;mykiss&quot; &quot;mykiss&quot; &quot;mykiss&quot; ...</span>
+<span class="co">#&gt;  $ LENGTH             : int  50 177 50 150 49 48 205 59 61 60 ...</span>
+<span class="co">#&gt;  $ WEIGHT             : num  1.3 78.9 1.1 48.1 1.2 ...</span>
+<span class="co">#&gt;  $ SEX                : chr  NA NA NA NA ...</span>
+<span class="co">#&gt;  $ AGE                : logi  NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;  $ REPORTED_LIFE_STAGE: logi  NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;  $ PHENOTYPE          : logi  NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;  $ HATCHERY_MARK      : logi  NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;  $ TAG_NUMBER         : num  NA 1.52e+08 NA 1.52e+08 NA ...</span>
+<span class="co">#&gt;  $ COLLECTION_DATE    : chr  &quot;5/21/08&quot; &quot;5/21/08&quot; &quot;5/21/08&quot; &quot;5/21/08&quot; ...</span>
+<span class="co">#&gt;  $ ESTIMATED_DATE     : logi  NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;  $ PICKER             : chr  &quot;AC&quot; &quot;AC&quot; &quot;AC&quot; &quot;AC&quot; ...</span>
+<span class="co">#&gt;  $ PICK_DATE          : chr  &quot;7/13/09&quot; &quot;7/13/09&quot; &quot;7/13/09&quot; &quot;7/13/09&quot; ...</span>
+<span class="co">#&gt;  $ LEFTOVER_SAMPLE    : logi  NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;  $ SAMPLE_COMMENTS    : chr  &quot;Gender ID samples, Notes: M-R, Database number: 964, Upper caudal clip&quot; &quot;Gender ID samples, Notes: M-R, Database number: 7171&quot; &quot;Gender ID samples, Notes: M-R, Database number: 965, Upper caudal clip&quot; &quot;Gender ID samples, Notes: M-R, Database number: 7178&quot; ...</span>
+<span class="co">#&gt;  $ NMFS_DNA_ID.1      : chr  &quot;M035484&quot; &quot;M035485&quot; &quot;M035486&quot; &quot;M035487&quot; ...</span>
+<span class="co">#&gt;  $ STATE_F            : chr  &quot;California&quot; &quot;California&quot; &quot;California&quot; &quot;California&quot; ...</span>
+<span class="co">#&gt;  $ COUNTY_F           : chr  &quot;Monterey&quot; &quot;Monterey&quot; &quot;Monterey&quot; &quot;Monterey&quot; ...</span>
+<span class="co">#&gt;  $ WATERSHED          : chr  &quot;Big Creek&quot; &quot;Big Creek&quot; &quot;Big Creek&quot; &quot;Big Creek&quot; ...</span>
+<span class="co">#&gt;  $ TRIB_1             : logi  NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;  $ TRIB_2             : logi  NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;  $ WATER_NAME         : chr  &quot;Big Creek&quot; &quot;Big Creek&quot; &quot;Big Creek&quot; &quot;Big Creek&quot; ...</span>
+<span class="co">#&gt;  $ REACH_SITE         : chr  &quot;upper&quot; &quot;upper&quot; &quot;upper&quot; &quot;upper&quot; ...</span>
+<span class="co">#&gt;  $ HATCHERY           : logi  NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;  $ STRAIN             : logi  NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;  $ LATITUDE_F         : logi  NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;  $ LONGITUDE_F        : logi  NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;  $ LOCATION_COMMENTS_F: chr  &quot;Running distance from bottom of reach: 225m&quot; &quot;Running distance from bottom of reach: 225m&quot; &quot;Running distance from bottom of reach: 250m&quot; &quot;Running distance from bottom of reach: 275m&quot; ...</span>
+<span class="co">#&gt;  $ NMFS_DNA_ID.2      : chr  &quot;M035484&quot; &quot;M035485&quot; &quot;M035486&quot; &quot;M035487&quot; ...</span>
+<span class="co">#&gt;  $ SNPplate           : chr  &quot;MPQ&quot; &quot;MPQ&quot; &quot;MPQ&quot; &quot;MPQ&quot; ...</span>
+<span class="co">#&gt;  $ Plate_POS          : chr  &quot;1A&quot; &quot;1B&quot; &quot;1C&quot; &quot;1D&quot; ...</span>
+<span class="co">#&gt;  $ BOX_ID.1           : chr  &quot;M355&quot; &quot;M355&quot; &quot;M355&quot; &quot;M355&quot; ...</span>
+<span class="co">#&gt;  $ DilPlate           : chr  &quot;MPS&quot; &quot;MPQ&quot; &quot;MPQ&quot; &quot;MPQ&quot; ...</span>
+<span class="co">#&gt;  $ SNPplateorder      : chr  &quot;7D&quot; &quot;1B&quot; &quot;1C&quot; &quot;1D&quot; ...</span>
+<span class="co">#&gt;  $ SNPorder           : int  41 11 23 35 47 59 71 83 1 12 ...</span>
+<span class="co">#&gt;  $ DilSampleOrder     : int  52 2 3 4 5 6 7 8 9 10 ...</span>
+<span class="co">#&gt;  $ DNAbox             : chr  &quot;M355&quot; &quot;M355&quot; &quot;M355&quot; &quot;M355&quot; ...</span>
+<span class="co">#&gt;  $ DNABoxSampleOrder  : int  1 2 3 4 5 6 7 8 9 10 ...</span>
+<span class="co">#&gt;  $ CONCAT_ID          : chr  &quot;MPQ_M355_1A&quot; &quot;MPQ_M355_1B&quot; &quot;MPQ_M355_1C&quot; &quot;MPQ_M355_1D&quot; ...</span>
+<span class="co">#&gt;  $ Omy_AldA           : int  3 0 3 3 4 3 3 4 4 3 ...</span>
+<span class="co">#&gt;  $ Omy_AldA.1         : int  4 0 4 4 4 4 4 4 4 4 ...</span>
+<span class="co">#&gt;  $ SexID              : int  0 7 6 7 7 6 7 0 6 6 ...</span>
+<span class="co">#&gt;  $ SexID.1            : int  0 6 6 6 6 6 6 0 6 6 ...</span>
+<span class="co">#&gt;  $ SH95489.423        : int  3 0 3 3 3 3 3 1 3 1 ...</span>
+<span class="co">#&gt;  $ SH95489.423.1      : int  1 0 1 3 1 1 1 1 1 1 ...</span>
+<span class="co">#&gt;  $ SH100771.63        : int  4 4 1 4 1 1 4 4 4 4 ...</span>
+<span class="co">#&gt;  $ SH100771.63.1      : int  1 1 1 1 1 1 1 4 4 1 ...</span></code></pre></li>
+<li>Finally, RStudio offers the very useful <code>View</code> function. Try this: <code>View(bc)</code>
+<ul>
+<li>You can even pop that out into a separate window.</li>
+<li>They really ought to find a way to keep the headers visible when scrolling.</li>
+</ul></li>
+</ol></li>
+</ul>
+<h3>Writing a data frame back out to a .csv file</h3>
+<ul>
+<li>There is a <code>write.table</code> function much like <code>read.table</code></li>
+<li>And there is a <code>write.csv</code> function that is similar</li>
+<li><p>Here we pick out just the fish between 60 and 100 mm and write the resulting data frame back to a .csv file:</p>
+<pre class="sourceCode r"><code class="sourceCode r">bc2 &lt;-<span class="st"> </span>bc[ bc$LENGTH &gt;=<span class="st"> </span><span class="dv">6</span> &amp;<span class="st"> </span>bc$LENGTH &lt;=<span class="st"> </span><span class="dv">100</span>, ]
+
+<span class="kw">write.csv</span>(bc2, <span class="dt">file =</span> <span class="st">&quot;~/Desktop/bc-bits.csv&quot;</span>)</code></pre>
+and you can open that with Excel, even.
+<ul>
+<li>Note that the numeric rownames are in there by default with no header.</li>
+<li>If you read it back in, you would want to use <code>row.names = 1</code>.</li>
+<li>Read <code>?write.table</code> for more info.</li>
+</ul></li>
+</ul>
+<h2 id="factors-tiny-blurb">A tiny blurb about <em>factors</em></h2>
+<ul>
+<li>In <code>read.csv</code> we used the option <code>stringsAsFactors = FALSE</code>
+<ul>
+<li>What does that mean, and why did I use it?</li>
+</ul></li>
+<li>In all the <code>read.table</code> family of functions, columns with character data (i.e. text strings) get converted to an object of class <em>factor</em>.</li>
+<li>In R you will see <em>factors</em> everywhere.<br /></li>
+<li>The name derives from the idea of factors in experimental design, which is a shame (I think) since factors in R are useful in many ways.</li>
+<li>My suggestion: when you see <em>factor</em> think <em>vector of <strong>categories</strong></em></li>
+</ul>
+<h3>Factors are vectors that record discrete <em>categories</em></h3>
+<ul>
+<li>Anything measured on a disrete scale can be said to fall into one of a set of categories.</li>
+<li>The discrete scale could be a summary of a continuous scale
+<ul>
+<li>For example, the categories of <em>Small</em>, <em>Medium</em>, and <em>Large</em> are (likely) summaries of a continuous variable like weight or height.</li>
+</ul></li>
+<li><p>If you have measured fish and put them into <em>Small</em>, <em>Medium</em>, and <em>Large</em>, categories you might have them in a data frame like this:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">17</span>)
+sml &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">ID =</span> <span class="kw">paste</span>(<span class="st">&quot;Fish&quot;</span>, <span class="dv">1</span>:<span class="dv">15</span>, <span class="dt">sep=</span><span class="st">&quot;_&quot;</span>),
+                  <span class="dt">SizeCategory =</span> <span class="kw">sample</span>(<span class="kw">c</span>(<span class="st">&quot;Small&quot;</span>, <span class="st">&quot;Medium&quot;</span>, <span class="st">&quot;Large&quot;</span>), <span class="dt">size =</span> <span class="dv">15</span>, <span class="dt">replace =</span> T)
+                  )
+
+<span class="co"># when you print it out it looks pretty normal</span>
+sml                 
+<span class="co">#&gt;         ID SizeCategory</span>
+<span class="co">#&gt; 1   Fish_1        Small</span>
+<span class="co">#&gt; 2   Fish_2        Large</span>
+<span class="co">#&gt; 3   Fish_3       Medium</span>
+<span class="co">#&gt; 4   Fish_4        Large</span>
+<span class="co">#&gt; 5   Fish_5       Medium</span>
+<span class="co">#&gt; 6   Fish_6       Medium</span>
+<span class="co">#&gt; 7   Fish_7        Small</span>
+<span class="co">#&gt; 8   Fish_8        Small</span>
+<span class="co">#&gt; 9   Fish_9        Large</span>
+<span class="co">#&gt; 10 Fish_10        Small</span>
+<span class="co">#&gt; 11 Fish_11       Medium</span>
+<span class="co">#&gt; 12 Fish_12        Small</span>
+<span class="co">#&gt; 13 Fish_13        Large</span>
+<span class="co">#&gt; 14 Fish_14        Large</span>
+<span class="co">#&gt; 15 Fish_15        Large</span></code></pre></li>
+</ul>
+<h3>Underlying structure of a <em>factor</em></h3>
+<ul>
+<li>The “SizeCategory” column looks like a vector of strings (a character vector), but it isn’t.</li>
+<li>A factor is a class that contains:
+<ol style="list-style-type: decimal">
+<li>A <em>levels</em> attribute that maps <span class="math"><em>N</em></span> categories to the integers <span class="math">1, …, <em>N</em></span>
+<ul>
+<li>(This sounds more complex than it is. It is just a character vector that gives an ordered collection of category names)</li>
+</ul></li>
+<li>An integer vector of values between 1 and <span class="math"><em>N</em></span> used to describe the occurrence of the categories.</li>
+</ol></li>
+<li>What? If that’s not clear, continuing with the <code>sml</code> example from above should help clarify things</li>
+</ul>
+<h3><em>sml</em> data frame’s SizeCategory</h3>
+<ul>
+<li><p>We can access the <em>levels</em> attribute of <code>sml$SizeCategory</code> like this:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(sml$SizeCategory)
+<span class="co">#&gt; [1] &quot;Large&quot;  &quot;Medium&quot; &quot;Small&quot;</span></code></pre></li>
+<li>The order these are in the <em>levels</em> tells us that:
+<ul>
+<li>1 = “Large”</li>
+<li>2 = “Medium”</li>
+<li>3 = “Small”</li>
+</ul></li>
+<li><p>And the integer vector part of <code>sml$SizeCategory</code> can be visualized by attaching it on the right side of the <code>sml</code> data frame like this:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cbind</span>(sml, <span class="dt">underlying_integer_vector =</span> <span class="kw">unclass</span>(sml$SizeCategory))
+<span class="co">#&gt;         ID SizeCategory underlying_integer_vector</span>
+<span class="co">#&gt; 1   Fish_1        Small                         3</span>
+<span class="co">#&gt; 2   Fish_2        Large                         1</span>
+<span class="co">#&gt; 3   Fish_3       Medium                         2</span>
+<span class="co">#&gt; 4   Fish_4        Large                         1</span>
+<span class="co">#&gt; 5   Fish_5       Medium                         2</span>
+<span class="co">#&gt; 6   Fish_6       Medium                         2</span>
+<span class="co">#&gt; 7   Fish_7        Small                         3</span>
+<span class="co">#&gt; 8   Fish_8        Small                         3</span>
+<span class="co">#&gt; 9   Fish_9        Large                         1</span>
+<span class="co">#&gt; 10 Fish_10        Small                         3</span>
+<span class="co">#&gt; 11 Fish_11       Medium                         2</span>
+<span class="co">#&gt; 12 Fish_12        Small                         3</span>
+<span class="co">#&gt; 13 Fish_13        Large                         1</span>
+<span class="co">#&gt; 14 Fish_14        Large                         1</span>
+<span class="co">#&gt; 15 Fish_15        Large                         1</span></code></pre></li>
+<li><p>(Note that, by default, if categories are named by characters, R sorts them alphabetically to give them an order in the <em>levels</em> of the factor.)</p></li>
+</ul>
+<h3>Factors are immensely useful, but tricky</h3>
+<ul>
+<li>We will continue talking about factors on Thursday.<br /></li>
+<li>Before that class, please download <a href="http://www.burns-stat.com/pages/Tutor/R_inferno.pdf">The R Inferno</a> and read the Preface on page 8 and the first few paragraphs of Chapter 1 (because it is fun to do so—we have all been in R hell at one time or another), then read from section 8.2 through 8.2.8, which covers factor hell.</li>
+</ul>
+<h2 id="mission-data-frame">Your mission</h2>
+<p>In lieu of homework on this topic, everyone should just do the following while this is fresh in your mind:</p>
+<ol style="list-style-type: decimal">
+<li>Read <code>?read.table</code></li>
+<li>Go get your own data sets that you want to work with (or are working with) and read them into R and have a look around them.
+<ul>
+<li>Look over their structure</li>
+<li>print them to the console in various ways</li>
+<li><code>View()</code> them.</li>
+<li>Change some values</li>
+<li>Extract just a few, non-adjacent columns</li>
+<li>Then save those non-adjacent columns to a new csv file.</li>
+</ul></li>
+<li><p>If you don’t have your own data and want some practice, play with more files that I put in the<code>data</code> directory of the course repo:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># parentage assignments of hatchery salmon</span>
+pbt &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;data/snppit_output_ParentageAssignments.txt&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">na.strings =</span> <span class="st">&quot;---&quot;</span>)
+<span class="kw">dim</span>(pbt)
+<span class="co">#&gt; [1] 7837   23</span>
+
+<span class="co"># candidate genes involved in avian song development</span>
+bird_genes &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;data/candidate-genes.txt&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>)</code></pre></li>
+</ol>
+
+          <hr>
+           <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'rep-res-course'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    
+        </div>
+      </div>
+
+            <div class="footer">
+        <hr>
+        <p>
+          <small>
+            Authored by Eric C. Anderson working as a Federal employee.  Content on this website is a government work in the public domain in the U.S. and under the CC0 1.0 internationally. Templates and plugins to build the site are modified from Hadley Wickham's <a href="https://github.com/hadley/adv-r/">Advanced R</a> website. Powered by <a href="http://jekyllrb.com/">jekyll</a>,
+          <a href="http://yihui.name/knitr/">knitr</a>, and
+          <a href="http://johnmacfarlane.net/pandoc/">pandoc</a>. Source
+          available on <a href="https://github.com/eriqande/rep-res-course/">github</a>.
+          </small>
+        </p>
+      </div>
+
+
+    </div> <!-- /container -->
+
+  <script src="//code.jquery.com/jquery.js"></script>
+  <script src="http://eriqande.github.io/rep-res-web/www/bootstrap.min.js"></script>
+  <script src="http://eriqande.github.io/rep-res-web/www/toc.js"></script>
+  <script type="text/javascript"
+    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  </body>
+</html>
+

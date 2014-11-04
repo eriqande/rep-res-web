@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-    <title>Learning R Markdown in one Hour &middot; Reproducible Research.</title>
+    <title>Factors &middot; Reproducible Research.</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -49,7 +49,7 @@
           <div class="well">
   How's this site built? See all sources at the course <a href="http://github.com/eriqande/rep-res-course">repository</a> on GitHub.
   <p><hr></p>
-  <p><a class="btn btn-primary" href="https://raw.githubusercontent.com/eriqande/rep-res-course/master/lectures/learning-rmarkdown-in-an-hour.rmd">Raw on GitHub</a></p>
+  <p><a class="btn btn-primary" href="https://raw.githubusercontent.com/eriqande/rep-res-course/master/lectures/factors.rmd">Raw on GitHub</a></p>
 </div>
 
 <h4>Page Contents</h4>
@@ -57,58 +57,27 @@
 
 <hr>
 <p><a href="http://eriqande.github.io/rep-res-web/contribute.html">How to contribute</a></p>
-<p><a class="btn btn-primary" href="https://github.com/eriqande/rep-res-course/edit/master/lectures/learning-rmarkdown-in-an-hour.rmd">Edit this page</a></p>
+<p><a class="btn btn-primary" href="https://github.com/eriqande/rep-res-course/edit/master/lectures/factors.rmd">Edit this page</a></p>
 
 
         </div>
 
         <div id="content" class="col-sm-8 pull-right">
-          <h1 id="rmarkdown-in-an-hour">Learning R Markdown in one Hour</h1>
-<p>In this session our goal is to:</p>
-<ol style="list-style-type: decimal">
-<li>Learn and use many of the features of Rmarkdown</li>
-<li>See how to intermix R code with text</li>
-<li>Collaboratively write a document to illustrate how Rmarkdown works</li>
-</ol>
-<p>The crazy thing is that, even though Rmarkdown provides an incredibly powerful tool for authoring reproducible research documents, you really can learn most of the fundamentals in about an hour.</p>
-<h2 id="rmarkdown-setup">Rmarkdown Setup</h2>
+          <h1 id="factor-lecture">Factors</h1>
 <ul>
-<li>If you completed <a href="./assign/assign-2.html#assignment-2">Assignment 2</a> you will understand what we are about to be doing.</li>
-<li>I hope everyone got the email I sent with the directions on getting the repository <em>before</em> you landed in the internet-impoverished conference room at NMFS. If not, here they are again:
+<li>Goals of this lecture:
 <ol style="list-style-type: decimal">
-<li>Open RStudio</li>
-<li>Choose File-&gt;New Project</li>
-<li>When asked, choose “Create Project from Version Control”</li>
-<li>Then when asked choose “Git”</li>
-<li>For repository URL use this: <a href="https://github.com/eriqande/grandma-recipe.git" class="uri">https://github.com/eriqande/grandma-recipe.git</a></li>
-<li>Let the project directory be named grandma-recipe</li>
-<li>Put it somewhere. I chose my Desktop.</li>
-<li>Hit “Create Project” and you should be in business.</li>
+<li>Go into moderate detail on <em>factors</em> (A tricky little data structure that probably causes more problems than anything else in R.)
+<ol style="list-style-type: lower-alpha">
+<li>What they are / what they look like.</li>
+<li>Why we talk about them with <em>data frames</em></li>
+<li>How they behave.</li>
+<li>Ways that they are useful.</li>
+</ol></li>
+<li>In the process we will look at the <code>table</code> function and have some examples from the world of <em>genetic stock identification</em> of salmon.</li>
 </ol></li>
 </ul>
-<h2>A few words about Markdown</h2>
-<ul>
-<li>Designed as a text <em>markup</em> language that would be
-<ul>
-<li>Simple</li>
-<li>Expressive</li>
-<li>Intuitive</li>
-<li>Capable of conveying intent even without being compiled into HTML or PDF</li>
-</ul></li>
-<li>There are many Markdown interpreters. The Rstudio folks have been using <a href="http://johnmacfarlane.net/pandoc/">pandoc</a> to crunch Markdown into other formats. It provides many useful extensions.</li>
-<li>Customizations of style are mostly separate from the <strong>content</strong>.</li>
-</ul>
-<h2>Mardown as “Reproducibility in Report Generation”</h2>
-<ul>
-<li>One nice thing about Markdown is that if you want to see how someone did something and you can find their R Markdown source then you can just look at it and see what they did.</li>
-<li>Contrast this to trying to explain to someone how to get a certain type of formatting in MS Word.</li>
-</ul>
-<h2>Learn this in an hour?!</h2>
-<ul>
-<li>Yes, we really can. It’s simple and intuitive.</li>
-<li>I’ve prepared a document in Rmarkdown using a lot of its features and now we will go through it together to discuss them.</li>
-<li>You assignment for next week is to write document using all the same features to describe yourself and your research.</li>
-</ul>
+<h2 id="factor-basics">Factor basics</h2>
 
           <hr>
            <div id="disqus_thread"></div>
