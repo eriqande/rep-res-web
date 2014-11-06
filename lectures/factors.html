@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link href="http://eriqande.github.io/rep-res-web/www/bootstrap.min.css" rel="stylesheet">
-    <link href="http://eriqande.github.io/rep-res-web/www/highlight.css" rel="stylesheet">
+    <link href="https://eriqande.github.io/rep-res-web/www/bootstrap.min.css" rel="stylesheet">
+    <link href="https://eriqande.github.io/rep-res-web/www/highlight.css" rel="stylesheet">
 
     <link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700'
       rel='stylesheet' type='text/css'>
@@ -14,7 +14,7 @@
 
   <body>
     <div class="navbar navbar-default navbar-static-top">
- <div class="navbar-header"><a class="navbar-brand" href="http://eriqande.github.io/rep-res-web">RepResCourse</a>
+ <div class="navbar-header"><a class="navbar-brand" href="https://eriqande.github.io/rep-res-web">RepResCourse</a>
       <a class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -23,9 +23,9 @@
     </div>
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li><a href="http://eriqande.github.io/rep-res-web/syllabus.html">Syllabus</a></li>
-        <li><a href="http://eriqande.github.io/rep-res-web/resources.html">Resources</a></li>
-        <li><a href="http://eriqande.github.io/rep-res-web/blogs.html">Instructor Blog</a></li>
+        <li><a href="https://eriqande.github.io/rep-res-web/syllabus.html">Syllabus</a></li>
+        <li><a href="https://eriqande.github.io/rep-res-web/resources.html">Resources</a></li>
+        <li><a href="https://eriqande.github.io/rep-res-web/blogs.html">Instructor Blog</a></li>
         <li><a href="#">Results/Gallery</a></li>
       </ul>
       <div class="navbar-right">
@@ -40,7 +40,7 @@
       <div class="masthead">
         <p> </p>
         <p> </p>
-        <h3 class="muted"><a href="http://eriqande.github.io/rep-res-web/">Reproducible Research Course</a> <small>by Eric C. Anderson for (NOAA/SWFSC)</small></h3>
+        <h3 class="muted"><a href="https://eriqande.github.io/rep-res-web/">Reproducible Research Course</a> <small>by Eric C. Anderson for (NOAA/SWFSC)</small></h3>
         <hr>
       </div>
 
@@ -56,7 +56,7 @@
 <ul class="list-unstyled" id="toc"></ul>
 
 <hr>
-<p><a href="http://eriqande.github.io/rep-res-web/contribute.html">How to contribute</a></p>
+<p><a href="https://eriqande.github.io/rep-res-web/contribute.html">How to contribute</a></p>
 <p><a class="btn btn-primary" href="https://github.com/eriqande/rep-res-course/edit/master/lectures/factors.rmd">Edit this page</a></p>
 
 
@@ -74,10 +74,620 @@
 <li>How they behave.</li>
 <li>Ways that they are useful.</li>
 </ol></li>
-<li>In the process we will look at the <code>table</code> function and have some examples from the world of <em>genetic stock identification</em> of salmon.</li>
+<li>In the process we will look at the <code>table</code> function and have some examples from the world of <em>genetic assignment</em> of birds.</li>
 </ol></li>
 </ul>
 <h2 id="factor-basics">Factor basics</h2>
+<p>Let’s reiterate some points/examples from the previous session.</p>
+<h3>Factors are vectors that record discrete <em>categories</em></h3>
+<ul>
+<li>Anything measured on a disrete scale can be said to fall into one of a set of categories.</li>
+<li>The discrete scale could be a summary of a continuous scale
+<ul>
+<li>For example, the categories of <em>Small</em>, <em>Medium</em>, and <em>Large</em> are (likely) summaries of a continuous variable like weight or height.</li>
+</ul></li>
+<li><p>If you have measured fish and put them into <em>Small</em>, <em>Medium</em>, and <em>Large</em>, categories you might have them in a data frame like this:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">17</span>)
+sml &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">ID =</span> <span class="kw">paste</span>(<span class="st">&quot;Fish&quot;</span>, <span class="dv">1</span>:<span class="dv">15</span>, <span class="dt">sep=</span><span class="st">&quot;_&quot;</span>),
+                  <span class="dt">SizeCategory =</span> <span class="kw">sample</span>(<span class="kw">c</span>(<span class="st">&quot;Small&quot;</span>, <span class="st">&quot;Medium&quot;</span>, <span class="st">&quot;Large&quot;</span>), <span class="dt">size =</span> <span class="dv">15</span>, <span class="dt">replace =</span> T)
+                  )
+
+<span class="co"># when you print it out it looks pretty normal</span>
+sml                 
+<span class="co">#&gt;         ID SizeCategory</span>
+<span class="co">#&gt; 1   Fish_1        Small</span>
+<span class="co">#&gt; 2   Fish_2        Large</span>
+<span class="co">#&gt; 3   Fish_3       Medium</span>
+<span class="co">#&gt; 4   Fish_4        Large</span>
+<span class="co">#&gt; 5   Fish_5       Medium</span>
+<span class="co">#&gt; 6   Fish_6       Medium</span>
+<span class="co">#&gt; 7   Fish_7        Small</span>
+<span class="co">#&gt; 8   Fish_8        Small</span>
+<span class="co">#&gt; 9   Fish_9        Large</span>
+<span class="co">#&gt; 10 Fish_10        Small</span>
+<span class="co">#&gt; 11 Fish_11       Medium</span>
+<span class="co">#&gt; 12 Fish_12        Small</span>
+<span class="co">#&gt; 13 Fish_13        Large</span>
+<span class="co">#&gt; 14 Fish_14        Large</span>
+<span class="co">#&gt; 15 Fish_15        Large</span></code></pre></li>
+</ul>
+<h3>Underlying structure of a <em>factor</em></h3>
+<ul>
+<li>The “SizeCategory” column looks like a vector of strings (a character vector), but it isn’t.</li>
+<li>A factor is a class that contains:
+<ol style="list-style-type: decimal">
+<li>A <em>levels</em> attribute that maps <span class="math"><em>N</em></span> categories to the integers <span class="math">1, …, <em>N</em></span>
+<ul>
+<li>(This sounds more complex than it is. It is just a character vector that gives an ordered collection of category names)</li>
+</ul></li>
+<li>An integer vector of values between 1 and <span class="math"><em>N</em></span> used to describe the occurrence of the categories.</li>
+</ol></li>
+<li>What? If that’s not clear, continuing with the <code>sml</code> example from above should help clarify things</li>
+</ul>
+<h3><em>sml</em> data frame’s SizeCategory</h3>
+<ul>
+<li><p>We can access the <em>levels</em> attribute of <code>sml$SizeCategory</code> like this:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(sml$SizeCategory)
+<span class="co">#&gt; [1] &quot;Large&quot;  &quot;Medium&quot; &quot;Small&quot;</span></code></pre></li>
+<li>The order these are in the <em>levels</em> tells us that:
+<ul>
+<li>1 = “Large”</li>
+<li>2 = “Medium”</li>
+<li>3 = “Small”</li>
+</ul></li>
+<li><p>And the integer vector part of <code>sml$SizeCategory</code> can be visualized by attaching it on the right side of the <code>sml</code> data frame like this:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cbind</span>(sml, <span class="dt">underlying_integer_vector =</span> <span class="kw">unclass</span>(sml$SizeCategory))
+<span class="co">#&gt;         ID SizeCategory underlying_integer_vector</span>
+<span class="co">#&gt; 1   Fish_1        Small                         3</span>
+<span class="co">#&gt; 2   Fish_2        Large                         1</span>
+<span class="co">#&gt; 3   Fish_3       Medium                         2</span>
+<span class="co">#&gt; 4   Fish_4        Large                         1</span>
+<span class="co">#&gt; 5   Fish_5       Medium                         2</span>
+<span class="co">#&gt; 6   Fish_6       Medium                         2</span>
+<span class="co">#&gt; 7   Fish_7        Small                         3</span>
+<span class="co">#&gt; 8   Fish_8        Small                         3</span>
+<span class="co">#&gt; 9   Fish_9        Large                         1</span>
+<span class="co">#&gt; 10 Fish_10        Small                         3</span>
+<span class="co">#&gt; 11 Fish_11       Medium                         2</span>
+<span class="co">#&gt; 12 Fish_12        Small                         3</span>
+<span class="co">#&gt; 13 Fish_13        Large                         1</span>
+<span class="co">#&gt; 14 Fish_14        Large                         1</span>
+<span class="co">#&gt; 15 Fish_15        Large                         1</span></code></pre></li>
+<li><p>(Note that, by default, if categories are named by characters, R sorts them alphabetically to give them an order in the <em>levels</em> of the factor.)</p></li>
+</ul>
+<h3>How R prints factors</h3>
+<ul>
+<li>R prints factors by showing the values as the <strong>strings</strong> that they are.</li>
+<li>And, at the bottom it prints out the <em>levels</em>
+<ul>
+<li>Or if there are lots of levels (i.e. categories) then it prints a few of them</li>
+</ul></li>
+<li><p>It looks like this:</p>
+<pre class="sourceCode r"><code class="sourceCode r">sml$SizeCategory
+<span class="co">#&gt;  [1] Small  Large  Medium Large  Medium Medium Small  Small  Large  Small </span>
+<span class="co">#&gt; [11] Medium Small  Large  Large  Large </span>
+<span class="co">#&gt; Levels: Large Medium Small</span></code></pre></li>
+<li><p>So, when you print something and it says <code>Levels:</code> on the last line, you know you are dealing with a factor.</p></li>
+</ul>
+<h2 id="same-on-factors">A different example</h2>
+<h3>Another example Data Frame</h3>
+<p>We can make some bogus data</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1</span>)
+bogus &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
+  <span class="dt">students =</span> <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;Devon&quot;</span>, <span class="st">&quot;Martha&quot;</span>, <span class="st">&quot;Hilary&quot;</span>), <span class="dv">3</span>),
+  <span class="dt">tests =</span> <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;Sep&quot;</span>,<span class="st">&quot;Oct&quot;</span>, <span class="st">&quot;Nov&quot;</span>), <span class="dt">each =</span> <span class="dv">3</span>),
+  <span class="dt">scores =</span> <span class="kw">as.integer</span>(<span class="kw">runif</span>(<span class="dv">9</span>, <span class="dt">min =</span> <span class="dv">55</span>, <span class="dt">max =</span> <span class="dv">98</span>))
+  )
+
+bogus <span class="co"># look at it</span>
+<span class="co">#&gt;   students tests scores</span>
+<span class="co">#&gt; 1    Devon   Sep     66</span>
+<span class="co">#&gt; 2   Martha   Sep     71</span>
+<span class="co">#&gt; 3   Hilary   Sep     79</span>
+<span class="co">#&gt; 4    Devon   Oct     94</span>
+<span class="co">#&gt; 5   Martha   Oct     63</span>
+<span class="co">#&gt; 6   Hilary   Oct     93</span>
+<span class="co">#&gt; 7    Devon   Nov     95</span>
+<span class="co">#&gt; 8   Martha   Nov     83</span>
+<span class="co">#&gt; 9   Hilary   Nov     82</span>
+
+<span class="kw">str</span>(bogus) <span class="co"># see what the types are. Hey there are factors!</span>
+<span class="co">#&gt; &#39;data.frame&#39;:    9 obs. of  3 variables:</span>
+<span class="co">#&gt;  $ students: Factor w/ 3 levels &quot;Devon&quot;,&quot;Hilary&quot;,..: 1 3 2 1 3 2 1 3 2</span>
+<span class="co">#&gt;  $ tests   : Factor w/ 3 levels &quot;Nov&quot;,&quot;Oct&quot;,&quot;Sep&quot;: 3 3 3 2 2 2 1 1 1</span>
+<span class="co">#&gt;  $ scores  : int  66 71 79 94 63 93 95 83 82</span></code></pre>
+<h3>Important Note</h3>
+<ul>
+<li>The default behavior of R is to convert character vectors to factors when putting them into a data frame.</li>
+<li><p>The column you get in <code>bogus$students</code> is the same as is returned by</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">factor</span>(<span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;Devon&quot;</span>, <span class="st">&quot;Martha&quot;</span>, <span class="st">&quot;Hilary&quot;</span>), <span class="dv">3</span>))
+<span class="co">#&gt; [1] Devon  Martha Hilary Devon  Martha Hilary Devon  Martha Hilary</span>
+<span class="co">#&gt; Levels: Devon Hilary Martha</span></code></pre></li>
+<li><p>So, the function <code>factor()</code> takes a vector and makes a factor vector out of it</p></li>
+</ul>
+<h3>What a factor consists of in R</h3>
+<ul>
+<li>Somewhat more tersely and technically than before:
+<ul>
+<li>A factor is a vector with class attribute of <code>factor</code> and with another attribute called <code>levels</code></li>
+<li><p>For a factor <code>f</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(f)   <span class="co"># returns the levels of f</span>
+<span class="kw">levels</span>(f) &lt;-<span class="st">  </span><span class="co"># can be used to set/modify the levels attribute of f</span></code></pre></li>
+</ul></li>
+<li><code>levels(f)</code> is a <em>character vector</em>, that will be sorted by default.</li>
+<li>The values of the factor variable itself are integers.
+<ul>
+<li>The i-th element of the factor vector tells us which level (or category) the i-th observation falls into.</li>
+</ul></li>
+</ul>
+<h3>What a Factor Looks like Under the Hood</h3>
+<ul>
+<li><p>One can use the <code>unclass</code> function to see the actual parts of an R object without having them printed in a way that is specific to the object<code>s</code>class` attribute.</p>
+<pre class="sourceCode r"><code class="sourceCode r">bogus$students  <span class="co"># printed as a factor</span>
+<span class="co">#&gt; [1] Devon  Martha Hilary Devon  Martha Hilary Devon  Martha Hilary</span>
+<span class="co">#&gt; Levels: Devon Hilary Martha</span>
+
+<span class="kw">unclass</span>(bogus$students)  <span class="co"># printed generically</span>
+<span class="co">#&gt; [1] 1 3 2 1 3 2 1 3 2</span>
+<span class="co">#&gt; attr(,&quot;levels&quot;)</span>
+<span class="co">#&gt; [1] &quot;Devon&quot;  &quot;Hilary&quot; &quot;Martha&quot;</span>
+
+
+bogus$tests   <span class="co"># printed as a factor</span>
+<span class="co">#&gt; [1] Sep Sep Sep Oct Oct Oct Nov Nov Nov</span>
+<span class="co">#&gt; Levels: Nov Oct Sep</span>
+
+<span class="kw">unclass</span>(bogus$tests)  <span class="co"># printed generically</span>
+<span class="co">#&gt; [1] 3 3 3 2 2 2 1 1 1</span>
+<span class="co">#&gt; attr(,&quot;levels&quot;)</span>
+<span class="co">#&gt; [1] &quot;Nov&quot; &quot;Oct&quot; &quot;Sep&quot;</span></code></pre></li>
+</ul>
+<h2 id="factor-issues">Issues and such with factors</h2>
+<h3>You can make R <em>not</em> create factors of character data in data frames</h3>
+<ul>
+<li>The <code>data.frame</code> function, as well as the <code>read.table</code> family of functions accept a <code>stringsAsFactors</code> parameter.<br /></li>
+<li>This can be a reasonable thing to do, since you can always explicitly make certain columns factors if you want to, using the <code>factor</code> function later.</li>
+</ul>
+<h3>Why does R use factors?</h3>
+<ul>
+<li>The idea of factors is central to the fitting of various statistical models.</li>
+<li>However R seems to go overboard by wanting to squash any character vector into a factor in a data frame.
+<ul>
+<li>Some of this relates to the fact that prior to a fairly late version of R, coding character vectors as factors was more space efficient.</li>
+</ul></li>
+<li>There are numerous hassles and headaches involved in dealing with factors, but factors are here to stay in R, so we had better get comfortable with them.</li>
+<li>There are also many good things about factors (see later).</li>
+</ul>
+<h3>Factors, once made, restrict allowable levels</h3>
+<p>Example:</p>
+<pre class="sourceCode r"><code class="sourceCode r">studentsf &lt;-<span class="st"> </span>bogus$students <span class="co"># this is a factor variable</span>
+
+studentsf <span class="co"># print it and see its values and levels</span>
+<span class="co">#&gt; [1] Devon  Martha Hilary Devon  Martha Hilary Devon  Martha Hilary</span>
+<span class="co">#&gt; Levels: Devon Hilary Martha</span>
+
+studentsf[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span>,<span class="dv">7</span>)] <span class="co"># return all the Devon values.</span>
+<span class="co">#&gt; [1] Devon Devon Devon</span>
+<span class="co">#&gt; Levels: Devon Hilary Martha</span>
+                    <span class="co"># note that the levels are still all three names</span>
+
+<span class="co"># Now, what if we want to change the name &quot;Devon&quot; to &quot;The Dude&quot;?</span>
+studentsf[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span>,<span class="dv">7</span>)] &lt;-<span class="st"> &quot;The Dude&quot;</span>  <span class="co"># R gets upset when you do this!</span>
+<span class="co">#&gt; Warning: invalid factor level, NA generated</span></code></pre>
+<h3>How can you change values of factors?</h3>
+<ul>
+<li>Two main ways:
+<ol style="list-style-type: decimal">
+<li><p>Modify the levels. In this example we will change “Devon” to “The Dude”</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Look at bogus$students</span>
+bogus$students
+<span class="co">#&gt; [1] Devon  Martha Hilary Devon  Martha Hilary Devon  Martha Hilary</span>
+<span class="co">#&gt; Levels: Devon Hilary Martha</span>
+
+<span class="co"># Confirm that Devon is the first element of the levels</span>
+<span class="kw">levels</span>(bogus$students)
+<span class="co">#&gt; [1] &quot;Devon&quot;  &quot;Hilary&quot; &quot;Martha&quot;</span>
+
+<span class="co"># Change that to &quot;The Dude&quot; using assignment-form indexing</span>
+<span class="kw">levels</span>(bogus$students)[<span class="dv">1</span>] &lt;-<span class="st"> &quot;The Dude&quot;</span>
+
+<span class="co"># Now look at the factor</span>
+bogus$students
+<span class="co">#&gt; [1] The Dude Martha   Hilary   The Dude Martha   Hilary   The Dude Martha  </span>
+<span class="co">#&gt; [9] Hilary  </span>
+<span class="co">#&gt; Levels: The Dude Hilary Martha</span></code></pre></li>
+<li><p>Coerce the factor to a character vector, modify, and re-<code>factor()</code> it</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># let&#39;s change &quot;Martha&quot; to &quot;Martha A&quot;</span>
+<span class="co"># what happens when we coerce to character?</span>
+<span class="kw">as.character</span>(bogus$students)
+<span class="co">#&gt; [1] &quot;The Dude&quot; &quot;Martha&quot;   &quot;Hilary&quot;   &quot;The Dude&quot; &quot;Martha&quot;   &quot;Hilary&quot;  </span>
+<span class="co">#&gt; [7] &quot;The Dude&quot; &quot;Martha&quot;   &quot;Hilary&quot;</span>
+
+<span class="co"># OK, so make a variable of that and then modify it</span>
+tmp &lt;-<span class="st"> </span><span class="kw">as.character</span>(bogus$students)
+tmp[tmp ==<span class="st"> &quot;Martha&quot;</span>] &lt;-<span class="st"> &quot;Martha A&quot;</span>  <span class="co"># change every occurrence of &quot;Martha&quot; to &quot;Martha A&quot;</span>
+
+<span class="co"># When we turn tmp back into a factor, what does it look like?</span>
+<span class="kw">factor</span>(tmp)
+<span class="co">#&gt; [1] The Dude Martha A Hilary   The Dude Martha A Hilary   The Dude Martha A</span>
+<span class="co">#&gt; [9] Hilary  </span>
+<span class="co">#&gt; Levels: Hilary Martha A The Dude</span>
+
+<span class="co"># OK, cool, we can assign that to bogus$students</span>
+bogus$students &lt;-<span class="st"> </span><span class="kw">factor</span>(tmp)
+
+<span class="co"># Look at the result:</span>
+bogus
+<span class="co">#&gt;   students tests scores</span>
+<span class="co">#&gt; 1 The Dude   Sep     66</span>
+<span class="co">#&gt; 2 Martha A   Sep     71</span>
+<span class="co">#&gt; 3   Hilary   Sep     79</span>
+<span class="co">#&gt; 4 The Dude   Oct     94</span>
+<span class="co">#&gt; 5 Martha A   Oct     63</span>
+<span class="co">#&gt; 6   Hilary   Oct     93</span>
+<span class="co">#&gt; 7 The Dude   Nov     95</span>
+<span class="co">#&gt; 8 Martha A   Nov     83</span>
+<span class="co">#&gt; 9   Hilary   Nov     82</span></code></pre></li>
+</ol></li>
+</ul>
+<h3>Catenating two factors</h3>
+<ul>
+<li><p>What if we have this scenario:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># imagine you have two factors</span>
+boys_f &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&quot;Joe&quot;</span>, <span class="st">&quot;Ted&quot;</span>, <span class="st">&quot;Fred&quot;</span>, <span class="st">&quot;Joe&quot;</span>))
+girls_f &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&quot;Anne&quot;</span>, <span class="st">&quot;Louise&quot;</span>, <span class="st">&quot;Louise&quot;</span>, <span class="st">&quot;Lucy&quot;</span>, <span class="st">&quot;Louise&quot;</span>))</code></pre>
+and, further, imagine you want to bung them together into a factor of <code>kids_f</code>.</li>
+<li><p>This fails spectacularly:</p>
+<pre class="sourceCode r"><code class="sourceCode r">kids_f &lt;-<span class="st"> </span><span class="kw">c</span>(boys_f, girls_f)
+kids_f
+<span class="co">#&gt; [1] 2 3 1 2 1 2 2 3 2</span></code></pre>
+Yikes! It has just catenated the underlying integer vectors!</li>
+<li>To get what you want:
+<ol style="list-style-type: decimal">
+<li>coerce each to character</li>
+<li>catenate</li>
+<li>re-<code>factor</code> it i.e.:</li>
+</ol>
+<pre class="sourceCode r"><code class="sourceCode r">kids_f &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">c</span>(<span class="kw">as.character</span>(boys_f), <span class="kw">as.character</span>(girls_f)))
+kids_f
+<span class="co">#&gt; [1] Joe    Ted    Fred   Joe    Anne   Louise Louise Lucy   Louise</span>
+<span class="co">#&gt; Levels: Anne Fred Joe Louise Lucy Ted</span>
+
+<span class="co"># check out the levels:</span>
+<span class="kw">levels</span>(kids_f)
+<span class="co">#&gt; [1] &quot;Anne&quot;   &quot;Fred&quot;   &quot;Joe&quot;    &quot;Louise&quot; &quot;Lucy&quot;   &quot;Ted&quot;</span></code></pre></li>
+</ul>
+<h3>What about adding rows to data frames?</h3>
+<ul>
+<li><p>Fortunately, if you want to add rows to a data frame, you can do that with <code>rbind()</code> and it will update the factor columns appropriately:</p>
+<pre class="sourceCode r"><code class="sourceCode r">extra &lt;-<span class="st"> </span><span class="kw">rbind</span>(bogus,
+               <span class="kw">data.frame</span>(<span class="dt">students =</span> <span class="kw">c</span>(<span class="st">&quot;Hilary&quot;</span>, <span class="st">&quot;Eve&quot;</span>), 
+                          <span class="dt">tests =</span> <span class="kw">c</span>(<span class="st">&quot;Jan&quot;</span>, <span class="st">&quot;Sep&quot;</span>),
+                          <span class="dt">scores =</span> <span class="kw">c</span>(<span class="dv">88</span>, <span class="dv">97</span>)
+                          )
+               )
+
+<span class="co"># what was the result?</span>
+extra
+<span class="co">#&gt;    students tests scores</span>
+<span class="co">#&gt; 1  The Dude   Sep     66</span>
+<span class="co">#&gt; 2  Martha A   Sep     71</span>
+<span class="co">#&gt; 3    Hilary   Sep     79</span>
+<span class="co">#&gt; 4  The Dude   Oct     94</span>
+<span class="co">#&gt; 5  Martha A   Oct     63</span>
+<span class="co">#&gt; 6    Hilary   Oct     93</span>
+<span class="co">#&gt; 7  The Dude   Nov     95</span>
+<span class="co">#&gt; 8  Martha A   Nov     83</span>
+<span class="co">#&gt; 9    Hilary   Nov     82</span>
+<span class="co">#&gt; 10   Hilary   Jan     88</span>
+<span class="co">#&gt; 11      Eve   Sep     97</span>
+
+<span class="co"># what do the levels look like:</span>
+<span class="kw">levels</span>(extra$students)
+<span class="co">#&gt; [1] &quot;Hilary&quot;   &quot;Martha A&quot; &quot;The Dude&quot; &quot;Eve&quot;</span>
+
+<span class="kw">levels</span>(extra$tests)
+<span class="co">#&gt; [1] &quot;Nov&quot; &quot;Oct&quot; &quot;Sep&quot; &quot;Jan&quot;</span></code></pre></li>
+</ul>
+<h3>Factor levels stick around</h3>
+<ul>
+<li><p>Even if you delete all occurrences of a level in a factor vector, the levels do not <em>automatically</em> change:</p>
+<pre class="sourceCode r"><code class="sourceCode r">no.dude &lt;-<span class="st"> </span>bogus[ bogus$students !=<span class="st"> &quot;The Dude&quot;</span>, ]  <span class="co"># drop Devon (The Dude) and his dudeliness</span>
+no.dude  <span class="co"># print it out...no &quot;The Dude&quot;</span>
+<span class="co">#&gt;   students tests scores</span>
+<span class="co">#&gt; 2 Martha A   Sep     71</span>
+<span class="co">#&gt; 3   Hilary   Sep     79</span>
+<span class="co">#&gt; 5 Martha A   Oct     63</span>
+<span class="co">#&gt; 6   Hilary   Oct     93</span>
+<span class="co">#&gt; 8 Martha A   Nov     83</span>
+<span class="co">#&gt; 9   Hilary   Nov     82</span>
+
+no.dude$students   <span class="co"># print that column of students</span>
+<span class="co">#&gt; [1] Martha A Hilary   Martha A Hilary   Martha A Hilary  </span>
+<span class="co">#&gt; Levels: Hilary Martha A The Dude</span>
+
+<span class="co"># whoa-ho!  The Dude is still a level...The Dude abides!</span>
+<span class="co"># check again</span>
+<span class="kw">levels</span>(no.dude$students)
+<span class="co">#&gt; [1] &quot;Hilary&quot;   &quot;Martha A&quot; &quot;The Dude&quot;</span></code></pre></li>
+<li><p>If you have subsetted a data frame and you want to get rid of the extra levels of all the factors, you can do like this with <code>droplevels()</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r">no.dude2 &lt;-<span class="st"> </span><span class="kw">droplevels</span>(no.dude)
+
+no.dude2  <span class="co"># print it</span>
+<span class="co">#&gt;   students tests scores</span>
+<span class="co">#&gt; 2 Martha A   Sep     71</span>
+<span class="co">#&gt; 3   Hilary   Sep     79</span>
+<span class="co">#&gt; 5 Martha A   Oct     63</span>
+<span class="co">#&gt; 6   Hilary   Oct     93</span>
+<span class="co">#&gt; 8 Martha A   Nov     83</span>
+<span class="co">#&gt; 9   Hilary   Nov     82</span>
+
+<span class="co"># check the levels</span>
+<span class="kw">levels</span>(no.dude2$students)  <span class="co"># no The Dude!</span>
+<span class="co">#&gt; [1] &quot;Hilary&quot;   &quot;Martha A&quot;</span></code></pre></li>
+<li><p>In many contexts you <em>will</em> want the factor levels to stick around. In others you don’t.</p></li>
+</ul>
+<h3>Numeric/Character/Factor Disasters</h3>
+<p>The most common disaster that can happen with factors occurs when you think you can get back to a numeric vector by coercing a factor to as.numeric:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># here are  some integers</span>
+my.nums &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span>,<span class="dv">8</span>,<span class="dv">10</span>,<span class="dv">1</span>,<span class="dv">8</span>,<span class="dv">8</span>,<span class="dv">8</span>,<span class="dv">10</span>)
+
+<span class="co"># make them a factor</span>
+numf &lt;-<span class="st"> </span><span class="kw">factor</span>(my.nums)
+
+<span class="co"># try to recover the original integers</span>
+<span class="kw">as.numeric</span>(numf)  <span class="co"># disaster</span>
+<span class="co">#&gt; [1] 1 2 3 4 1 3 3 3 4</span>
+
+<span class="co"># 2 &quot;correct&quot; ways of doing it</span>
+<span class="kw">as.numeric</span>(<span class="kw">as.character</span>(numf))  <span class="co"># coerce to character first, then to numeric</span>
+<span class="co">#&gt; [1]  1  4  8 10  1  8  8  8 10</span>
+
+
+<span class="kw">as.numeric</span>(<span class="kw">levels</span>(numf)[numf])  <span class="co"># slurp out the levels by numf and coerce</span>
+<span class="co">#&gt; [1]  1  4  8 10  1  8  8  8 10</span></code></pre>
+<h2 id="factor-utility">Why factors are super useful!</h2>
+<ul>
+<li>I am going to go through just one example that involves counting up occurrences of different categories.<br /></li>
+<li>When counting categories you usually will want to:
+<ol style="list-style-type: decimal">
+<li>Record a zero for known categories that had no observations</li>
+<li>List the categories in a particular order</li>
+</ol></li>
+<li>Both of these desires can be accommodated by judicious use of <em>factors</em>!
+<ol style="list-style-type: decimal">
+<li>Because <em>levels</em> “stick around” categories will be counted (as 0) even if there are no observations of them</li>
+<li>The <em>levels</em> of a factor can be put in any order desired, and that order will be used in reporting from many different functions.</li>
+</ol></li>
+</ul>
+<h3>The <em>table()</em> function</h3>
+<ul>
+<li><p><code>table(x)</code> gives the number of occurrence of each unique category in <code>x</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">2</span>)
+x &lt;-<span class="st"> </span><span class="kw">sample</span>(letters, <span class="dt">size =</span> <span class="dv">100</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)
+x  <span class="co"># print it</span>
+<span class="co">#&gt;   [1] &quot;e&quot; &quot;s&quot; &quot;o&quot; &quot;e&quot; &quot;y&quot; &quot;y&quot; &quot;d&quot; &quot;v&quot; &quot;m&quot; &quot;o&quot; &quot;o&quot; &quot;g&quot; &quot;t&quot; &quot;e&quot; &quot;k&quot; &quot;w&quot; &quot;z&quot;</span>
+<span class="co">#&gt;  [18] &quot;f&quot; &quot;l&quot; &quot;b&quot; &quot;r&quot; &quot;k&quot; &quot;v&quot; &quot;d&quot; &quot;j&quot; &quot;m&quot; &quot;d&quot; &quot;j&quot; &quot;z&quot; &quot;d&quot; &quot;a&quot; &quot;e&quot; &quot;v&quot; &quot;w&quot;</span>
+<span class="co">#&gt;  [35] &quot;n&quot; &quot;q&quot; &quot;v&quot; &quot;h&quot; &quot;r&quot; &quot;d&quot; &quot;z&quot; &quot;h&quot; &quot;c&quot; &quot;e&quot; &quot;y&quot; &quot;u&quot; &quot;z&quot; &quot;j&quot; &quot;n&quot; &quot;v&quot; &quot;a&quot;</span>
+<span class="co">#&gt;  [52] &quot;a&quot; &quot;r&quot; &quot;y&quot; &quot;h&quot; &quot;v&quot; &quot;u&quot; &quot;z&quot; &quot;p&quot; &quot;s&quot; &quot;u&quot; &quot;x&quot; &quot;q&quot; &quot;g&quot; &quot;w&quot; &quot;l&quot; &quot;k&quot; &quot;l&quot;</span>
+<span class="co">#&gt;  [69] &quot;f&quot; &quot;b&quot; &quot;h&quot; &quot;i&quot; &quot;b&quot; &quot;e&quot; &quot;e&quot; &quot;t&quot; &quot;h&quot; &quot;w&quot; &quot;k&quot; &quot;o&quot; &quot;j&quot; &quot;r&quot; &quot;a&quot; &quot;k&quot; &quot;f&quot;</span>
+<span class="co">#&gt;  [86] &quot;w&quot; &quot;z&quot; &quot;i&quot; &quot;t&quot; &quot;i&quot; &quot;z&quot; &quot;k&quot; &quot;j&quot; &quot;o&quot; &quot;m&quot; &quot;f&quot; &quot;l&quot; &quot;c&quot; &quot;c&quot; &quot;l&quot;</span>
+
+<span class="co"># count the number of each occurence</span>
+<span class="kw">table</span>(x)
+<span class="co">#&gt; x</span>
+<span class="co">#&gt; a b c d e f g h i j k l m n o p q r s t u v w x y z </span>
+<span class="co">#&gt; 4 3 3 5 7 4 2 5 3 5 6 5 3 2 5 1 2 4 2 3 3 6 5 1 4 7</span></code></pre></li>
+<li><p>It also can count the number of occurrences of pairs of categories:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">20</span>)
+x &lt;-<span class="st"> </span><span class="kw">sample</span>(letters[<span class="dv">1</span>:<span class="dv">3</span>], <span class="dt">size =</span> <span class="dv">10</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)
+y &lt;-<span class="st"> </span><span class="kw">sample</span>(LETTERS[<span class="dv">1</span>:<span class="dv">3</span>], <span class="dt">size =</span> <span class="dv">10</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)
+
+
+<span class="kw">cbind</span>(x,y)  <span class="co"># think of lining up x and y together</span>
+<span class="co">#&gt;       x   y  </span>
+<span class="co">#&gt;  [1,] &quot;c&quot; &quot;C&quot;</span>
+<span class="co">#&gt;  [2,] &quot;c&quot; &quot;C&quot;</span>
+<span class="co">#&gt;  [3,] &quot;a&quot; &quot;A&quot;</span>
+<span class="co">#&gt;  [4,] &quot;b&quot; &quot;C&quot;</span>
+<span class="co">#&gt;  [5,] &quot;c&quot; &quot;A&quot;</span>
+<span class="co">#&gt;  [6,] &quot;c&quot; &quot;B&quot;</span>
+<span class="co">#&gt;  [7,] &quot;a&quot; &quot;A&quot;</span>
+<span class="co">#&gt;  [8,] &quot;a&quot; &quot;A&quot;</span>
+<span class="co">#&gt;  [9,] &quot;a&quot; &quot;A&quot;</span>
+<span class="co">#&gt; [10,] &quot;b&quot; &quot;C&quot;</span>
+
+<span class="co"># how often do you see the combination a,A or a,B or c,B  etc.</span>
+<span class="kw">table</span>(<span class="kw">list</span>(x, y)) 
+<span class="co">#&gt;    .2</span>
+<span class="co">#&gt; .1  A B C</span>
+<span class="co">#&gt;   a 4 0 0</span>
+<span class="co">#&gt;   b 0 0 2</span>
+<span class="co">#&gt;   c 1 1 2</span></code></pre></li>
+</ul>
+<h3>Some sample data from birds</h3>
+<ul>
+<li>Example from <a href="http://onlinelibrary.wiley.com/doi/10.1111/mec.12977/abstract">Mapping migration in a songbird …</a></li>
+<li>393 birds from various <em>locations</em> in the breeding range of Wilson’s warbler</li>
+</ul>
+<p><img src="http://www.allaboutbirds.org/guide/PHOTO/LARGE/WilsonsWarbler-Vyn_090606_5182.jpg" alt="wilson’s warbler" /></p>
+<ul>
+<li>These were genotyped, and <em>locations</em> were lumped into <em>regions</em></li>
+<li>Then we asked how well we could use the genetic data to assign individual birds from each <em>location</em> to the correct <em>region</em></li>
+<li><p>Here is what the output looks like (a data frame)</p>
+<pre class="sourceCode r"><code class="sourceCode r">wiwa &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/bird-self-assignments.csv&quot;</span>, <span class="dt">row.names=</span><span class="dv">1</span>)
+
+<span class="kw">head</span>(wiwa)
+<span class="co">#&gt;         PopulationOfOrigin NumberOfLoci AK.EastBC.AB Wa.To.NorCalCoast</span>
+<span class="co">#&gt; wAKDE01              wAKDE           95       1.0000           0.00002</span>
+<span class="co">#&gt; wAKDE02              wAKDE           94       0.9962           0.00327</span>
+<span class="co">#&gt; wAKDE03              wAKDE           95       1.0000           0.00000</span>
+<span class="co">#&gt; wAKDE04              wAKDE           95       1.0000           0.00000</span>
+<span class="co">#&gt; wAKDE05              wAKDE           95       0.9998           0.00015</span>
+<span class="co">#&gt; wAKDE06              wAKDE           95       1.0000           0.00000</span>
+<span class="co">#&gt;         CentCalCoast CalSierra Basin.Rockies Eastern    MaxColumn</span>
+<span class="co">#&gt; wAKDE01            0         0         0e+00       0 AK.EastBC.AB</span>
+<span class="co">#&gt; wAKDE02            0         0         5e-04       0 AK.EastBC.AB</span>
+<span class="co">#&gt; wAKDE03            0         0         0e+00       0 AK.EastBC.AB</span>
+<span class="co">#&gt; wAKDE04            0         0         0e+00       0 AK.EastBC.AB</span>
+<span class="co">#&gt; wAKDE05            0         0         0e+00       0 AK.EastBC.AB</span>
+<span class="co">#&gt; wAKDE06            0         0         0e+00       0 AK.EastBC.AB</span>
+<span class="co">#&gt;         MaxPosterior</span>
+<span class="co">#&gt; wAKDE01       1.0000</span>
+<span class="co">#&gt; wAKDE02       0.9962</span>
+<span class="co">#&gt; wAKDE03       1.0000</span>
+<span class="co">#&gt; wAKDE04       1.0000</span>
+<span class="co">#&gt; wAKDE05       0.9998</span>
+<span class="co">#&gt; wAKDE06       1.0000</span>
+
+<span class="co"># here are the different locations</span>
+<span class="kw">levels</span>(wiwa$PopulationOfOrigin)
+<span class="co">#&gt;  [1] &quot;eNBFR&quot; &quot;eONHI&quot; &quot;eQCCM&quot; &quot;wABCA&quot; &quot;wAKDE&quot; &quot;wAKJU&quot; &quot;wAKUG&quot; &quot;wAKYA&quot;</span>
+<span class="co">#&gt;  [9] &quot;wBCMH&quot; &quot;wCABS&quot; &quot;wCACL&quot; &quot;wCAEU&quot; &quot;wCAHM&quot; &quot;wCAHU&quot; &quot;wCASL&quot; &quot;wCATE&quot;</span>
+<span class="co">#&gt; [17] &quot;wCOGM&quot; &quot;wCOPP&quot; &quot;wMTHM&quot; &quot;wOREL&quot; &quot;wORHA&quot; &quot;wORMB&quot; &quot;wWADA&quot;</span>
+
+<span class="co"># here are the different regions</span>
+<span class="kw">levels</span>(wiwa$MaxColumn)
+<span class="co">#&gt; [1] &quot;AK.EastBC.AB&quot;      &quot;Basin.Rockies&quot;     &quot;CalSierra&quot;        </span>
+<span class="co">#&gt; [4] &quot;CentCalCoast&quot;      &quot;Eastern&quot;           &quot;Wa.To.NorCalCoast&quot;</span></code></pre></li>
+</ul>
+<h3>Counting up self-assignments</h3>
+<ul>
+<li><p>We can count how many birds from each location were assigned to which regions using <code>table()</code></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(<span class="kw">list</span>(wiwa$PopulationOfOrigin, wiwa$MaxColumn))
+<span class="co">#&gt;        .2</span>
+<span class="co">#&gt; .1      AK.EastBC.AB Basin.Rockies CalSierra CentCalCoast Eastern</span>
+<span class="co">#&gt;   eNBFR            0             0         0            0       4</span>
+<span class="co">#&gt;   eONHI            0             0         0            0       4</span>
+<span class="co">#&gt;   eQCCM            0             0         0            0      17</span>
+<span class="co">#&gt;   wABCA           24             1         0            0       0</span>
+<span class="co">#&gt;   wAKDE           29             0         0            0       0</span>
+<span class="co">#&gt;   wAKJU           10             0         0            0       0</span>
+<span class="co">#&gt;   wAKUG           26             0         0            0       0</span>
+<span class="co">#&gt;   wAKYA           21             0         0            0       0</span>
+<span class="co">#&gt;   wBCMH            9             4         0            0       0</span>
+<span class="co">#&gt;   wCABS            0             0         1           11       0</span>
+<span class="co">#&gt;   wCACL            0             0        12            2       0</span>
+<span class="co">#&gt;   wCAEU            0             0         3            0       0</span>
+<span class="co">#&gt;   wCAHM            0             0         1           14       0</span>
+<span class="co">#&gt;   wCAHU            0             0        15            0       0</span>
+<span class="co">#&gt;   wCASL            0             0         3           19       0</span>
+<span class="co">#&gt;   wCATE            0             0        21            2       0</span>
+<span class="co">#&gt;   wCOGM            0            11         0            0       0</span>
+<span class="co">#&gt;   wCOPP            0            19         0            0       0</span>
+<span class="co">#&gt;   wMTHM            1             2         0            0       0</span>
+<span class="co">#&gt;   wOREL            6            19         0            0       0</span>
+<span class="co">#&gt;   wORHA            0             0         0            3       0</span>
+<span class="co">#&gt;   wORMB            0             0         1            1       0</span>
+<span class="co">#&gt;   wWADA            2             0         0            1       0</span>
+<span class="co">#&gt;        .2</span>
+<span class="co">#&gt; .1      Wa.To.NorCalCoast</span>
+<span class="co">#&gt;   eNBFR                 0</span>
+<span class="co">#&gt;   eONHI                 0</span>
+<span class="co">#&gt;   eQCCM                 0</span>
+<span class="co">#&gt;   wABCA                 0</span>
+<span class="co">#&gt;   wAKDE                 0</span>
+<span class="co">#&gt;   wAKJU                 0</span>
+<span class="co">#&gt;   wAKUG                 0</span>
+<span class="co">#&gt;   wAKYA                 0</span>
+<span class="co">#&gt;   wBCMH                 0</span>
+<span class="co">#&gt;   wCABS                 3</span>
+<span class="co">#&gt;   wCACL                 1</span>
+<span class="co">#&gt;   wCAEU                15</span>
+<span class="co">#&gt;   wCAHM                 2</span>
+<span class="co">#&gt;   wCAHU                 1</span>
+<span class="co">#&gt;   wCASL                 1</span>
+<span class="co">#&gt;   wCATE                 2</span>
+<span class="co">#&gt;   wCOGM                 0</span>
+<span class="co">#&gt;   wCOPP                 0</span>
+<span class="co">#&gt;   wMTHM                 0</span>
+<span class="co">#&gt;   wOREL                 0</span>
+<span class="co">#&gt;   wORHA                20</span>
+<span class="co">#&gt;   wORMB                20</span>
+<span class="co">#&gt;   wWADA                 9</span></code></pre></li>
+<li>That is all right, but the locations and regions are not ordered very sensibly.
+<ul>
+<li>They are ordered alphabetically,</li>
+<li>It would be better to order them geographically</li>
+</ul></li>
+<li>We can do this by resetting the levels in the order we want:
+<ol style="list-style-type: decimal">
+<li><p>First, get vectors that have all the categories you want in the order you want them in</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># a vector of regions in a geographically sensible order</span>
+regions_ordered &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;AK.EastBC.AB&quot;</span>, <span class="st">&quot;Wa.To.NorCalCoast&quot;</span>, <span class="st">&quot;CentCalCoast&quot;</span>, <span class="st">&quot;CalSierra&quot;</span>, <span class="st">&quot;Basin.Rockies&quot;</span>, <span class="st">&quot;Eastern&quot;</span>)
+
+<span class="co"># get a vector of locations in a good order</span>
+locations_ordered &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;wAKDE&quot;</span>, <span class="st">&quot;wAKYA&quot;</span>, <span class="st">&quot;wAKUG&quot;</span>, <span class="st">&quot;wAKJU&quot;</span>, <span class="st">&quot;wABCA&quot;</span>, <span class="st">&quot;wBCMH&quot;</span>, <span class="st">&quot;wWADA&quot;</span>, 
+<span class="st">&quot;wORHA&quot;</span>, <span class="st">&quot;wORMB&quot;</span>, <span class="st">&quot;wCAEU&quot;</span>, <span class="st">&quot;wCAHM&quot;</span>, <span class="st">&quot;wCABS&quot;</span>, <span class="st">&quot;wCASL&quot;</span>, <span class="st">&quot;wCATE&quot;</span>, <span class="st">&quot;wCACL&quot;</span>, <span class="st">&quot;wCAHU&quot;</span>,
+<span class="st">&quot;wMTHM&quot;</span>, <span class="st">&quot;wOREL&quot;</span>, <span class="st">&quot;wCOPP&quot;</span>, <span class="st">&quot;wCOGM&quot;</span>, <span class="st">&quot;eQCCM&quot;</span>, <span class="st">&quot;eONHI&quot;</span>, <span class="st">&quot;eNBFR&quot;</span>
+)</code></pre></li>
+<li><p>Then, this is the magical step: reset the levels to be the ordered vectors of categories you want. You do this by passing in the ordered vector to the <code>levels</code> argument of the <code>factor()</code> function:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># order the levels of the regions nicely</span>
+wiwa$MaxColumn &lt;-<span class="st"> </span><span class="kw">factor</span>(wiwa$MaxColumn, <span class="dt">levels =</span> regions_ordered)
+
+<span class="co"># order the levels of the locations nicely</span>
+wiwa$PopulationOfOrigin &lt;-<span class="st"> </span><span class="kw">factor</span>(wiwa$PopulationOfOrigin, <span class="dt">levels =</span> locations_ordered)</code></pre>
+<ul>
+<li><p><strong>WARNING</strong> DO NOT DO THIS!</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(wiwa$MaxColumn) &lt;-<span class="st"> </span>regions_ordered
+<span class="kw">levels</span>(wiwa$PopulationOfOrigin) &lt;-<span class="st"> </span>locations_ordered</code></pre>
+You have to reconstitute is as a factor after changing the levels. Otherwise you can get totally wrong values.</li>
+</ul></li>
+<li><p>Then use table again, and note the ordering of the categories in the output:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(<span class="kw">list</span>(wiwa$PopulationOfOrigin, wiwa$MaxColumn))
+<span class="co">#&gt;        .2</span>
+<span class="co">#&gt; .1      AK.EastBC.AB Wa.To.NorCalCoast CentCalCoast CalSierra</span>
+<span class="co">#&gt;   wAKDE           29                 0            0         0</span>
+<span class="co">#&gt;   wAKYA           21                 0            0         0</span>
+<span class="co">#&gt;   wAKUG           26                 0            0         0</span>
+<span class="co">#&gt;   wAKJU           10                 0            0         0</span>
+<span class="co">#&gt;   wABCA           24                 0            0         0</span>
+<span class="co">#&gt;   wBCMH            9                 0            0         0</span>
+<span class="co">#&gt;   wWADA            2                 9            1         0</span>
+<span class="co">#&gt;   wORHA            0                20            3         0</span>
+<span class="co">#&gt;   wORMB            0                20            1         1</span>
+<span class="co">#&gt;   wCAEU            0                15            0         3</span>
+<span class="co">#&gt;   wCAHM            0                 2           14         1</span>
+<span class="co">#&gt;   wCABS            0                 3           11         1</span>
+<span class="co">#&gt;   wCASL            0                 1           19         3</span>
+<span class="co">#&gt;   wCATE            0                 2            2        21</span>
+<span class="co">#&gt;   wCACL            0                 1            2        12</span>
+<span class="co">#&gt;   wCAHU            0                 1            0        15</span>
+<span class="co">#&gt;   wMTHM            1                 0            0         0</span>
+<span class="co">#&gt;   wOREL            6                 0            0         0</span>
+<span class="co">#&gt;   wCOPP            0                 0            0         0</span>
+<span class="co">#&gt;   wCOGM            0                 0            0         0</span>
+<span class="co">#&gt;   eQCCM            0                 0            0         0</span>
+<span class="co">#&gt;   eONHI            0                 0            0         0</span>
+<span class="co">#&gt;   eNBFR            0                 0            0         0</span>
+<span class="co">#&gt;        .2</span>
+<span class="co">#&gt; .1      Basin.Rockies Eastern</span>
+<span class="co">#&gt;   wAKDE             0       0</span>
+<span class="co">#&gt;   wAKYA             0       0</span>
+<span class="co">#&gt;   wAKUG             0       0</span>
+<span class="co">#&gt;   wAKJU             0       0</span>
+<span class="co">#&gt;   wABCA             1       0</span>
+<span class="co">#&gt;   wBCMH             4       0</span>
+<span class="co">#&gt;   wWADA             0       0</span>
+<span class="co">#&gt;   wORHA             0       0</span>
+<span class="co">#&gt;   wORMB             0       0</span>
+<span class="co">#&gt;   wCAEU             0       0</span>
+<span class="co">#&gt;   wCAHM             0       0</span>
+<span class="co">#&gt;   wCABS             0       0</span>
+<span class="co">#&gt;   wCASL             0       0</span>
+<span class="co">#&gt;   wCATE             0       0</span>
+<span class="co">#&gt;   wCACL             0       0</span>
+<span class="co">#&gt;   wCAHU             0       0</span>
+<span class="co">#&gt;   wMTHM             2       0</span>
+<span class="co">#&gt;   wOREL            19       0</span>
+<span class="co">#&gt;   wCOPP            19       0</span>
+<span class="co">#&gt;   wCOGM            11       0</span>
+<span class="co">#&gt;   eQCCM             0      17</span>
+<span class="co">#&gt;   eONHI             0       4</span>
+<span class="co">#&gt;   eNBFR             0       4</span></code></pre></li>
+</ol></li>
+<li><p>Many, many functions use the order of the levels of a factor to determine what order to output things in (like drawning legends on plots, etc.). So knowing how to set the order of the levels with <code>factor(my.factor, levels = my.ord)</code> is very useful.</p></li>
+</ul>
 
           <hr>
            <div id="disqus_thread"></div>
@@ -114,8 +724,8 @@
     </div> <!-- /container -->
 
   <script src="//code.jquery.com/jquery.js"></script>
-  <script src="http://eriqande.github.io/rep-res-web/www/bootstrap.min.js"></script>
-  <script src="http://eriqande.github.io/rep-res-web/www/toc.js"></script>
+  <script src="https://eriqande.github.io/rep-res-web/www/bootstrap.min.js"></script>
+  <script src="https://eriqande.github.io/rep-res-web/www/toc.js"></script>
   <script type="text/javascript"
     src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
   </script>

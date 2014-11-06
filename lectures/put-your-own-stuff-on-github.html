@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Putting repos on github &middot; Reproducible Research.</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://eriqande.github.io/rep-res-web/www/bootstrap.min.css" rel="stylesheet">
+    <link href="https://eriqande.github.io/rep-res-web/www/highlight.css" rel="stylesheet">
+
+    <link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700'
+      rel='stylesheet' type='text/css'>
+  </head>
+
+  <body>
+    <div class="navbar navbar-default navbar-static-top">
+ <div class="navbar-header"><a class="navbar-brand" href="https://eriqande.github.io/rep-res-web">RepResCourse</a>
+      <a class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="https://eriqande.github.io/rep-res-web/syllabus.html">Syllabus</a></li>
+        <li><a href="https://eriqande.github.io/rep-res-web/resources.html">Resources</a></li>
+        <li><a href="https://eriqande.github.io/rep-res-web/blogs.html">Instructor Blog</a></li>
+        <li><a href="#">Results/Gallery</a></li>
+      </ul>
+      <div class="navbar-right">
+    	<p class="navbar-text">I'm navbar-fixed-top</p>
+  	  </div>
+    </div>
+</div>
+
+
+    <div class="container">
+            <!-- The title and stuff is here -->
+      <div class="masthead">
+        <p> </p>
+        <p> </p>
+        <h3 class="muted"><a href="https://eriqande.github.io/rep-res-web/">Reproducible Research Course</a> <small>by Eric C. Anderson for (NOAA/SWFSC)</small></h3>
+        <hr>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-3" id="nav">
+          <div class="well">
+  How's this site built? See all sources at the course <a href="http://github.com/eriqande/rep-res-course">repository</a> on GitHub.
+  <p><hr></p>
+  <p><a class="btn btn-primary" href="https://raw.githubusercontent.com/eriqande/rep-res-course/master/lectures/put-your-own-stuff-on-github.rmd">Raw on GitHub</a></p>
+</div>
+
+<h4>Page Contents</h4>
+<ul class="list-unstyled" id="toc"></ul>
+
+<hr>
+<p><a href="https://eriqande.github.io/rep-res-web/contribute.html">How to contribute</a></p>
+<p><a class="btn btn-primary" href="https://github.com/eriqande/rep-res-course/edit/master/lectures/put-your-own-stuff-on-github.rmd">Edit this page</a></p>
+
+
+        </div>
+
+        <div id="content" class="col-sm-8 pull-right">
+          <h1 id="put-it-on-github">Put your stuff on GitHub</h1>
+<h2>Goals</h2>
+<ul>
+<li>I want everyone to walk through the process of:
+<ol style="list-style-type: decimal">
+<li>Making an RStudio project with git version control</li>
+<li>Committing some stuff in it.</li>
+<li>Making a “home” for that at GitHub</li>
+<li>Pushing the contents to GitHub</li>
+<li>Modifying something, committing, and pushing it up anew.</li>
+<li>Cloning the repo elsewhere.</li>
+</ol></li>
+<li>The folks at RStudio and GitHub have worked pretty hard to make such a process about as easy as can be.</li>
+</ul>
+<h3>Make a project</h3>
+<ul>
+<li>By now, this should be familiar:
+<ol style="list-style-type: decimal">
+<li>From RStudio, choose File -&gt; New Project…</li>
+<li>Choose “New Directory” then “Empty Project”</li>
+<li>Give the directory a name (like <code>my_proj</code>) 4 Click the button to use git version control</li>
+</ol></li>
+</ul>
+<h3>Make some changes and commit them.</h3>
+<ul>
+<li>For this step, try something like this:
+<ol style="list-style-type: decimal">
+<li>Choose File -&gt; New File -&gt; Text File</li>
+<li><p>Then insert something like: ``` # My own (basically empty) project on GitHub</p>
+I am just figuring out how to put my own stuff up on GitHub. ``<code>into it and save that as a file called</code>README.md` in the top level of your project directory.</li>
+<li>Make a new file (if you want) and add some R code to it.</li>
+<li>Commit those new files
+<ol style="list-style-type: lower-alpha">
+<li>Stage the files you want to commit. This should be at least <code>.gitignore</code>, <code>my_proj.Rproj</code>, and <code>README.md</code></li>
+<li>Commit them (write a short commit message).</li>
+</ol></li>
+</ol></li>
+<li>Cool. At this point you have a git repo you can put on GitHub.</li>
+</ul>
+<h3>Putting it up on GitHub</h3>
+<ul>
+<li>Here is the strategy that we will follow for this part (in brief)
+<ol style="list-style-type: decimal">
+<li>Go to GitHub and create a new repository there named <code>my_proj</code></li>
+<li>Follow the instructions on GitHub on how to get info into that repository.</li>
+</ol></li>
+<li>In more detail here it how your create a new repository on GitHub
+<ol style="list-style-type: decimal">
+<li>Go to <strong>your</strong> GitHub page. It will be at <code>https://github.com/USERNAME</code> where USERNAME is replaced with your GitHub name.</li>
+<li>On the top right of the page there is a <code>+</code> symbol with a little triangle next to it (should be just to the right of your username). Click this and choose <code>New Repository</code>.</li>
+<li>In the text box, type in <code>my_proj</code></li>
+<li>In the Description box, feel free to put whatever you want to in there. (Like <code>first attempt!</code>)</li>
+<li>Leave the <code>Public</code> button checked.</li>
+<li><strong>DO NOT</strong> initialize the repo with a README file. <strong>Neither should you</strong> click the button to add a <code>gitignore</code> or a license file.</li>
+<li>Hit <code>Create Repository</code></li>
+</ol></li>
+<li>Now, here is how you get your stuff into that repo.
+<ol style="list-style-type: decimal">
+<li>After doing the above steps, you get a screen that shows a quick setup. Make sure that the <code>http</code> button is activated, instead of the <code>ssh</code> button.</li>
+<li>Copy the two lines of code under where it says _or push an existing repository from the command line__</li>
+<li>Open up a Shell from your <code>my_proj</code> RStudio project. (Choose Tools -&gt; Shell) and paste the two lines of code into the shell. (You probably have to hit return after that, too.)</li>
+<li>If everything worked correctly, you should see a messsage like this: <code>Counting objects: 5, done.     Delta compression using up to 2 threads.     Compressing objects: 100% (4/4), done.     Writing objects: 100% (5/5), 567 bytes | 0 bytes/s, done.     Total 5 (delta 0), reused 0 (delta 0)     To https://github.com/eriqande/my_proj.git * [new branch]      master -&gt; master Branch master set up to track remote branch master from origin.</code></li>
+<li>That is it. Now you can commit new changes and easily push them up to GitHub from within RStudio.</li>
+<li>Go back to your GitHub page and choose the repositories tab and you will find your <code>my_proj</code> repo there.</li>
+</ol></li>
+</ul>
+<h3>Have fun playing around</h3>
+<ul>
+<li>Here are some thing to try:
+<ol style="list-style-type: decimal">
+<li>Note that you can actually edit files directly on GitHub (try to figure out how to edit your README on GitHub) and then commit those changes. Then you can pull them down to your local repo.</li>
+<li>In the Shell, go to a new directory and then give a command like: <code>git clone https://github.com/USERNAME/my_proj.git</code> where USERNAME is replaced with your username. (Note that on the right side of your <code>myproj</code> repository page on GitHub, you can find the correct <strong>https</strong> clone URL.
+<ul>
+<li>This will give you a completely new clone of your repository. This can be nice if you need to set up work on a different computer, etc.</li>
+</ul></li>
+</ol></li>
+</ul>
+
+          <hr>
+           <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'rep-res-course'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    
+        </div>
+      </div>
+
+            <div class="footer">
+        <hr>
+        <p>
+          <small>
+            Authored by Eric C. Anderson working as a Federal employee.  Content on this website is a government work in the public domain in the U.S. and under the CC0 1.0 internationally. Templates and plugins to build the site are modified from Hadley Wickham's <a href="https://github.com/hadley/adv-r/">Advanced R</a> website. Powered by <a href="http://jekyllrb.com/">jekyll</a>,
+          <a href="http://yihui.name/knitr/">knitr</a>, and
+          <a href="http://johnmacfarlane.net/pandoc/">pandoc</a>. Source
+          available on <a href="https://github.com/eriqande/rep-res-course/">github</a>.
+          </small>
+        </p>
+      </div>
+
+
+    </div> <!-- /container -->
+
+  <script src="//code.jquery.com/jquery.js"></script>
+  <script src="https://eriqande.github.io/rep-res-web/www/bootstrap.min.js"></script>
+  <script src="https://eriqande.github.io/rep-res-web/www/toc.js"></script>
+  <script type="text/javascript"
+    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  </body>
+</html>
+
