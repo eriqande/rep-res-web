@@ -70,14 +70,14 @@
 <li>Please download/install these before coming to class:
 <ol style="list-style-type: decimal">
 <li><p>install necessary packages:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;ggplot2&quot;</span>,<span class="st">&quot;lubridate&quot;</span>, <span class="st">&quot;plyr&quot;</span>, <span class="st">&quot;mosaic&quot;</span>, <span class="st">&quot;mosaicData&quot;</span>)</code></pre></li>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="kw">c</span>(<span class="st">&quot;ggplot2&quot;</span>,<span class="st">&quot;lubridate&quot;</span>, <span class="st">&quot;plyr&quot;</span>, <span class="st">&quot;mosaic&quot;</span>, <span class="st">&quot;mosaicData&quot;</span>))</code></pre></li>
 <li><p>Pull the most recent version of the rep-res-course repo just before coming to class.</p></li>
 </ol></li>
 </ul>
 <h3>Goals for this hour:</h3>
 <ol style="list-style-type: decimal">
 <li>Describe (briefly) <code>ggplot2</code>s underlying philosophy and how to work with it.</li>
-<li>Quickly overview the _geom_s available in <code>ggplot2</code></li>
+<li>Quickly overview the <em>geom</em>s available in <code>ggplot2</code></li>
 <li>Develop an example plot together</li>
 <li>Turn you all loose with the <code>mosaic</code> package to experiment with different plots</li>
 </ol>
@@ -156,7 +156,7 @@
 <h3>A pole vaulting example</h3>
 <ul>
 <li>Here is a concrete example: we will investigate the history of pole-vaulting world records</li>
-<li>I grabbed the data by copying them from Wikipedia and pasting them into a text file</li>
+<li>I grabbed the data by copying them from <a href="http://en.wikipedia.org/wiki/Men&#39;s_pole_vault_world_record_progression">http://en.wikipedia.org/wiki/Men's_pole_vault_world_record_progression</a> and pasting them into a text file</li>
 <li><p>Here we make a data frame out of them:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(lubridate)  <span class="co"># for dealing with dates</span>
 <span class="kw">library</span>(ggplot2)
@@ -261,14 +261,23 @@ d4</code></pre>
 <li><p>Now, add “rugs” along the <span class="math"><em>x</em></span> and <span class="math"><em>y</em></span> axes that show the position of points, and in them, map <em>color</em> to <em>Nation</em>:</p>
 <pre class="sourceCode r"><code class="sourceCode r">d5 &lt;-<span class="st"> </span>d4 +<span class="st"> </span><span class="kw">geom_rug</span>(<span class="dt">sides =</span> <span class="st">&quot;bl&quot;</span>, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">color =</span> Nation))
 d5</code></pre>
-<p><img src="figures/unnamed-chunk-16.png" title="plot of chunk unnamed-chunk-16" alt="plot of chunk unnamed-chunk-16" width="600px" height="420px" /></p>
-<p>Note that we are using the <code>aes()</code> function to add the mapping of <em>color</em> to <em>Nation</em> within the <code>geom_rug()</code> function. + Note also that the legend was created automatically.</p></li>
+<img src="figures/unnamed-chunk-16.png" title="plot of chunk unnamed-chunk-16" alt="plot of chunk unnamed-chunk-16" width="600px" height="420px" />
+<ul>
+<li>Note that we are using the <code>aes()</code> function to add the mapping of <em>color</em> to <em>Nation</em> within the <code>geom_rug()</code> function.
+<ul>
+<li>Note also that the legend was created automatically.</li>
+</ul></li>
+<li>Wow! A legend is produced automatically, by default, and it looks pretty good. This doesn’t happen without an all-out wrestling match in R’s base graphics system.</li>
+</ul></li>
 </ol>
 <ul>
 <li>So, that was some fun playing around with the truly awesome ease with which you can build up complex and lovely graphics with ggplot.</li>
 </ul>
 <h3>How many geoms are there?</h3>
-<p>Quite a few. There is a good summary with little icons for each <a href="http://docs.ggplot2.org/current/">here</a></p>
+<ul>
+<li>Quite a few. There is a good summary with little icons for each <a href="http://docs.ggplot2.org/current/">here</a></li>
+<li>Note that most geoms respond to the aesthetics of <code>x</code>, <code>y</code>, and <code>color</code> (or <code>fill</code>). And some have more (or other) aesthetics you can map values to.</li>
+</ul>
 <h3>Getting even sillier</h3>
 <ul>
 <li>Here is another plot I made while geeking out.</li>
@@ -289,8 +298,7 @@ bb &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt"
                 <span class="dt">xmax =</span> DateNext, 
                 <span class="dt">ymin =</span> FirstRecordMeters, 
                 <span class="dt">ymax =</span> Meters,
-                <span class="dt">fill =</span> Nation,
-                <span class="dt">color =</span> Nation
+                <span class="dt">fill =</span> Nation
                 ))
 bb</code></pre>
 <p><img src="figures/unnamed-chunk-17.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" width="600px" height="420px" /></p>
@@ -315,7 +323,7 @@ pv1[<span class="dv">1</span>:<span class="dv">5</span>, ]  <span class="co"># h
 <span class="co">#&gt; 8              4.30 1932-07-15 16:00:00</span></code></pre></li>
 <li><p>Look at the previous plot and decide that we would like to run names equally spaced along a line that runs from about (1910, 4.25) to (1980, 6.5). Note that we will have to squish 34 names along that line. So, we can define the points along it as follows:</p>
 <pre class="sourceCode r"><code class="sourceCode r">pv1$nameline.x &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">mdy</span>(<span class="st">&quot;1-1-1910&quot;</span>), <span class="kw">mdy</span>(<span class="st">&quot;1-1-1980&quot;</span>), <span class="dt">length.out =</span> <span class="kw">nrow</span>(pv1))
-<span class="co"># holy cow! did you see how we got  sequence of dates? lubridate is sick!</span>
+<span class="co"># holy cow! did you see how easily we got that sequence of dates? lubridate is amazing!</span>
 pv1$nameline.y &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="fl">4.5</span>, <span class="fl">6.44</span>, <span class="dt">length.out =</span> <span class="kw">nrow</span>(pv1))</code></pre></li>
 <li><p>Add that line to the plot as colored points atop a black line.</p>
 <pre class="sourceCode r"><code class="sourceCode r">bb2 &lt;-<span class="st"> </span>bb +<span class="st"> </span>
@@ -323,7 +331,7 @@ pv1$nameline.y &lt;-<span class="st"> </span><span class="kw">seq</span>(<span c
 <span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> pv1, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> nameline.x, <span class="dt">y =</span> nameline.y))
 bb2</code></pre>
 <p><img src="figures/unnamed-chunk-20.png" title="plot of chunk unnamed-chunk-20" alt="plot of chunk unnamed-chunk-20" width="600px" height="420px" /></p>
-Notice how the color of Nation gets applied to it automatically.</li>
+Notice how the color of Nation gets applied to the points automatically.</li>
 <li><p>Now, little colored lines from the nameline points to the records. For this we can use the <code>geom_segment()</code> function.</p>
 <pre class="sourceCode r"><code class="sourceCode r">bb3 &lt;-<span class="st"> </span>bb2 +<span class="st"> </span><span class="kw">geom_segment</span>(<span class="dt">data =</span> pv1, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">xend =</span> nameline.x, <span class="dt">yend =</span> nameline.y))
 bb3</code></pre>
@@ -347,7 +355,10 @@ bb4</code></pre>
 <span class="kw">mPlot</span>(mtcars, <span class="dt">system =</span> <span class="st">&quot;ggplot&quot;</span>)</code></pre>
 <p>This will load the mtcars data set into moscaic’s ggplot “interactor”.</p>
 <ul>
-<li>Click the “gear” symbol in the upper left of the plot window and start fiddling!</li>
+<li>Click the “gear” symbol in the upper left of the plot window and start fiddling!
+<ul>
+<li>Note that you only access a fraction of ggplot’s functionality this way, but it can still be informative.</li>
+</ul></li>
 <li>Hit the Show Expression button to see what commands create the resulting plot.</li>
 <li>Look for other data sets. Type <code>data()</code> to see a list of them. Or try</li>
 </ul>
