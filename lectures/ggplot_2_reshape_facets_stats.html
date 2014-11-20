@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>ggplot2 - 1 &middot; Reproducible Research.</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="http://eriqande.github.io/rep-res-web/www/bootstrap.min.css" rel="stylesheet">
+    <link href="http://eriqande.github.io/rep-res-web/www/highlight.css" rel="stylesheet">
+
+    <link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700'
+      rel='stylesheet' type='text/css'>
+  </head>
+
+  <body>
+    <div class="navbar navbar-default navbar-static-top">
+ <div class="navbar-header"><a class="navbar-brand" href="http://eriqande.github.io/rep-res-web">RepResCourse</a>
+      <a class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="http://eriqande.github.io/rep-res-web/syllabus.html">Syllabus</a></li>
+        <li><a href="http://eriqande.github.io/rep-res-web/resources.html">Resources</a></li>
+        <li><a href="http://eriqande.github.io/rep-res-web/blogs.html">Instructor Blog</a></li>
+        <li><a href="#">Results/Gallery</a></li>
+      </ul>
+      <div class="navbar-right">
+    	<p class="navbar-text">I'm navbar-fixed-top</p>
+  	  </div>
+    </div>
+</div>
+
+
+    <div class="container">
+            <!-- The title and stuff is here -->
+      <div class="masthead">
+        <p> </p>
+        <p> </p>
+        <h3 class="muted"><a href="http://eriqande.github.io/rep-res-web/">Reproducible Research Course</a> <small>by Eric C. Anderson for (NOAA/SWFSC)</small></h3>
+        <hr>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-3" id="nav">
+          <div class="well">
+  How's this site built? See all sources at the course <a href="http://github.com/eriqande/rep-res-course">repository</a> on GitHub.
+  <p><hr></p>
+  <p><a class="btn btn-primary" href="https://raw.githubusercontent.com/eriqande/rep-res-course/master/lectures/ggplot_2_reshape_facets_stats.rmd">Raw on GitHub</a></p>
+</div>
+
+<h4>Page Contents</h4>
+<ul class="list-unstyled" id="toc"></ul>
+
+<hr>
+<p><a href="http://eriqande.github.io/rep-res-web/contribute.html">How to contribute</a></p>
+<p><a class="btn btn-primary" href="https://github.com/eriqande/rep-res-course/edit/master/lectures/ggplot_2_reshape_facets_stats.rmd">Edit this page</a></p>
+
+
+        </div>
+
+        <div id="content" class="col-sm-8 pull-right">
+          <h1 id="ggplot2-second-lecture">Further fun with ggplot2</h1>
+<h2 id="ggplot-2-intro">Intro</h2>
+<h3 id="ggplot-prereq">Prerequisites</h3>
+<ul>
+<li>To work through the examples you will need a few different packages.</li>
+<li>Please download/install these before coming to class:
+<ol style="list-style-type: decimal">
+<li><p>install necessary packages:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="kw">c</span>(<span class="st">&quot;ggplot2&quot;</span>,<span class="st">&quot;lubridate&quot;</span>, <span class="st">&quot;plyr&quot;</span>, <span class="st">&quot;mosaic&quot;</span>, <span class="st">&quot;mosaicData&quot;</span>, <span class="st">&quot;reshape2&quot;</span>))</code></pre></li>
+<li><p>Pull the most recent version of the rep-res-course repo just before coming to class.</p></li>
+</ol></li>
+</ul>
+<h3>Goals for this hour:</h3>
+<ol style="list-style-type: decimal">
+<li>Discuss <em>wide</em> vs. <em>long</em> format data, and how ggplot operates on the latter</li>
+<li>Introduce the <code>reshape2</code> package for converting between <em>wide</em> and <em>long</em> formats</li>
+<li>Demonstrate <em>faceting</em> (creating many smaller plots whilst breaking data up over different categories)</li>
+<li>Brief discussion of ggplot’s <em>stats</em> (statistical transformations)</li>
+</ol>
+<h2 id="wide-v-long">Wide vs Long format</h2>
+<h3>Grand Rapids, MI snow data 1893-2011</h3>
+<ul>
+<li>We will explore this using the snowfall data from Grand Rapids, Michigan that is in the <code>mosaicData</code> package. (thanks to Megan S. for pointing this data set out as a good example!)</li>
+<li><p>Here we will print out a small part of it:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(mosaicData)
+<span class="kw">dim</span>(SnowGR)  <span class="co"># how many rows and columns?</span>
+<span class="co">#&gt; [1] 119  15</span>
+<span class="kw">head</span>(SnowGR)  <span class="co"># have a look at the first few rows</span>
+<span class="co">#&gt;   SeasonStart SeasonEnd Jul Aug Sep Oct  Nov  Dec  Jan  Feb  Mar Apr May</span>
+<span class="co">#&gt; 1        1893      1894   0   0   0 0.0  8.0 24.9 12.5  6.8  4.8   2   0</span>
+<span class="co">#&gt; 2        1894      1895   0   0   0 0.0  7.5  5.3 21.5  8.0 22.5   0   0</span>
+<span class="co">#&gt; 3        1895      1896   0   0   0 0.4 23.2 15.0   NA  8.5  2.0   0   0</span>
+<span class="co">#&gt; 4        1896      1897   0   0   0 0.2  8.0  8.0  4.9 11.2 12.0   0   0</span>
+<span class="co">#&gt; 5        1897      1898   0   0   0 0.0  1.4  8.0 15.5 29.5  0.0   0   0</span>
+<span class="co">#&gt; 6        1898      1899   0   0   0 0.0 18.5 18.0 20.0  3.4 16.0   0   0</span>
+<span class="co">#&gt;   Jun Total</span>
+<span class="co">#&gt; 1   0  59.0</span>
+<span class="co">#&gt; 2   0  64.8</span>
+<span class="co">#&gt; 3   0  49.1</span>
+<span class="co">#&gt; 4   0  44.3</span>
+<span class="co">#&gt; 5   0  54.4</span>
+<span class="co">#&gt; 6   0  75.9</span></code></pre></li>
+<li>We could think of a few plots we might want to make from this:
+<ul>
+<li>Average snowfall for each month</li>
+<li>Distribution since 1893 of snowfall in each month,</li>
+<li>etc.</li>
+</ul></li>
+<li>Would be great to explore this with ggplot, but there is one small problem:
+<ul>
+<li>ggplot accepts <em>long</em> format data, and <code>SnowGR</code> is in <em>wide</em> format.</li>
+</ul></li>
+</ul>
+<h3>Wide vs. Long, colloquially</h3>
+<ul>
+<li>Wide format data is called “wide” because it typically has a lot of columns which stretch widely across the page or your computer screen</li>
+<li>Long format data is called “long” because it typically has fewer columns but preserves all the same information. In order to that, it has to be longer…</li>
+<li>Most of us are familiar with looking at wide format data
+<ul>
+<li>It is convenient if you are doing data entry</li>
+<li>It often lets you see more of the data, at one time, on your screen</li>
+</ul></li>
+<li>Long format data is typically less familiar to most humans
+<ul>
+<li>It seems awfully hard to get a good look at all (or most) of it</li>
+<li>It seems like it would require more storage on your hard disk</li>
+<li>It seems like it would be harder to enter data in a long format</li>
+<li>if we have been using Microsoft Excel for too long our conceptual model for how to analyze data may never have developed beyond thinking about operating on columns as if each one were a separate entity.</li>
+</ul></li>
+<li>Which is better?
+<ul>
+<li>Well, there <em>are</em> some contexts where putting things in wide format is computationally efficient because you can treat data in a matrix format and to efficient matrix calculations on it.</li>
+<li>However,
+<ol style="list-style-type: decimal">
+<li>adding data to wide format data sets is very hard 1.it is very difficult to conceive of analytical schemes that apply generally across all wide-format data sets.</li>
+<li>many tools in R want data in long format</li>
+<li>the long format for data corresponds to the <em>relational model</em> for storing data, which is the model used in most modern data bases like the SQL family of data base systems.</li>
+</ol></li>
+</ul></li>
+</ul>
+<h3>ID variables, Measured variables, Values</h3>
+<ul>
+<li>A more technical treatment of wide versus long data requires some terminology:
+<ul>
+<li><span style="color:blue">Identifier variables</span> are often categorical things that cross-classify observations into categories.</li>
+<li><span style="color:red">Measured variables</span> are the names given to properties or characteristics that you can go out and measure.</li>
+<li><span style="color:orange">Values</span> are the values that you measure are record for any particular measured variable.</li>
+</ul></li>
+<li>In any particular data set, what you might want to call an <span style="color:blue">Identifier variables</span> versus a <span style="color:red">Measured variables</span> can not always be entirely clear.
+<ul>
+<li>Other people might choose to define things differently.</li>
+</ul></li>
+<li>However, to my mind, it is <em>less important</em> to be able to precisely recognize these three entities in every possible situation (where there might be some fuzziness about which is which)</li>
+<li>And it is <em>more important</em> to understand how <span style="color:blue">Identifier variables</span>, <span style="color:red">Measured variables</span>, and <span style="color:orange">Values</span> interact and behave when we are transforming data between wide and long formats.</li>
+</ul>
+<h3>Variables and values in SnowGR</h3>
+<ul>
+<li>To give this some concreteness, let’s go back to the SnowGR data set.</li>
+<li><p>However, let us drop the “Total” column from it first because that is just computed from the other columns and is not “directly measured”.</p>
+<pre class="sourceCode r"><code class="sourceCode r">Snow &lt;-<span class="st"> </span>SnowGR[, -<span class="kw">ncol</span>(SnowGR)]</code></pre></li>
+<li>Now, color it up:<br /> <img src="figures/unnamed-chunk-5.png" title="plot of chunk unnamed-chunk-5" alt="plot of chunk unnamed-chunk-5" width="600px" height="420px" /></li>
+<li>We can think of SeasonStart and SeasonEnd as being <span style="color:blue">Identifier variables</span>. They identify which season we are in.</li>
+<li>The months are the <span style="color:red">Measured variables</span>, because you go out and measure snow in each month</li>
+<li><p>And the <span style="color:orange">Values</span> occupy most of the table.</p></li>
+</ul>
+<h3>Long Format Snow</h3>
+<ul>
+<li>When something is in long format, there are columns for values of the <span style="color:blue">Identifier variables</span> and there is <em>one column</em> for the values of the values of the <span style="color:red">Measured variables</span> and one column for the <span style="color:orange">Values</span></li>
+<li>This is called a <a href="http://vita.had.co.nz/papers/tidy-data.pdf">Tidy Data</a> format.</li>
+<li>It looks like this:<br /> <img src="figures/unnamed-chunk-6.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" width="600px" height="420px" /></li>
+<li>This is the type of data frame that ggplot can deal with.</li>
+</ul>
+<h3>Reshaping data</h3>
+<ul>
+<li>Hadley Wickham’s package <code>reshape2</code> is perhaps the nicest utility for converting between long and wide format.</li>
+<li>Today we will look at the <code>melt</code> function which converts from wide to long format.</li>
+<li>When you “melt” a big, wide, block of data, you can stretch it easily into long format.</li>
+<li><code>melt</code> takes a few arguments. The most important are these:
+<ul>
+<li><strong>data</strong>: the data frame in wide format</li>
+<li><span style="color:blue">id.vars</span>: character vector of the names of the columns that are the <span style="color:blue">Identifier variables</span>
+<ul>
+<li><strong>NOTE</strong>: if this is ommitted, but <span style="color:red">measure.vars</span> is given, then all the columns that <strong>are not</strong> in <span style="color:red">measure.vars</span> are assumed to be <span style="color:blue">id.vars</span></li>
+</ul></li>
+<li><span style="color:red">measure.vars</span>: The names of the columns that hold the <span style="color:red">Measured variables </span>.
+<ul>
+<li><strong>NOTE</strong>: if this is ommitted, but <span style="color:blue">id.vars</span> is given, then all the columns that <strong>are not</strong> in <span style="color:blue">id.vars</span> are assumed to be <span style="color:red">measure.vars</span></li>
+</ul></li>
+<li><strong>variable.name</strong>: What do you want to call the column of <span style="color:red">Measured variables</span> in the long (or molten) data frame that you are making?</li>
+<li><strong>value.name</strong>: What do you want to call the column of <span style="color:orange">Values</span> in the long format data frame you are making?</li>
+</ul></li>
+<li><p>Let’s see it in action:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(reshape2)
+longSnow &lt;-<span class="st"> </span><span class="kw">melt</span>(<span class="dt">data =</span> Snow, 
+                 <span class="dt">id.vars =</span> <span class="kw">c</span>(<span class="st">&quot;SeasonStart&quot;</span>, <span class="st">&quot;SeasonEnd&quot;</span>), 
+                 <span class="dt">variable.name =</span> <span class="st">&quot;Month&quot;</span>, 
+                 <span class="dt">value.name =</span> <span class="st">&quot;Snowfall&quot;</span>
+                )
+<span class="kw">head</span>(longSnow)  <span class="co"># see what it looks like</span>
+<span class="co">#&gt;   SeasonStart SeasonEnd Month Snowfall</span>
+<span class="co">#&gt; 1        1893      1894   Jul        0</span>
+<span class="co">#&gt; 2        1894      1895   Jul        0</span>
+<span class="co">#&gt; 3        1895      1896   Jul        0</span>
+<span class="co">#&gt; 4        1896      1897   Jul        0</span>
+<span class="co">#&gt; 5        1897      1898   Jul        0</span>
+<span class="co">#&gt; 6        1898      1899   Jul        0</span></code></pre></li>
+<li><p>Note that you have to <strong>quote</strong> the column names (unlike in ggplot!) ## Plotting some snowfall</p></li>
+</ul>
+<p>We are going to make some plots to underscore some particular points about ggplot</p>
+<h3>Order of items done via factors</h3>
+<ul>
+<li><p>Let’s make simple boxplots summarizing snowfall for each month over all the years. We want Month on the <span class="math"><em>x</em></span>-axis and we will map Snowfall to the <span class="math"><em>y</em></span>-axis.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
+g &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> longSnow, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> Month, <span class="dt">y =</span> Snowfall))
+g +<span class="st"> </span><span class="kw">geom_boxplot</span>()
+<span class="co">#&gt; Warning: Removed 7 rows containing non-finite values (stat_boxplot).</span></code></pre>
+<img src="figures/unnamed-chunk-8.png" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" width="600px" height="420px" /></li>
+<li>Hey! The months came out in the right order. That is cool. Why?
+<ul>
+<li><p>Because, by default, <code>melt</code> made a factor of the Month column and ordered the values as they appeared in the data frame:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(longSnow$Month)
+<span class="co">#&gt; [1] &quot;factor&quot;</span>
+<span class="kw">levels</span>(longSnow$Month)
+<span class="co">#&gt;  [1] &quot;Jul&quot; &quot;Aug&quot; &quot;Sep&quot; &quot;Oct&quot; &quot;Nov&quot; &quot;Dec&quot; &quot;Jan&quot; &quot;Feb&quot; &quot;Mar&quot; &quot;Apr&quot; &quot;May&quot;</span>
+<span class="co">#&gt; [12] &quot;Jun&quot;</span></code></pre></li>
+</ul></li>
+</ul>
+<h3>Colors: discrete or continuous gradient?</h3>
+<ul>
+<li>When <code>ggplot</code> applies colors to things, it uses discrete values if the values of discrete (aka factors or characters) and continuous gradients if they are numeric.</li>
+<li><p>We can plot points, coloring them by SeasonStart (which is numeric…) instead of making boxplots</p>
+<pre class="sourceCode r"><code class="sourceCode r">g +<span class="st"> </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> SeasonStart))
+<span class="co">#&gt; Warning: Removed 7 rows containing missing values (geom_point).</span></code></pre>
+<img src="figures/unnamed-chunk-10.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" width="600px" height="420px" /></li>
+<li><p>If we made a factor out of SeasonStart, then each SeasonStart gets it own color (far more than would be reasonable to visualize)</p>
+<pre class="sourceCode r"><code class="sourceCode r">g +<span class="st"> </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> <span class="kw">factor</span>(SeasonStart)))
+<span class="co">#&gt; Warning: Removed 7 rows containing missing values (geom_point).</span></code></pre>
+<img src="figures/unnamed-chunk-11.png" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" width="600px" height="420px" /></li>
+<li><p>So that is a little silly.</p></li>
+</ul>
+<h3>Dealing with overplotting of points</h3>
+<ul>
+<li>Notice that many points are drawn over one another. You can reveal many more points by “jittering” each one.</li>
+<li><p>This is easily achieved with <code>geom_jitter()</code> instead of <code>geom_point()</code></p>
+<pre class="sourceCode r"><code class="sourceCode r">g +<span class="st"> </span><span class="kw">geom_jitter</span>(<span class="kw">aes</span>(<span class="dt">color =</span> SeasonStart))
+<span class="co">#&gt; Warning: Removed 7 rows containing missing values (geom_point).</span></code></pre>
+<p><img src="figures/unnamed-chunk-12.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" width="600px" height="420px" /></p></li>
+</ul>
+<h2 id="ggplot-facets">Faceting</h2>
+<ul>
+<li>Sometimes it is helpful to break your data into separate subsets (usually on the value of a factor) and make a plot that is a series of smaller plots.</li>
+</ul>
+<h3>Facet Wrap</h3>
+<ul>
+<li><p>Let’s consider looking at a histogram of Snowfall:</p>
+<pre class="sourceCode r"><code class="sourceCode r">d &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> longSnow, <span class="kw">aes</span>(<span class="dt">x =</span> Snowfall)) +<span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="dv">2</span>, <span class="dt">fill =</span> <span class="st">&quot;blue&quot;</span>)
+d</code></pre>
+<img src="figures/unnamed-chunk-13.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" width="600px" height="420px" /></li>
+<li>That is nice, but it might be more interesting to see that month-by-month</li>
+<li><p>We can add a <code>facet_wrap</code> specification. We are “faceting in one long strip” but then “wrapping” it to fit on the page:</p>
+<pre class="sourceCode r"><code class="sourceCode r">d +<span class="st"> </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>Month, <span class="dt">ncol =</span> <span class="dv">4</span>)</code></pre>
+<p><img src="figures/unnamed-chunk-14.png" title="plot of chunk unnamed-chunk-14" alt="plot of chunk unnamed-chunk-14" width="600px" height="420px" /></p></li>
+</ul>
+<h3>Facet Grid</h3>
+<ul>
+<li>You can also make a rows x column <code>facet_grid</code>. In fact that is where the <code>~</code> sort of specification comes from.<br /></li>
+<li><p>Let’s imagine that we want to look at Nov through Mar snowfall, in the three different, equal-length, periods of years.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># make intervals</span>
+longSnow$Interval &lt;-<span class="st"> </span><span class="kw">cut_interval</span>(longSnow$SeasonStart, <span class="dt">n =</span> <span class="dv">3</span>, <span class="dt">dig.lab =</span> <span class="dv">4</span>)
+
+<span class="co"># here is what they are:</span>
+<span class="kw">levels</span>(longSnow$Interval)
+<span class="co">#&gt; [1] &quot;[1893,1932]&quot; &quot;(1932,1972]&quot; &quot;(1972,2011]&quot;</span>
+
+<span class="co"># get just the months we are interesed in</span>
+Winter &lt;-<span class="st"> </span><span class="kw">droplevels</span>(<span class="kw">subset</span>(longSnow, Month %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Nov&quot;</span>, <span class="st">&quot;Dec&quot;</span>, <span class="st">&quot;Jan&quot;</span>, <span class="st">&quot;Feb&quot;</span>, <span class="st">&quot;Mar&quot;</span>)))
+
+<span class="co"># note the use of droplevels!</span></code></pre></li>
+<li><p>Now we can plot that with a facet_grid:</p>
+<pre class="sourceCode r"><code class="sourceCode r">w &lt;-<span class="st"> </span><span class="kw">ggplot</span>(Winter, <span class="kw">aes</span>(<span class="dt">x =</span> Snowfall, <span class="dt">fill =</span> Interval)) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="dv">2</span>) +
+<span class="st">  </span><span class="kw">facet_grid</span>(Interval ~<span class="st"> </span>Month)
+w</code></pre>
+<img src="figures/unnamed-chunk-16.png" title="plot of chunk unnamed-chunk-16" alt="plot of chunk unnamed-chunk-16" width="600px" height="420px" /></li>
+<li><p>How about a different kind of plot that is like a continuous boxplot? Just for fun.</p>
+<pre class="sourceCode r"><code class="sourceCode r">y &lt;-<span class="st"> </span><span class="kw">ggplot</span>(Winter, <span class="kw">aes</span>(<span class="dt">x =</span> Month, <span class="dt">y =</span> Snowfall, <span class="dt">fill =</span> Interval))
+y +<span class="st"> </span><span class="kw">geom_violin</span>() +<span class="st"> </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>Interval, <span class="dt">ncol =</span> <span class="dv">1</span>)
+<span class="co">#&gt; Warning: Removed 2 rows containing non-finite values (stat_ydensity).</span>
+<span class="co">#&gt; Warning: Removed 2 rows containing non-finite values (stat_ydensity).</span></code></pre>
+<p><img src="figures/unnamed-chunk-17.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" width="600px" height="420px" /></p></li>
+</ul>
+<h2>ggplot’s statistical transformations</h2>
+<ul>
+<li>In order to create boxplots and histograms, ggplot is clearly doing some sort of statistical operations on the data.
+<ul>
+<li>For the histograms it is <em>binning</em> the data</li>
+<li>For the box plots it is computing <em>boxplot</em> statistics (notches, and medians, etc)</li>
+<li>For the violine plots it is computing <em>density</em> statistics.</li>
+</ul></li>
+<li>Each <code>geom_xxx()</code> function is associated with a default <code>stat_xxxx</code> function and vice-versa.</li>
+</ul>
+<h3>Accessing the outputted values of stat_xxxx() functions</h3>
+<ul>
+<li><p>This is not entirely trivial, but can be done by looking at the output of <code>ggplot_build()</code></p>
+<pre class="sourceCode r"><code class="sourceCode r">boing &lt;-<span class="st"> </span><span class="kw">ggplot_build</span>(w)
+<span class="kw">head</span>(boing$data[[<span class="dv">1</span>]])
+<span class="co">#&gt;      fill  y count  x ndensity ncount density PANEL group ymin ymax xmin</span>
+<span class="co">#&gt; 1 #F8766D  0     0 -1   0.0000 0.0000  0.0000     1     1    0    0   -2</span>
+<span class="co">#&gt; 2 #F8766D 14    14  1   1.0000 1.0000  0.1750     1     1    0   14    0</span>
+<span class="co">#&gt; 3 #F8766D  7     7  3   0.5000 0.5000  0.0875     1     1    0    7    2</span>
+<span class="co">#&gt; 4 #F8766D  4     4  5   0.2857 0.2857  0.0500     1     1    0    4    4</span>
+<span class="co">#&gt; 5 #F8766D  6     6  7   0.4286 0.4286  0.0750     1     1    0    6    6</span>
+<span class="co">#&gt; 6 #F8766D  7     7  9   0.5000 0.5000  0.0875     1     1    0    7    8</span>
+<span class="co">#&gt;   xmax</span>
+<span class="co">#&gt; 1    0</span>
+<span class="co">#&gt; 2    2</span>
+<span class="co">#&gt; 3    4</span>
+<span class="co">#&gt; 4    6</span>
+<span class="co">#&gt; 5    8</span>
+<span class="co">#&gt; 6   10</span></code></pre></li>
+<li><p>This can be a fun exercise to get your head around what sort of data are produced by each of the stats (and there are quite a few of them! <a href="http://docs.ggplot2.org/current/">http://docs.ggplot2.org/current/</a> )</p></li>
+</ul>
+
+          <hr>
+           <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'rep-res-course'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    
+        </div>
+      </div>
+
+            <div class="footer">
+        <hr>
+        <p>
+          <small>
+            Authored by Eric C. Anderson working as a Federal employee.  Content on this website is a government work in the public domain in the U.S. and under the CC0 1.0 internationally. Templates and plugins to build the site are modified from Hadley Wickham's <a href="https://github.com/hadley/adv-r/">Advanced R</a> website. Powered by <a href="http://jekyllrb.com/">jekyll</a>,
+          <a href="http://yihui.name/knitr/">knitr</a>, and
+          <a href="http://johnmacfarlane.net/pandoc/">pandoc</a>. Source
+          available on <a href="https://github.com/eriqande/rep-res-course/">github</a>.
+          </small>
+        </p>
+      </div>
+
+
+    </div> <!-- /container -->
+
+  <script src="//code.jquery.com/jquery.js"></script>
+  <script src="http://eriqande.github.io/rep-res-web/www/bootstrap.min.js"></script>
+  <script src="http://eriqande.github.io/rep-res-web/www/toc.js"></script>
+  <script type="text/javascript"
+    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  </body>
+</html>
+
