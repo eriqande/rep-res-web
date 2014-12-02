@@ -64,51 +64,70 @@
 
         <div id="content" class="col-sm-8 pull-right">
           <h1>Multinomial Models</h1>
+
 <p>This is just some stuff I had lying around that Bruno had written and I had copied at one point to see how slidy worked.</p>
+
 <h2>The multinomial distribution</h2>
+
 <p>The binomial distribution can be generalized to allow for more than two mutually exclusive outcomes. We consider a random variable taking one of of <span class="math"><em>k</em></span> possible outcomes and count the number of occurrences of each type of outcome. The vector of such counts, <span class="math"><em>y</em></span> has the density <br /><span class="math">$$
 p(y|\theta) \propto \prod_{j=1}^k \theta_j^{y_j}~~,~~\sum_{j=1}^k \theta_j = 1.
 $$</span><br /> We assume that <span class="math">$\sum_{j=1}^k y_j = n$</span> is known.</p>
+
 <h2>The Dirichlet distribution</h2>
+
 <p>A generalization of the beta distribution to <span class="math"><em>k</em></span> components is given by the Dirichlet distribution <br /><span class="math">$$
 p(\theta|\alpha) \propto \prod_{j=1}^k \theta_j^{\alpha_j-1}~~,~~
 \sum_{j=1}^k \theta_j =1~~,~~\theta_j&gt;0,~ \alpha_j &gt;0,~~ j=1,...,k. 
 $$</span><br /> This distribution is a conjugate prior for the multinomial likelihood. The corresponding posterior distribution is <br /><span class="math">$$
 p(\theta|y)  \propto \prod_{j=1}^k \theta_j^{\alpha_j + y_j -1}.
 $$</span><br /> This implies that the posterior distribution is a Dirichlet with parameters <span class="math"><em>α</em><sub><em>j</em></sub> + <em>y</em><sub><em>j</em></sub>  ,   <em>j</em> = 1, …, <em>k</em></span>.</p>
+
 <h2>Sampling from a Dirichlet</h2>
+
 <p>To obtain a sample from a Dirichlet <span class="math"><em>α</em> = (<em>α</em><sub>1</sub>, …, <em>α</em><sub><em>k</em></sub>)</span>, generate <span class="math"><em>k</em></span> independent gamma random variates <span class="math"><em>x</em><sub>1</sub>, …, <em>x</em><sub><em>k</em></sub></span>, with shape parameters <span class="math"><em>α</em><sub>1</sub>, …, <em>α</em><sub><em>k</em></sub></span>. Let <br /><span class="math">$$
 \theta_j = \frac{x_j}{\sum_{j=1}^k x_j}.
 $$</span><br /> We notice that the scale that is used to generate the gamma variates is irrelevant, as it cancels in the ratio.</p>
+
 <p>Here we can define a function to do that in R:</p>
+
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">#     footer: &quot;&lt;a href=&quot;https://github.com/eriqande/test-pages/edit/master/slidy/test-slidy-lecture.rmd&quot;&gt;Edit Rmarkdown source for slides on GitHub&lt;/a&gt;&quot;</span>
 <span class="co"># a is a vector of alphas</span>
 rdirch.one &lt;-<span class="st"> </span>function(a) {
   x &lt;-<span class="st"> </span><span class="kw">rgamma</span>(<span class="kw">length</span>(a), a)
   x/<span class="kw">sum</span>(x)
 }</code></pre>
+
 <h2>Sampling from a Dirichlet</h2>
+
 <h3>(a vectorized version)</h3>
+
 <p>Of course, if we want multiple replicates of <span class="math"><em>θ</em></span> we would want to pass it an <code>n</code> argument too. In that case, we can make a nice vectorized version like this:</p>
+
 <pre class="sourceCode r"><code class="sourceCode r">rdirch &lt;-<span class="st"> </span>function(<span class="dt">n =</span> <span class="dv">1</span>, a) {
   x &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rgamma</span>(n *<span class="st"> </span><span class="kw">length</span>(a), a), <span class="dt">nrow =</span> <span class="kw">length</span>(a))
   denoms &lt;-<span class="st"> </span><span class="kw">colSums</span>(x)
   x/<span class="kw">rep</span>(denoms, <span class="dt">each =</span> <span class="kw">length</span>(a))
 }</code></pre>
+
 <p>which returns random vectors as columns in a matrix. Here is an example:</p>
+
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">10</span>)
 <span class="kw">rdirch</span>(<span class="dv">5</span>, <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">5</span>,<span class="dv">10</span>))
-<span class="co">#&gt;         [,1]    [,2]    [,3]    [,4]    [,5]</span>
-<span class="co">#&gt; [1,] 0.04296 0.05966 0.02579 0.01431 0.03784</span>
-<span class="co">#&gt; [2,] 0.34459 0.43844 0.26878 0.35929 0.18092</span>
-<span class="co">#&gt; [3,] 0.61245 0.50190 0.70542 0.62640 0.78124</span></code></pre>
+<span class="co">#&gt;            [,1]       [,2]       [,3]       [,4]      [,5]</span>
+<span class="co">#&gt; [1,] 0.04296039 0.05965636 0.02579238 0.01431293 0.0378400</span>
+<span class="co">#&gt; [2,] 0.34459378 0.43844380 0.26878370 0.35928665 0.1809225</span>
+<span class="co">#&gt; [3,] 0.61244583 0.50189985 0.70542392 0.62640042 0.7812375</span></code></pre>
+
 <h2>Sampling From a Dirichlet | (plotted results)</h2>
+
 <p>Here we make boxplots of the components of 1000 random vectors:</p>
+
 <pre class="sourceCode r"><code class="sourceCode r">alpha &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">3.5</span>, <span class="dv">7</span>, <span class="dv">15</span>, <span class="fl">1.2</span>, <span class="dv">62</span>)
 x &lt;-<span class="st"> </span><span class="kw">rdirch</span>(<span class="dv">1000</span>, <span class="dt">a =</span> alpha)
 <span class="kw">boxplot</span>(<span class="kw">as.numeric</span>(x) ~<span class="st"> </span><span class="kw">factor</span>(<span class="kw">rep</span>(alpha, <span class="dt">length.out =</span> <span class="kw">length</span>(x)), <span class="dt">levels =</span> alpha),
         <span class="dt">xlab =</span> <span class="st">&quot;alpha&quot;</span>)</code></pre>
-<p><img src="lecture_figs/dirch-unnamed-chunk-4.png" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" width="384" /></p>
+
+<p><img src="lecture_figs/dirch-unnamed-chunk-4-1.png" title="" alt="" width="384" /></p>
 
         </div>
       </div>

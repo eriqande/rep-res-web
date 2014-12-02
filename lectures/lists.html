@@ -64,7 +64,9 @@
 
         <div id="content" class="col-sm-8 pull-right">
           <h1 id="lists-lecture">Lists (aka “recursive vectors”)</h1>
+
 <h2 id="intro-to-lists">Introduction to Lists</h2>
+
 <ul>
 <li>A <em>list</em> in R is a special type of vector.<br /></li>
 <li>Previously we have seen <em>atomic vectors</em> in which each element is a scalar/singleton and all elements must be of the same mode.</li>
@@ -82,8 +84,11 @@
 <li>You will also want to know how to create and use <em>lists</em> yourself.</li>
 </ul></li>
 </ul>
+
 <h3>Creating Lists</h3>
+
 <p>You use the <code>list()</code> function to create a list.</p>
+
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># make L an empty list</span>
 L &lt;-<span class="st"> </span><span class="kw">list</span>()  
 L
@@ -111,7 +116,9 @@ N
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[3]]</span>
 <span class="co">#&gt; [1]  TRUE  TRUE  TRUE FALSE</span></code></pre>
+
 <h3>How R prints lists</h3>
+
 <ul>
 <li>Notice that the i-th component is printed after a <code>[[i]]</code> in R’s output.
 <ul>
@@ -145,7 +152,9 @@ Q
 <span class="co">#&gt; [[3]][[2]][[2]]</span>
 <span class="co">#&gt; [1] FALSE FALSE  TRUE</span></code></pre></li>
 </ul>
+
 <h3>Names for list components</h3>
+
 <ul>
 <li>Just as we saw atomic vectors with a <code>names</code> attribute, so too can lists have names.</li>
 <li>You can pass names in to the <code>list()</code> function:
@@ -162,7 +171,9 @@ a &lt;-<span class="st"> </span><span class="kw">list</span>( <span class="dt">f
 <span class="co">#&gt; [1] &quot;foo&quot; &quot;bar&quot; &quot;&quot;</span></code></pre></li>
 </ul></li>
 </ul>
+
 <h3>Backtrack: you can do the same with <em>c()</em></h3>
+
 <ul>
 <li><p>In the last lecture, we may not have noted that <code>names</code> can be assigned to the elements of atomic vectors during assignment with <code>c()</code>, just like one can with <code>list()</code>:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># example of assigning names and values with c() </span>
@@ -179,8 +190,11 @@ weights
 <span class="kw">names</span>(weights)
 <span class="co">#&gt; [1] &quot;onefish&quot;  &quot;twofish&quot;  &quot;redfish&quot;  &quot;bluefish&quot;</span></code></pre></li>
 </ul>
+
 <h3>How R prints complex lists with names</h3>
+
 <p>Let’s recreate our Q list from above, but put a few names on it (and call it Z):</p>
+
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># make a list that has another list as a component</span>
 Z &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">screaming =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>),
           <span class="dt">yellow =</span> <span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;d&quot;</span>),
@@ -207,24 +221,34 @@ Z
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $zonkers$second[[2]]</span>
 <span class="co">#&gt; [1] FALSE FALSE  TRUE</span></code></pre>
+
 <h2 id="single-chomp">Accessing Parts of Lists with [ ]</h2>
+
 <h3>The Boxcar analogy</h3>
+
 <p>Someone had a nice way of thinking about lists:</p>
+
 <ul>
 <li>You can think of a list as a train.</li>
 <li>Each component of a list is a boxcar.</li>
 <li>What that component holds is the contents of the boxcar.</li>
 </ul>
+
 <p>The weird thing about this is that inside a boxcar you can have a whole ’nuther train…</p>
+
 <ul>
 <li>However, it provides a nice way of thinking about the indexing lists with the different list indexing operators.</li>
 </ul>
+
 <h3>List indexing operators</h3>
+
 <ul>
 <li>There are <code>[ ]</code> and ’[[ ]]<code>and</code>$`.<br /></li>
 <li>We will talk about <code>[ ]</code> first</li>
 </ul>
+
 <h3><em>L[ vec ]</em> — The “standard” indexing operator</h3>
+
 <ul>
 <li>This is what we have been using on atomic vectors.</li>
 <li>When applied to a list the <code>[ ]</code> indexing operator
@@ -234,11 +258,15 @@ Z
 </ul></li>
 <li>I like to call it the “single-chomp” indexing operator—it’s like a pair of jaws that just rips off a chunk of the list but doesn’t “chew” into the boxcars at all.</li>
 </ul>
+
 <h3>A diagram might help</h3>
+
 <ul>
 <li>Here is the list <code>Z</code> from above. It is a train with three boxcars:</li>
 </ul>
+
 <p><img src="diagrams/list-train.png" alt="list-train.png" /></p>
+
 <ul>
 <li><p>Never mind that the boxcar named “zonkers” has a lot of complicated stuff in it.</p></li>
 <li><strong>Now, this is crucial:</strong> From the perspective of the <code>[ ]</code> indexing operator the train is just a bunch of boxcars.
@@ -247,19 +275,29 @@ Z
 <li>When you index it with <code>[ ]</code>, the <code>[ ]</code> does just what it would do with an atomic vector, it just happens that the elements of a <em>list</em> can be thought of as singleton <em>lists</em>, themselves (instead of <em>logicals</em> or <em>numerics</em>, etc.)</li>
 </ul></li>
 </ul>
+
 <h3>The way <em>[ ]</em> sees a list:</h3>
+
 <p>So, to the <code>[ ]</code> (“single-chomp” indexing operator) the list <code>Z</code> really looks like this:</p>
+
 <p><img src="diagrams/list-train-agnostic.png" alt="list-train-agnostic.png" /></p>
+
 <p>Hence if do this <code>Z[c(3,1)]</code> you get a list back that looks like:</p>
+
 <p><img src="diagrams/list-train-agnostic-3-1.png" alt="list-train-agnostic-3-1.png" /></p>
+
 <p>And if you had X-ray eyes and were able to peek into each of the boxcars of the list <code>Z[c(3,1)]</code>, the list would look like this:</p>
+
 <p><img src="diagrams/list-train-3-1.png" alt="list-train-3-1.png" /></p>
+
 <h3>Examples of indexing with <em>[vec]</em> on lists in code</h3>
+
 <ul>
 <li>Consider indexing a list with <code>[vec]</code></li>
 <li>As before, <code>vec</code> is a vector that is positive numeric, negative numeric, logical, or character (names) (recall the four main ways of indexing a vector…)</li>
 <li>So, let’s see what it looks like when we index some of the lists we created up above:</li>
 </ul>
+
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># first play around with the list N</span>
 N
 <span class="co">#&gt; [[1]]</span>
@@ -322,7 +360,9 @@ a[<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">2</span>)
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $bar</span>
 <span class="co">#&gt; [1] &quot;MINE!&quot;</span></code></pre>
+
 <h3>Summary</h3>
+
 <ul>
 <li>When you index a variable <code>L</code> with <code>[ ]</code>, then
 <ul>
@@ -330,7 +370,9 @@ a[<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">2</span>)
 <li>If <code>L</code> is an atomic vector, the result is an atomic vector.</li>
 </ul></li>
 </ul>
+
 <h2 id="double-chomp">Accessing Single Components of Lists with [[ ]]</h2>
+
 <ul>
 <li>Indexing with <code>[ ]</code> is all fine and dandy if all we ever want to do is shuffle boxcars around.</li>
 <li>But, typically, “the goods” are <em>inside the boxcars!</em></li>
@@ -342,7 +384,9 @@ a[<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">2</span>)
 <li>We open the door of boxcar <em>i</em>, pull out <em>its contents</em>, and return the contents (but not the boxcar “shell”)</li>
 </ol></li>
 </ul>
+
 <h3>Call it a two-chomp extractor…</h3>
+
 <ul>
 <li>I think of <code>[[ ]]</code> as the “two-chomp” extractor. (which is what it looks like…if <code>[ ]</code> is the one-chomp extractor)
 <ul>
@@ -350,8 +394,11 @@ a[<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">2</span>)
 <li>The second one chews on the boxcar to “crunch off” its outer shell.</li>
 </ul></li>
 </ul>
+
 <h3><em>[[ i ]]</em> only works with single indexes</h3>
+
 <p>Here is how I think of it:</p>
+
 <ul>
 <li>Because <code>[[ ]]</code> is “chewing” (to crunch into the boxcar) it can’t take too big of a bite</li>
 <li>In fact, it can only chew on a single component of a list (single boxcar) at a time</li>
@@ -368,6 +415,7 @@ a[<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">2</span>)
 </ul></li>
 </ul></li>
 </ul>
+
 <pre class="sourceCode r"><code class="sourceCode r">N[<span class="dv">2</span>]  <span class="co"># single chomp</span>
 <span class="co">#&gt; [[1]]</span>
 <span class="co">#&gt; [1] 3 4</span>
@@ -384,7 +432,9 @@ a[<span class="st">&quot;foo&quot;</span>] <span class="co"># single chomp</span
 
 a[[<span class="st">&quot;foo&quot;</span>]] <span class="co"># two chomps</span>
 <span class="co">#&gt; [1] &quot;q&quot; &quot;w&quot;</span></code></pre>
+
 <h4>These would not work</h4>
+
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># indexer for [[ ]] must be of length 1</span>
 a[[ <span class="kw">c</span>(<span class="st">&quot;foo&quot;</span>, <span class="st">&quot;bar&quot;</span>)]]
 
@@ -401,17 +451,23 @@ a[[<span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="ot">TRUE
                    <span class="co"># not recommended!</span>
 
 a[[<span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="ot">FALSE</span>)]]  <span class="co"># fails appropriately</span></code></pre>
+
 <ul>
 <li><strong>N.B.</strong> The <code>[[ ]]</code> can be used with atomic vectors, but seldom is, as it offers nothing over <code>[ ]</code> in the atomic vector case.</li>
 </ul>
+
 <h2 id="dollar-sign">The $ Two-Chomp Extractor</h2>
+
 <p>If you have names on your list, you can use the <code>$</code> to extract <em>the contents</em> of single components like so:</p>
+
 <pre class="sourceCode r"><code class="sourceCode r">a$foo
 <span class="co">#&gt; [1] &quot;q&quot; &quot;w&quot;</span>
 
 a$bar
 <span class="co">#&gt; [1] &quot;MINE!&quot;</span></code></pre>
+
 <p>Which is convenient if you are typing the name since you don’t have to use quotation marks. But it does not work with names that are stored in objects:</p>
+
 <pre class="sourceCode r"><code class="sourceCode r">i &lt;-<span class="st"> &quot;foo&quot;</span>
 
 
@@ -421,8 +477,11 @@ a$i  <span class="co"># NULL! no component named i</span>
 
 a[[i]] <span class="co"># this returns the same as a$foo</span>
 <span class="co">#&gt; [1] &quot;q&quot; &quot;w&quot;</span></code></pre>
+
 <h3>Class Activity:</h3>
+
 <p>Given our list Z:</p>
+
 <pre class="sourceCode r"><code class="sourceCode r">Z
 <span class="co">#&gt; $screaming</span>
 <span class="co">#&gt; [1] 1 2 3 4 5 6</span>
@@ -440,13 +499,19 @@ a[[i]] <span class="co"># this returns the same as a$foo</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $zonkers$second[[2]]</span>
 <span class="co">#&gt; [1] FALSE FALSE  TRUE</span></code></pre>
+
 <p>How can you extract the part whose value is: <code>&quot;whizz-bang&quot;</code>.</p>
+
 <p>Do that with <em>names</em>, and with <em>integer indices</em>, and also do it with <code>$</code> and with `<code>[[ ]]</code> and with a combination of both.</p>
+
 <p>Recall that R prints lists with headers that show how you could access each element.</p>
+
 <h3>The $ extractor might need quotes</h3>
+
 <ul>
 <li>If the names of the list don’t satisfy the requirements for names of symbols in the R language, then you need to quote them</li>
 </ul>
+
 <pre class="sourceCode r"><code class="sourceCode r">b &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;my bonny&quot;</span> =<span class="st"> </span><span class="dv">1</span>:<span class="dv">3</span>, <span class="st">&quot;lies-over&quot;</span> =<span class="st"> </span><span class="dv">4</span>:<span class="dv">9</span>, <span class="st">&quot;the.ocean&quot;</span> =<span class="st"> </span><span class="dv">10</span>:<span class="dv">14</span>)
 
 <span class="co"># note when you print it you see the single backticks:</span>
@@ -475,10 +540,13 @@ b$my
 <span class="co">#&gt; [1] 1 2 3</span>
 
 <span class="co"># Why?</span></code></pre>
+
 <h3>$ and name matching</h3>
+
 <ul>
 <li>If the name given to $ is the unique prefix of name in the list, then it will automagically expand to that</li>
 </ul>
+
 <pre class="sourceCode r"><code class="sourceCode r">silly &lt;-<span class="st"> </span><span class="kw">list</span>( <span class="dt">here.is.a.stupid.long.name =</span> <span class="kw">c</span>(F, T, T),
                <span class="dt">here.is.another.stupid.long.name =</span> <span class="dv">4</span>:<span class="dv">8</span>
                )
@@ -501,8 +569,11 @@ silly$something.completely.different
 
 silly[[<span class="st">&quot;what.is.going.on.here?&quot;</span>]]
 <span class="co">#&gt; NULL</span></code></pre>
+
 <h2 id="list-add-or-change">Adding or Changing Components</h2>
+
 <h3>You can add a component to a list using <em>[[ ]]</em> or $:</h3>
+
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">length</span>(a)  <span class="co"># number of components</span>
 <span class="co">#&gt; [1] 3</span>
 
@@ -518,8 +589,11 @@ a$another &lt;-<span class="st"> </span><span class="dv">1</span>:<span class="d
 
 
 a[[<span class="dv">10</span>]] &lt;-<span class="st"> &quot;this is way out there&quot;</span></code></pre>
+
 <p>Adding an element to a list that is beyond its current length pads the rest with <code>NULL</code>s</p>
+
 <h3>You can also <em>replace</em> a component using <em>[[ ]]</em> or <em>$</em></h3>
+
 <pre class="sourceCode r"><code class="sourceCode r">a
 <span class="co">#&gt; $foo</span>
 <span class="co">#&gt; [1] &quot;q&quot; &quot;w&quot;</span>
@@ -590,11 +664,15 @@ a
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[10]]</span>
 <span class="co">#&gt; [1] &quot;this is way out there&quot;</span></code></pre>
+
 <h2 id="list-essentials">Various List Essentials</h2>
+
 <h3>Catenating lists</h3>
+
 <ul>
 <li>You can use the <code>c()</code> operator to catenate lists. If any argument is a list, then it creates a list</li>
 </ul>
+
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">c</span>(a,N) <span class="co"># stick those in there</span>
 <span class="co">#&gt; $foo</span>
 <span class="co">#&gt; [1] &quot;q&quot; &quot;w&quot;</span>
@@ -689,9 +767,11 @@ a
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[16]]</span>
 <span class="co">#&gt; [1] &quot;listized!&quot;</span></code></pre>
+
 <ul>
 <li>Note how different this is than trying to catenate with <code>list()</code></li>
 </ul>
+
 <pre class="sourceCode r"><code class="sourceCode r">z &lt;-<span class="st"> </span><span class="kw">list</span>(a,N)  <span class="co"># this makes a new list with two components that are lists!</span>
 
 z[[<span class="dv">1</span>]]$another;  <span class="co"># two two-bites!</span>
@@ -700,10 +780,13 @@ z[[<span class="dv">1</span>]]$another;  <span class="co"># two two-bites!</span
 <span class="co">#&gt; [23] FALSE FALSE</span>
 z[[<span class="dv">1</span>]][[<span class="dv">5</span>]][<span class="dv">11</span>]  <span class="co"># two two-bites and a one-bite!</span>
 <span class="co">#&gt; [1] TRUE</span></code></pre>
+
 <h3>Coercing To/Away From List</h3>
+
 <ul>
 <li><code>as.list()</code> to coerce an atomic vector to be a list with each component being a scalar:</li>
 </ul>
+
 <pre class="sourceCode r"><code class="sourceCode r">w &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;this&quot;</span>, <span class="st">&quot;is&quot;</span>, <span class="st">&quot;only&quot;</span>, <span class="st">&quot;a&quot;</span>, <span class="st">&quot;test&quot;</span>)
 
 <span class="kw">as.list</span>(w)  <span class="co"># make a list of the vector</span>
@@ -737,9 +820,11 @@ z[[<span class="dv">1</span>]][[<span class="dv">5</span>]][<span class="dv">11<
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $fish</span>
 <span class="co">#&gt; [1] &quot;test&quot;</span></code></pre>
+
 <ul>
 <li><code>unlist()</code> to “flatten” a list into an atomic vector, coercing mode to the most general. Note that <code>names</code> if present get prepended to indexes, and NULL components are omitted:</li>
 </ul>
+
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">unlist</span>(a)
 <span class="co">#&gt;                    foo1                    foo2                     bar </span>
 <span class="co">#&gt;                     &quot;q&quot;                     &quot;w&quot;                 &quot;YOURS&quot; </span>

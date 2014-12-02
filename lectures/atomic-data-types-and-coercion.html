@@ -64,25 +64,36 @@
 
         <div id="content" class="col-sm-8 pull-right">
           <h1 id="r-data-types-and-coercion">Atomic Data Types and Coercion</h1>
+
 <h2 id="basic-modes">Basic Data “Modes” of R</h2>
+
 <p>There are four main “modes” of scalar data, in order from least to most general:</p>
+
 <ol style="list-style-type: decimal">
 <li><code>logical</code> can take two values: <code>TRUE</code> and <code>FALSE</code>, which can be abbreviated, when you type them as <code>T</code> and <code>F</code>.</li>
 <li>The <code>numeric</code> mode comes in two flavors: “integer” and “numeric” (real numbers). Examples: <code>1</code>, <code>3.14</code>, <code>8.2</code>, <code>10</code>, etc.</li>
 <li><code>complex</code>: these are complex numbers of the form <span class="math"><em>a</em> + <em>b</em><em>i</em></span> where <span class="math"><em>a</em></span> and <span class="math"><em>b</em></span> are real numbers and <span class="math">$i=\sqrt{-1}.$</span> Examples: <code>3.2+7.3i</code>, <code>4+0i</code></li>
 <li><code>character</code>: these take values that are often called “strings” in other languages. Examples: <code>&quot;fred&quot;</code>, <code>&quot;foo&quot;</code>, <code>&quot;bar&quot;</code>, <code>&quot;boing&quot;</code>. There is also a <code>raw</code> mode which refers to raw bytes of data, but we won’t concern ourselves with that for now.</li>
 </ol>
+
 <h3>Atomic Vectors</h3>
+
 <p>A fundamental data structure in R: a vector in which every element is of the same mode. Like</p>
+
 <pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">7</span>)
 x
 <span class="co">#&gt; [1] 1 2 3 5 7</span></code></pre>
+
 <p>Pretty basic stuff, until you start accidentally, or intentionally mixing modes.</p>
+
 <pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">7</span>,<span class="st">&quot;11&quot;</span>)
 x
 <span class="co">#&gt; [1] &quot;1&quot;  &quot;2&quot;  &quot;3&quot;  &quot;5&quot;  &quot;7&quot;  &quot;11&quot;</span></code></pre>
+
 <p>The mode of everything is <em>coerced</em> to the mode of the element with the most general mode, and this can really bite you in the rear if you don’t watch out!</p>
+
 <h2 id="coercion">Coercion</h2>
+
 <ul>
 <li>All the data in an atomic vector <em>must be of the same mode</em></li>
 <li>If data are added so that modes are mixed, then <em>the whole vector gets changed so that everything is of the most general mode</em></li>
@@ -97,7 +108,9 @@ x[<span class="dv">1</span>] &lt;-<span class="st"> &quot;tweezer&quot;</span>
 x
 <span class="co">#&gt; [1] &quot;tweezer&quot; &quot;2&quot;       &quot;3&quot;       &quot;4&quot;       &quot;5&quot;       &quot;6&quot;</span></code></pre></li>
 </ul>
+
 <h3>Coercion Up One Step</h3>
+
 <ul>
 <li>logical to numeric:
 <ul>
@@ -114,8 +127,11 @@ x
 <li><code>6.4+0i</code> ==&gt; <code>&quot;6.4+0i&quot;</code></li>
 </ul></li>
 </ul>
+
 <h3>Coercion Up Two Or More Steps</h3>
+
 <p>Note that the coercion sometimes “jumps over the intermediate steps”</p>
+
 <ul>
 <li>logical to complex
 <ul>
@@ -133,9 +149,13 @@ x
 <li><code>3.1415</code> ==&gt; <code>&quot;3.1415&quot;</code></li>
 </ul></li>
 </ul>
+
 <h3>Coercion down one step</h3>
+
 <p>Sometimes things get coerced “downards” (i.e., toward less general data types).</p>
+
 <p>If the coercion doesn’t make sense you end up with <code>NA</code> which is how R denotes missing data</p>
+
 <ul>
 <li>numeric to logical (0 ==&gt; FALSE, anything else ==&gt; TRUE); <em>Always “makes sense”</em>
 <ul>
@@ -160,8 +180,11 @@ x
 <li><code>&quot;a&quot;</code> -&gt; <code>NA</code> (you can’t coerce <code>&quot;a&quot;</code> to any number, reasonably)</li>
 </ul></li>
 </ul>
+
 <h3>Coercion down more than one step</h3>
+
 <p>Important point: it doesn’t <em>necessarily</em> go through intermediate steps:</p>
+
 <ul>
 <li>complex to logical (0 ==&gt;FALSE, anything else ==&gt; TRUE)
 <ul>
@@ -184,8 +207,11 @@ x
 <li><code>&quot;fred&quot;</code> -&gt; <code>NA</code></li>
 </ul></li>
 </ul>
+
 <h3>Functions For Explicit Coercion</h3>
+
 <p>There is a whole family for coercing objects between different modes (or different types) that take the form <code>as.something</code>:</p>
+
 <ul>
 <li><code>as.logical(x)</code></li>
 <li><code>as.numeric(x)</code></li>
@@ -193,14 +219,20 @@ x
 <li><code>as.complex(x)</code></li>
 <li><code>as.character(x)</code></li>
 </ul>
+
 <p>As expected, these are vectorized—they coerce every element of the vector to the desired mode.</p>
+
 <h2 id="missing-data">Missing Data and Special Values in R</h2>
+
 <p>We saw <code>NA</code> up above. That means “Not Available” and it denotes missing data.</p>
+
 <p>There are also two more interesting values:</p>
+
 <ol style="list-style-type: decimal">
 <li><code>Inf</code> (-Inf) means <span class="math">∞</span> (or <span class="math"> − ∞</span>) and arises from things like: 1/0 or log(0).</li>
 <li><code>NaN</code> means “Not a Number” and it arises from situations where you can’t evaluate something and it doesn’t have an obvious limit. Like 0/0 or Inf/-Inf or 0*Inf.</li>
 </ol>
+
 <ul>
 <li>If you wish to test whether something is NaN, or NA you have: <code>is.na(x)</code> and <code>is.nan(x)</code> which return logical vectors.</li>
 <li><p>The same goes for testing if things are finite or infinite:</p>
@@ -215,8 +247,11 @@ x
 <span class="kw">is.infinite</span>(x) <span class="co"># only Inf or -Inf</span>
 <span class="co">#&gt; [1] FALSE FALSE  TRUE FALSE FALSE FALSE</span></code></pre></li>
 </ul>
+
 <h3>Modes of Missing Data</h3>
+
 <p>Here is something to be aware of: missing values, like non-missing values, carry around their mode. Try this:</p>
+
 <pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="ot">NA</span>, <span class="dv">4</span>, <span class="st">&quot;5&quot;</span>)
 x
 <span class="co">#&gt; [1] &quot;1&quot; &quot;2&quot; NA  &quot;4&quot; &quot;5&quot;</span>
@@ -229,19 +264,26 @@ x[<span class="dv">3</span>]  <span class="co"># this extracts the third element
 
 <span class="kw">c</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="ot">NA</span>)  <span class="co"># this is a &quot;fresh&quot; NA, no coercion</span>
 <span class="co">#&gt; [1] 10 20 30 NA</span></code></pre>
+
 <h2 id="vectorization">Vectorization</h2>
+
 <ul>
 <li>In R, the term <em>vectorization</em> refers to the fact that, in many cases, when you apply a function to a vector, it applies the function to every element of the vector.</li>
 <li>This is apparent in many of the <em>operators</em> and we will see it in plenty of other functions, too.</li>
 </ul>
+
 <h3>Most Operators are Vectorized</h3>
+
 <p>This is <em>incredibly important</em>! All the mathematical operators, like <code>+</code>, <code>-</code>, <code>*</code>, and the logical operators, like <code>&amp;</code> (AND), <code>|</code> (OR), and the comparison operators, like <code>&lt;</code> and <code>&gt;</code> are hungry to operate <em>element-wise</em> on every <em>element</em> of a vector. Example:</p>
+
 <pre class="sourceCode r"><code class="sourceCode r">fish.lengths &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">121</span>, <span class="dv">95</span>, <span class="dv">87</span>, <span class="dv">142</span>)
 fish.weights &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1011</span>, <span class="dv">505</span>, <span class="dv">702</span>, <span class="dv">900</span>)
 fish.fatness &lt;-<span class="st"> </span>fish.weights /<span class="st"> </span>fish.lengths
 fish.fatness
-<span class="co">#&gt; [1] 8.355 5.316 8.069 6.338</span></code></pre>
+<span class="co">#&gt; [1] 8.355372 5.315789 8.068966 6.338028</span></code></pre>
+
 <h3>Vectorization is so important…</h3>
+
 <p>That we are going to go to open up a whole new lecture that starts with it.</p>
 
           <hr>
