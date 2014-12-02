@@ -77,7 +77,7 @@
 <h3>Goals for this hour:</h3>
 <ol style="list-style-type: decimal">
 <li>Describe (briefly) <code>ggplot2</code>s underlying philosophy and how to work with it.</li>
-<li>Quickly overview the <em>geom</em>s available in <code>ggplot2</code></li>
+<li>Quickly overview the _geom_s available in <code>ggplot2</code></li>
 <li>Develop an example plot together</li>
 <li>Turn you all loose with the <code>mosaic</code> package to experiment with different plots</li>
 </ol>
@@ -156,7 +156,7 @@
 <h3>A pole vaulting example</h3>
 <ul>
 <li>Here is a concrete example: we will investigate the history of pole-vaulting world records</li>
-<li>I grabbed the data by copying them from <a href="http://en.wikipedia.org/wiki/Men&#39;s_pole_vault_world_record_progression">http://en.wikipedia.org/wiki/Men's_pole_vault_world_record_progression</a> and pasting them into a text file</li>
+<li>I grabbed the data by copying them from <a href="http://en.wikipedia.org/wiki/Men&#39;s_pole_vault_world_record_progression" class="uri">http://en.wikipedia.org/wiki/Men's_pole_vault_world_record_progression</a> and pasting them into a text file</li>
 <li><p>Here we make a data frame out of them:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(lubridate)  <span class="co"># for dealing with dates</span>
 <span class="kw">library</span>(ggplot2)
@@ -208,7 +208,7 @@ That doesn’t work, because there is nothing to plot. We have to add a layer to
 <li><p>Adding a layer is done by adding a collection of geometric objects to it using one of the <code>geom_xxxx</code> functions. Each such function requires a <em>data set</em> and a <em>mapping</em> of columns in the data set to <em>aesthetics</em>. Let’s make some scatter-points: Meters as a function of Date:</p>
 <pre class="sourceCode r"><code class="sourceCode r">g2 &lt;-<span class="st"> </span>g +<span class="st"> </span><span class="kw">geom_point</span>(<span class="dt">data =</span> pv, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> Date, <span class="dt">y =</span> Meters))
 g2</code></pre>
-<p><img src="figures/unnamed-chunk-7.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" width="600px" height="420px" /></p>
+<p><img src="lecture_figs/ggplot-intro-unnamed-chunk-7.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" width="600px" height="420px" /></p>
 <p>Wow! That totally worked. Here are some interesting points about:</p>
 <pre class="sourceCode r"><code class="sourceCode r">g2 &lt;-<span class="st"> </span>g +<span class="st"> </span><span class="kw">geom_point</span>(<span class="dt">data =</span> pv, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> Date, <span class="dt">y =</span> Meters))
 g2</code></pre>
@@ -222,12 +222,12 @@ g2</code></pre>
 <li><p>I want to overlay a line on that…No problem! Add another layer:</p>
 <pre class="sourceCode r"><code class="sourceCode r">g3 &lt;-<span class="st"> </span>g2 +<span class="st"> </span><span class="kw">geom_line</span>(<span class="dt">data =</span> pv, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> Date, <span class="dt">y =</span> Meters))
 g3</code></pre>
-<p><img src="figures/unnamed-chunk-9.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" width="600px" height="420px" /></p>
+<p><img src="lecture_figs/ggplot-intro-unnamed-chunk-9.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" width="600px" height="420px" /></p>
 That worked! We just added (literally, using a <code>+</code> sign!) another layer—one that had a line on it. BUT! what if I want to make that line blue?</li>
 <li><p>Make the line blue. Note that you are giving the line an aesthetic property (the color blue), but you are not mapping that to any values in the data frame, <strong>so</strong> you don’t put that within the <code>aes()</code> function:</p>
 <pre class="sourceCode r"><code class="sourceCode r">g4 &lt;-<span class="st"> </span>g2 +<span class="st"> </span><span class="kw">geom_line</span>(<span class="dt">data =</span> pv, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> Date, <span class="dt">y =</span> Meters), <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>)
 g4</code></pre>
-<p><img src="figures/unnamed-chunk-10.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" width="600px" height="420px" /></p>
+<p><img src="lecture_figs/ggplot-intro-unnamed-chunk-10.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" width="600px" height="420px" /></p>
 <p>That worked! Notice that we were able to put that new layer atop <code>g2</code> which we had stored previously.</p></li>
 </ol>
 <h3>ggplot’s system of defaults</h3>
@@ -238,7 +238,7 @@ g4</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">d &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> pv, <span class="kw">aes</span>(<span class="dt">x =</span> Date, <span class="dt">y =</span> Meters))  <span class="co"># this defines defaults</span>
 d2 &lt;-<span class="st"> </span>d +<span class="st"> </span><span class="kw">geom_point</span>()  <span class="co"># add a layer with points</span>
 d2  <span class="co"># print it</span></code></pre>
-<img src="figures/unnamed-chunk-11.png" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" width="600px" height="420px" /></li>
+<img src="lecture_figs/ggplot-intro-unnamed-chunk-11.png" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" width="600px" height="420px" /></li>
 <li>Sick! Now we can add all sorts of fun layers as we see fit, each time, by invoking a <code>geom_xxx()</code> function.</li>
 <li><p>Let’s go totally crazy!</p></li>
 </ul>
@@ -248,20 +248,20 @@ d2  <span class="co"># print it</span></code></pre>
 <li><p>Add a transparent turquoise area along the back:</p>
 <pre class="sourceCode r"><code class="sourceCode r">d2 &lt;-<span class="st"> </span>d +<span class="st"> </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymax =</span> Meters), <span class="dt">ymin =</span> <span class="kw">min</span>(pv$Meters), <span class="dt">alpha =</span> <span class="fl">0.4</span>, <span class="dt">fill =</span> <span class="st">&quot;turquoise&quot;</span>)
 d2</code></pre>
-<p><img src="figures/unnamed-chunk-13.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" width="600px" height="420px" /></p>
+<p><img src="lecture_figs/ggplot-intro-unnamed-chunk-13.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" width="600px" height="420px" /></p>
 Wow! I feel like transparency was never so easy in R base graphics!</li>
 <li><p>Put a line along there too:</p>
 <pre class="sourceCode r"><code class="sourceCode r">d3 &lt;-<span class="st"> </span>d2 +<span class="st"> </span><span class="kw">geom_line</span>(<span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>)
 d3</code></pre>
-<img src="figures/unnamed-chunk-14.png" title="plot of chunk unnamed-chunk-14" alt="plot of chunk unnamed-chunk-14" width="600px" height="420px" /></li>
+<img src="lecture_figs/ggplot-intro-unnamed-chunk-14.png" title="plot of chunk unnamed-chunk-14" alt="plot of chunk unnamed-chunk-14" width="600px" height="420px" /></li>
 <li><p>Now add some small orange points:</p>
 <pre class="sourceCode r"><code class="sourceCode r">d4 &lt;-<span class="st"> </span>d3 +<span class="st"> </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="st">&quot;orange&quot;</span>)
 d4</code></pre>
-<img src="figures/unnamed-chunk-15.png" title="plot of chunk unnamed-chunk-15" alt="plot of chunk unnamed-chunk-15" width="600px" height="420px" /></li>
+<img src="lecture_figs/ggplot-intro-unnamed-chunk-15.png" title="plot of chunk unnamed-chunk-15" alt="plot of chunk unnamed-chunk-15" width="600px" height="420px" /></li>
 <li><p>Now, add “rugs” along the <span class="math"><em>x</em></span> and <span class="math"><em>y</em></span> axes that show the position of points, and in them, map <em>color</em> to <em>Nation</em>:</p>
 <pre class="sourceCode r"><code class="sourceCode r">d5 &lt;-<span class="st"> </span>d4 +<span class="st"> </span><span class="kw">geom_rug</span>(<span class="dt">sides =</span> <span class="st">&quot;bl&quot;</span>, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">color =</span> Nation))
 d5</code></pre>
-<img src="figures/unnamed-chunk-16.png" title="plot of chunk unnamed-chunk-16" alt="plot of chunk unnamed-chunk-16" width="600px" height="420px" />
+<img src="lecture_figs/ggplot-intro-unnamed-chunk-16.png" title="plot of chunk unnamed-chunk-16" alt="plot of chunk unnamed-chunk-16" width="600px" height="420px" />
 <ul>
 <li>Note that we are using the <code>aes()</code> function to add the mapping of <em>color</em> to <em>Nation</em> within the <code>geom_rug()</code> function.
 <ul>
@@ -301,7 +301,7 @@ bb &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt"
                 <span class="dt">fill =</span> Nation
                 ))
 bb</code></pre>
-<p><img src="figures/unnamed-chunk-17.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" width="600px" height="420px" /></p>
+<p><img src="lecture_figs/ggplot-intro-unnamed-chunk-17.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" width="600px" height="420px" /></p>
 <p>I used <code>geom_rect()</code> to plot rectangles where the bottom edge is situated at the athlete’s lowest world record. Note how it required massaging some data into the data frame at the beginning.</p>
 <h3>More! Add some text to it!</h3>
 <p>Now, I want to try to get every single name in the first time the person set the record. Of course, they won’t all fit exactly at the point (Date and Meters) of each record, so let’s space them out evenly, then draw little line segments to meet up with the records.</p>
@@ -330,20 +330,20 @@ pv1$nameline.y &lt;-<span class="st"> </span><span class="kw">seq</span>(<span c
 <span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> pv1, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> nameline.x, <span class="dt">y =</span> nameline.y), <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">size =</span> <span class="fl">0.2</span>) +
 <span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> pv1, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> nameline.x, <span class="dt">y =</span> nameline.y))
 bb2</code></pre>
-<p><img src="figures/unnamed-chunk-20.png" title="plot of chunk unnamed-chunk-20" alt="plot of chunk unnamed-chunk-20" width="600px" height="420px" /></p>
+<p><img src="lecture_figs/ggplot-intro-unnamed-chunk-20.png" title="plot of chunk unnamed-chunk-20" alt="plot of chunk unnamed-chunk-20" width="600px" height="420px" /></p>
 Notice how the color of Nation gets applied to the points automatically.</li>
 <li><p>Now, little colored lines from the nameline points to the records. For this we can use the <code>geom_segment()</code> function.</p>
 <pre class="sourceCode r"><code class="sourceCode r">bb3 &lt;-<span class="st"> </span>bb2 +<span class="st"> </span><span class="kw">geom_segment</span>(<span class="dt">data =</span> pv1, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">xend =</span> nameline.x, <span class="dt">yend =</span> nameline.y))
 bb3</code></pre>
-<img src="figures/unnamed-chunk-21.png" title="plot of chunk unnamed-chunk-21" alt="plot of chunk unnamed-chunk-21" width="600px" height="420px" /></li>
+<img src="lecture_figs/ggplot-intro-unnamed-chunk-21.png" title="plot of chunk unnamed-chunk-21" alt="plot of chunk unnamed-chunk-21" width="600px" height="420px" /></li>
 <li><p>Finally, we want to add the names of the athletes in there. We already have their names in <code>pv1</code>. We use the <code>geom_text()</code> function.</p>
 <pre class="sourceCode r"><code class="sourceCode r">bb4 &lt;-<span class="st"> </span>bb3 +<span class="st"> </span><span class="kw">geom_text</span>(<span class="dt">data =</span> pv1, <span class="kw">aes</span>(<span class="dt">label =</span> Athlete, <span class="dt">x =</span> nameline.x -<span class="st"> </span><span class="kw">dyears</span>(.<span class="dv">75</span>), <span class="dt">y =</span> nameline.y +<span class="st"> </span>.<span class="dv">03</span>), 
                        <span class="dt">angle =</span> -<span class="dv">45</span>, <span class="dt">hjust =</span> <span class="dv">1</span>)
 bb4</code></pre>
-<img src="figures/unnamed-chunk-22.png" title="plot of chunk unnamed-chunk-22" alt="plot of chunk unnamed-chunk-22" width="600px" height="420px" /></li>
+<img src="lecture_figs/ggplot-intro-unnamed-chunk-22.png" title="plot of chunk unnamed-chunk-22" alt="plot of chunk unnamed-chunk-22" width="600px" height="420px" /></li>
 <li><p>That is pretty cool, but a lot of names have gotten chopped off. Can we do something about that? There might be something a little more automatic, but we can do it by-hand, too:</p>
 <pre class="sourceCode r"><code class="sourceCode r">bb4 +<span class="st"> </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">mdy</span>(<span class="kw">c</span>(<span class="st">&quot;1-1-1890&quot;</span>, <span class="st">&quot;1-1-2020&quot;</span>)), <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="fl">3.8</span>, <span class="fl">7.1</span>))</code></pre>
-<p><img src="figures/unnamed-chunk-23.png" title="plot of chunk unnamed-chunk-23" alt="plot of chunk unnamed-chunk-23" width="600px" height="420px" /></p></li>
+<p><img src="lecture_figs/ggplot-intro-unnamed-chunk-23.png" title="plot of chunk unnamed-chunk-23" alt="plot of chunk unnamed-chunk-23" width="600px" height="420px" /></p></li>
 </ol>
 <h2 id="ggplot-play-on-own">Playing on your own</h2>
 <p>It can be downright daunting learning <code>ggplot</code>. That is why I recommend you get a feel for it by playing with a sort of ggplot GUI developed by the guys who make the <code>mosaic</code> package.</p>
@@ -373,7 +373,7 @@ bb4</code></pre>
 </ul>
 <pre class="sourceCode r"><code class="sourceCode r">Births78$day_of_week &lt;-<span class="st"> </span><span class="kw">wday</span>(<span class="kw">ymd</span>(Births78$date), <span class="dt">label =</span> <span class="ot">TRUE</span>)
 <span class="kw">ggplot</span>(<span class="dt">data=</span>Births78, <span class="kw">aes</span>(<span class="dt">x=</span>dayofyear, <span class="dt">y=</span>births, <span class="dt">color =</span> day_of_week)) +<span class="st"> </span><span class="kw">geom_point</span>()  +<span class="st"> </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">&quot;right&quot;</span>) +<span class="st"> </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;&quot;</span>) +<span class="st"> </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;loess&quot;</span>, <span class="dt">alpha =</span> .<span class="dv">1</span>)</code></pre>
-<p><img src="figures/unnamed-chunk-28.png" title="plot of chunk unnamed-chunk-28" alt="plot of chunk unnamed-chunk-28" width="600px" height="420px" /></p>
+<p><img src="lecture_figs/ggplot-intro-unnamed-chunk-28.png" title="plot of chunk unnamed-chunk-28" alt="plot of chunk unnamed-chunk-28" width="600px" height="420px" /></p>
 
           <hr>
            <div id="disqus_thread"></div>

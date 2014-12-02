@@ -88,6 +88,7 @@
 <li>We will explore this using the snowfall data from Grand Rapids, Michigan that is in the <code>mosaicData</code> package. (thanks to Megan S. for pointing this data set out as a good example!)</li>
 <li><p>Here we will print out a small part of it:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(mosaicData)
+<span class="co">#&gt; Warning: package &#39;mosaicData&#39; was built under R version 3.1.1</span>
 <span class="kw">dim</span>(SnowGR)  <span class="co"># how many rows and columns?</span>
 <span class="co">#&gt; [1] 119  15</span>
 <span class="kw">head</span>(SnowGR)  <span class="co"># have a look at the first few rows</span>
@@ -163,7 +164,7 @@
 <li>To give this some concreteness, let’s go back to the SnowGR data set.</li>
 <li><p>However, let us drop the “Total” column from it first because that is just computed from the other columns and is not “directly measured”.</p>
 <pre class="sourceCode r"><code class="sourceCode r">Snow &lt;-<span class="st"> </span>SnowGR[, -<span class="kw">ncol</span>(SnowGR)]</code></pre></li>
-<li>Now, color it up:<br /> <img src="figures/unnamed-chunk-5.png" title="plot of chunk unnamed-chunk-5" alt="plot of chunk unnamed-chunk-5" width="600px" height="420px" /></li>
+<li>Now, color it up:<br /><img src="lecture_figs/ggplot-more-unnamed-chunk-5.png" title="plot of chunk unnamed-chunk-5" alt="plot of chunk unnamed-chunk-5" width="600px" height="420px" /></li>
 <li>We can think of SeasonStart and SeasonEnd as being <span style="color:blue">Identifier variables</span>. They identify which season we are in.</li>
 <li>The months are the <span style="color:red">Measured variables</span>, because you go out and measure snow in each month</li>
 <li><p>And the <span style="color:orange">Values</span> occupy most of the table.</p></li>
@@ -172,7 +173,7 @@
 <ul>
 <li>When something is in long format, there are columns for values of the <span style="color:blue">Identifier variables</span> and there is <em>one column</em> for the values of the values of the <span style="color:red">Measured variables</span> and one column for the <span style="color:orange">Values</span></li>
 <li>This is called a <a href="http://vita.had.co.nz/papers/tidy-data.pdf">Tidy Data</a> format.</li>
-<li>It looks like this:<br /> <img src="figures/unnamed-chunk-6.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" width="600px" height="420px" /></li>
+<li>It looks like this:<br /><img src="lecture_figs/ggplot-more-unnamed-chunk-6.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" width="600px" height="420px" /></li>
 <li>This is the type of data frame that ggplot can deal with.</li>
 </ul>
 <h3>Reshaping data</h3>
@@ -219,7 +220,7 @@ longSnow &lt;-<span class="st"> </span><span class="kw">melt</span>(<span class=
 g &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> longSnow, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> Month, <span class="dt">y =</span> Snowfall))
 g +<span class="st"> </span><span class="kw">geom_boxplot</span>()
 <span class="co">#&gt; Warning: Removed 7 rows containing non-finite values (stat_boxplot).</span></code></pre>
-<img src="figures/unnamed-chunk-8.png" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" width="600px" height="420px" /></li>
+<img src="lecture_figs/ggplot-more-unnamed-chunk-8.png" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" width="600px" height="420px" /></li>
 <li>Hey! The months came out in the right order. That is cool. Why?
 <ul>
 <li><p>Because, by default, <code>melt</code> made a factor of the Month column and ordered the values as they appeared in the data frame:</p>
@@ -236,11 +237,11 @@ g +<span class="st"> </span><span class="kw">geom_boxplot</span>()
 <li><p>We can plot points, coloring them by SeasonStart (which is numeric…) instead of making boxplots</p>
 <pre class="sourceCode r"><code class="sourceCode r">g +<span class="st"> </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> SeasonStart))
 <span class="co">#&gt; Warning: Removed 7 rows containing missing values (geom_point).</span></code></pre>
-<img src="figures/unnamed-chunk-10.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" width="600px" height="420px" /></li>
+<img src="lecture_figs/ggplot-more-unnamed-chunk-10.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" width="600px" height="420px" /></li>
 <li><p>If we made a factor out of SeasonStart, then each SeasonStart gets it own color (far more than would be reasonable to visualize)</p>
 <pre class="sourceCode r"><code class="sourceCode r">g +<span class="st"> </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> <span class="kw">factor</span>(SeasonStart)))
 <span class="co">#&gt; Warning: Removed 7 rows containing missing values (geom_point).</span></code></pre>
-<img src="figures/unnamed-chunk-11.png" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" width="600px" height="420px" /></li>
+<img src="lecture_figs/ggplot-more-unnamed-chunk-11.png" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" width="600px" height="420px" /></li>
 <li><p>So that is a little silly.</p></li>
 </ul>
 <h3>Dealing with overplotting of points</h3>
@@ -249,7 +250,7 @@ g +<span class="st"> </span><span class="kw">geom_boxplot</span>()
 <li><p>This is easily achieved with <code>geom_jitter()</code> instead of <code>geom_point()</code></p>
 <pre class="sourceCode r"><code class="sourceCode r">g +<span class="st"> </span><span class="kw">geom_jitter</span>(<span class="kw">aes</span>(<span class="dt">color =</span> SeasonStart))
 <span class="co">#&gt; Warning: Removed 7 rows containing missing values (geom_point).</span></code></pre>
-<p><img src="figures/unnamed-chunk-12.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" width="600px" height="420px" /></p></li>
+<p><img src="lecture_figs/ggplot-more-unnamed-chunk-12.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" width="600px" height="420px" /></p></li>
 </ul>
 <h2 id="ggplot-facets">Faceting</h2>
 <ul>
@@ -260,11 +261,11 @@ g +<span class="st"> </span><span class="kw">geom_boxplot</span>()
 <li><p>Let’s consider looking at a histogram of Snowfall:</p>
 <pre class="sourceCode r"><code class="sourceCode r">d &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> longSnow, <span class="kw">aes</span>(<span class="dt">x =</span> Snowfall)) +<span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="dv">2</span>, <span class="dt">fill =</span> <span class="st">&quot;blue&quot;</span>)
 d</code></pre>
-<img src="figures/unnamed-chunk-13.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" width="600px" height="420px" /></li>
+<img src="lecture_figs/ggplot-more-unnamed-chunk-13.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" width="600px" height="420px" /></li>
 <li>That is nice, but it might be more interesting to see that month-by-month</li>
 <li><p>We can add a <code>facet_wrap</code> specification. We are “faceting in one long strip” but then “wrapping” it to fit on the page:</p>
 <pre class="sourceCode r"><code class="sourceCode r">d +<span class="st"> </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>Month, <span class="dt">ncol =</span> <span class="dv">4</span>)</code></pre>
-<p><img src="figures/unnamed-chunk-14.png" title="plot of chunk unnamed-chunk-14" alt="plot of chunk unnamed-chunk-14" width="600px" height="420px" /></p></li>
+<p><img src="lecture_figs/ggplot-more-unnamed-chunk-14.png" title="plot of chunk unnamed-chunk-14" alt="plot of chunk unnamed-chunk-14" width="600px" height="420px" /></p></li>
 </ul>
 <h3>Facet Grid</h3>
 <ul>
@@ -286,13 +287,13 @@ Winter &lt;-<span class="st"> </span><span class="kw">droplevels</span>(<span cl
 <span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="dv">2</span>) +
 <span class="st">  </span><span class="kw">facet_grid</span>(Interval ~<span class="st"> </span>Month)
 w</code></pre>
-<img src="figures/unnamed-chunk-16.png" title="plot of chunk unnamed-chunk-16" alt="plot of chunk unnamed-chunk-16" width="600px" height="420px" /></li>
+<img src="lecture_figs/ggplot-more-unnamed-chunk-16.png" title="plot of chunk unnamed-chunk-16" alt="plot of chunk unnamed-chunk-16" width="600px" height="420px" /></li>
 <li><p>How about a different kind of plot that is like a continuous boxplot? Just for fun.</p>
 <pre class="sourceCode r"><code class="sourceCode r">y &lt;-<span class="st"> </span><span class="kw">ggplot</span>(Winter, <span class="kw">aes</span>(<span class="dt">x =</span> Month, <span class="dt">y =</span> Snowfall, <span class="dt">fill =</span> Interval))
 y +<span class="st"> </span><span class="kw">geom_violin</span>() +<span class="st"> </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>Interval, <span class="dt">ncol =</span> <span class="dv">1</span>)
 <span class="co">#&gt; Warning: Removed 2 rows containing non-finite values (stat_ydensity).</span>
 <span class="co">#&gt; Warning: Removed 2 rows containing non-finite values (stat_ydensity).</span></code></pre>
-<p><img src="figures/unnamed-chunk-17.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" width="600px" height="420px" /></p></li>
+<p><img src="lecture_figs/ggplot-more-unnamed-chunk-17.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" width="600px" height="420px" /></p></li>
 </ul>
 <h2>ggplot’s statistical transformations</h2>
 <ul>
@@ -323,7 +324,7 @@ y +<span class="st"> </span><span class="kw">geom_violin</span>() +<span class="
 <span class="co">#&gt; 4    6</span>
 <span class="co">#&gt; 5    8</span>
 <span class="co">#&gt; 6   10</span></code></pre></li>
-<li><p>This can be a fun exercise to get your head around what sort of data are produced by each of the stats (and there are quite a few of them! <a href="http://docs.ggplot2.org/current/">http://docs.ggplot2.org/current/</a> )</p></li>
+<li><p>This can be a fun exercise to get your head around what sort of data are produced by each of the stats (and there are quite a few of them! <a href="http://docs.ggplot2.org/current/" class="uri">http://docs.ggplot2.org/current/</a> )</p></li>
 </ul>
 
           <hr>
