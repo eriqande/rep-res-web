@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Functions and lapply &middot; Reproducible Research.</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="http://eriqande.github.io/rep-res-web/www/bootstrap.min.css" rel="stylesheet">
+    <link href="http://eriqande.github.io/rep-res-web/www/highlight.css" rel="stylesheet">
+
+    <link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700'
+      rel='stylesheet' type='text/css'>
+  </head>
+
+  <body>
+    <div class="navbar navbar-default navbar-static-top">
+ <div class="navbar-header"><a class="navbar-brand" href="http://eriqande.github.io/rep-res-web">RepResCourse</a>
+      <a class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="http://eriqande.github.io/rep-res-web/syllabus.html">Syllabus</a></li>
+        <li><a href="http://eriqande.github.io/rep-res-web/resources.html">Resources</a></li>
+        <li><a href="http://eriqande.github.io/rep-res-web/blogs.html">Instructor Blog</a></li>
+        <li><a href="#">Results/Gallery</a></li>
+      </ul>
+      <div class="navbar-right">
+    	<p class="navbar-text">I'm navbar-fixed-top</p>
+  	  </div>
+    </div>
+</div>
+
+
+    <div class="container">
+            <!-- The title and stuff is here -->
+      <div class="masthead">
+        <p> </p>
+        <p> </p>
+        <h3 class="muted"><a href="http://eriqande.github.io/rep-res-web/">Reproducible Research Course</a> <small>by Eric C. Anderson for (NOAA/SWFSC)</small></h3>
+        <hr>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-3" id="nav">
+          <div class="well">
+  How's this site built? See all sources at the course <a href="http://github.com/eriqande/rep-res-course">repository</a> on GitHub.
+  <p><hr></p>
+  <p><a class="btn btn-primary" href="https://raw.githubusercontent.com/eriqande/rep-res-course/master/lectures/functions_and_lapply.rmd">Raw on GitHub</a></p>
+</div>
+
+<h4>Page Contents</h4>
+<ul class="list-unstyled" id="toc"></ul>
+
+<hr>
+<p><a href="http://eriqande.github.io/rep-res-web/contribute.html">How to contribute</a></p>
+<p><a class="btn btn-primary" href="https://github.com/eriqande/rep-res-course/edit/master/lectures/functions_and_lapply.rmd">Edit this page</a></p>
+
+
+        </div>
+
+        <div id="content" class="col-sm-8 pull-right">
+          <h1 id="functions-and-lapply">Functions and lapply</h1>
+
+<h2 id="functions-intro-stuff">Intro</h2>
+
+<p>R is known as a “functional” language in the sense that every operation it does can be be thought of a function that operates on arguments and returns a value. For the casual user of R, it is not clear whether thinking about this is helpful. BUT what is helpful to any user of R is the ability to understand how functions in R:</p>
+
+<ol style="list-style-type: decimal">
+<li>Are called,</li>
+<li>Parse their arguments,</li>
+<li>Can be defined by the user (yes! you can make your own functions in R),</li>
+<li>Can be applied iteratively over elements of lists or vectors.</li>
+</ol>
+
+<p>Once you get comfortable writing your own functions, you can save yourself a lot of time by:</p>
+
+<ul>
+<li>recognizing what parts of your code essesntially do the same things</li>
+<li>wrapping those into a function</li>
+<li>calling that function with different arguments.</li>
+</ul>
+
+<p>This can be particularly useful if you want to apply the same analysis to multiple different data sets. You can write a function that will perform the analysis on a single, “generic” data set like one that you have, and then you can apply that function to multiple data sets that you might have.</p>
+
+<h3>Specific goals</h3>
+
+<ol style="list-style-type: decimal">
+<li>Show how you define functions</li>
+<li>Discuss parameters and arguments, and R’s system for default values and parsing of argument lists.</li>
+<li>Take a brief sojourn into the world of overloaded functions and R’s S3 object system.</li>
+<li>Show how you can apply a function to every member of a list with <code>lapply()</code>, and give an actual example.</li>
+</ol>
+
+<h2 id="user-defd-funcs">User defined functions</h2>
+
+<p>We could start off talking about functions, generally, but it will be more fun, and more accessible to just start writing our own functions. In the process we will learn a lot about function conventions.</p>
+
+<h3>the function function</h3>
+
+<ul>
+<li>There is a function in R called <code>function()</code> whose job is to <em>return a function</em>.</li>
+<li>Let’s use it, and then talk about it.</li>
+<li>Here we make a function called evensum that adds up the elements in positions 2, 4, 6, … of a vector:</li>
+</ul>
+
+<pre class="sourceCode r"><code class="sourceCode r">    <span class="co"># define it </span>
+    evensum &lt;-<span class="st"> </span>function(x) <span class="kw">sum</span>(x[<span class="kw">seq</span>(<span class="dv">2</span>, <span class="kw">length</span>(x), <span class="dt">by =</span> <span class="dv">2</span>)])
+
+    <span class="co"># use it!</span>
+    <span class="kw">evensum</span>(<span class="dt">x =</span> <span class="dv">10</span>:<span class="dv">20</span>)
+<span class="co">#&gt; [1] 75</span></code></pre>
+
+<ul>
+<li>Wow! that was easy! How did that work?</li>
+</ul>
+
+<h3>The anatomy of function()</h3>
+
+<ul>
+<li>The syntax of the <code>function()</code> function is relatively straightforward:
+<ol style="list-style-type: decimal">
+<li>It takes arguments which are the names of the variables that act as placeholders for the values that you will pass into the function. These are called parameters.
+<ul>
+<li>In the case of <code>evensum()</code> there is one parameter, <code>x</code>.<br /></li>
+<li>In the body of the function, which is the expression that comes after <code>function(x)</code> we say what we want to do to <code>x</code> (namely add up every other element of it, starting with the second element).</li>
+</ul></li>
+<li>When we call the function, that value that we “pass in for <code>x</code>” (which was the vector <code>10:20</code> in our example) gets substituted for every occurrence of <code>x</code> in the body of the function.</li>
+<li>When the function is exectuted it returns whatever value the expression that is its body returns.</li>
+</ol></li>
+</ul>
+
+<h3>Compound expressions</h3>
+
+<ul>
+<li>Most functions are going to be more complex than just a single statement like <code>sum(x[seq(2, length(x), by = 2)])</code>, so how do we execute muliple statements in the body of a function and return the value that we want?</li>
+<li>Answer: Use a <em>compound expression</em> which is merely a bunch of expressions wrapped up in curly braces.</li>
+<li>Here is an example of how we could have written <code>evensum</code> with multiple expressions and intermediate value assignments:</li>
+</ul>
+
+<pre class="sourceCode r"><code class="sourceCode r">    <span class="co"># define it</span>
+    evensum &lt;-<span class="st"> </span>function(x) {
+      idx &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">2</span>, <span class="kw">length</span>(x), <span class="dt">by =</span> <span class="dv">2</span>)
+      y &lt;-<span class="st"> </span>x[idx]
+      <span class="kw">sum</span>(y)
+    }
+
+    <span class="co"># use it!</span>
+    <span class="kw">evensum</span>(<span class="dv">10</span>:<span class="dv">20</span>)
+<span class="co">#&gt; [1] 75</span>
+
+    <span class="co"># hooray! we got the same thing as last time</span></code></pre>
+
+<h3>The value of a compound expression</h3>
+
+<ul>
+<li><p>It is important to understand that if you have a compound expression like:</p>
+<pre class="sourceCode r"><code class="sourceCode r">{
+ statement_1
+ statement_2
+ statement_3
+}</code></pre>
+then the <em>value</em> of this expression will be the value returned by the last expression inside the compound expression (in the above case, the value returned by <code>statement_3</code>)</li>
+<li>Thus, when the body of a function is a compound expression, the value that the function returns will just be the value of the last expression in the body of the function.</li>
+<li><p>You can also be explicit about it and wrap it in <code>return()</code>:</p></li>
+</ul>
+
+<pre class="sourceCode r"><code class="sourceCode r">    <span class="co"># define it using return</span>
+    evensum &lt;-<span class="st"> </span>function(x) {
+      idx &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">2</span>, <span class="kw">length</span>(x), <span class="dt">by =</span> <span class="dv">2</span>)
+      y &lt;-<span class="st"> </span>x[idx]
+      <span class="kw">return</span>(<span class="kw">sum</span>(y))
+    }
+    
+    <span class="co"># use it</span>
+    <span class="kw">evensum</span>(<span class="dv">10</span>:<span class="dv">20</span>)
+<span class="co">#&gt; [1] 75</span></code></pre>
+
+<h3>Multiple parameters</h3>
+
+<ul>
+<li>Having multiple parameters that your function understands is straightforward. You just put them in the argument list of <code>function()</code>!</li>
+<li>Imagine that we wanted to make a more general function of which <code>evensum</code> was a special case. Perhaps we want to be able to easily take any vector, start on the Start-th element and then sum it and every other element in steps of Step. Here goes:</li>
+</ul>
+
+<pre class="sourceCode r"><code class="sourceCode r">    skip_sum &lt;-<span class="st"> </span>function(x, Start, Step) <span class="kw">sum</span>(x[<span class="kw">seq</span>(Start, <span class="kw">length</span>(x), <span class="dt">by =</span> Step)])</code></pre>
+
+<ul>
+<li>Now, we can call that with values for <code>x</code>, <code>Start</code> and <code>Step</code>.</li>
+</ul>
+
+<pre class="sourceCode r"><code class="sourceCode r">    <span class="co"># Try this:</span>
+    <span class="kw">skip_sum</span>(<span class="dt">x =</span> <span class="dv">10</span>:<span class="dv">20</span>, <span class="dt">Start =</span> <span class="dv">4</span>, <span class="dt">Step =</span> <span class="dv">3</span>)
+<span class="co">#&gt; [1] 48</span>
+
+    <span class="co"># this will give us the same results as evensum:</span>
+    <span class="kw">skip_sum</span>(<span class="dt">x =</span> <span class="dv">10</span>:<span class="dv">20</span>, <span class="dt">Start =</span> <span class="dv">2</span>, <span class="dt">Step =</span> <span class="dv">2</span>)
+<span class="co">#&gt; [1] 75</span></code></pre>
+
+<ul>
+<li>Notice that in the two invocations of <code>skip_sum</code> above, we are using <em>named parameters</em>. i.e., we are saying <code>x = 10:20</code> and <code>Start = 2</code>, etc. We are being very explicit about which arguments belong to which parameters.</li>
+</ul>
+
+<h3>In class exercise</h3>
+
+<p>OK, everyone, you have 5 minutes to write your own function called <code>addmult</code> that takes two vectors, <code>a</code> and <code>b</code> and returns a named list in which the first component named “Add” is equal to a+b and the second component named “Mult” is equal to a*b.</p>
+
+<h3>Positional parameters and named parameters</h3>
+
+<ul>
+<li>R is rather interesting in that you don’t have to give it named parameters. It can figure out what you mean as long as the order of arguments you give it is in the order of the parameters in the function definition:</li>
+</ul>
+
+<pre class="sourceCode r"><code class="sourceCode r">    <span class="co"># this:</span>
+    <span class="kw">skip_sum</span>(<span class="dv">10</span>:<span class="dv">20</span>, <span class="dv">4</span>, <span class="dv">3</span>)
+<span class="co">#&gt; [1] 48</span>
+  
+    <span class="co"># will be the same as this:</span>
+    <span class="kw">skip_sum</span>(<span class="dt">x =</span> <span class="dv">10</span>:<span class="dv">20</span>, <span class="dt">Start =</span> <span class="dv">4</span>, <span class="dt">Step =</span> <span class="dv">3</span>)
+<span class="co">#&gt; [1] 48</span></code></pre>
+
+<ul>
+<li>But, if the argument list is long, it is often easier to read (and less error-prone) to use named parameters.</li>
+<li>Note that named arguments don’t have to be in any particular order, if they are named!</li>
+</ul>
+
+<pre class="sourceCode r"><code class="sourceCode r">    <span class="co"># these will all be the same</span>
+    <span class="kw">skip_sum</span>(<span class="dt">x =</span> <span class="dv">10</span>:<span class="dv">20</span>, <span class="dt">Start =</span> <span class="dv">4</span>, <span class="dt">Step =</span> <span class="dv">3</span>)
+<span class="co">#&gt; [1] 48</span>
+    <span class="kw">skip_sum</span>(<span class="dt">Start =</span> <span class="dv">4</span>, <span class="dt">Step =</span> <span class="dv">3</span>, <span class="dt">x =</span> <span class="dv">10</span>:<span class="dv">20</span>)
+<span class="co">#&gt; [1] 48</span>
+    <span class="kw">skip_sum</span>(<span class="dt">Start =</span> <span class="dv">4</span>, <span class="dt">x =</span> <span class="dv">10</span>:<span class="dv">20</span>, <span class="dt">Step =</span> <span class="dv">3</span>)
+<span class="co">#&gt; [1] 48</span></code></pre>
+
+<h3>Mixing named and positional parameters</h3>
+
+<p>This is far out. You can mix named and positional parameters. R’s rule is this:</p>
+
+<ol style="list-style-type: decimal">
+<li>First match all the named parameters to named arguments and then move them off the argument list <em>and</em> the parameter list.</li>
+<li>Then match the remaining arguments to the remaining parameters positionally.</li>
+</ol>
+
+<pre class="sourceCode r"><code class="sourceCode r">    <span class="co"># for example these will all be the same</span>
+    <span class="kw">skip_sum</span>(<span class="dt">x =</span> <span class="dv">10</span>:<span class="dv">20</span>, <span class="dt">Start =</span> <span class="dv">4</span>, <span class="dt">Step =</span> <span class="dv">3</span>)
+<span class="co">#&gt; [1] 48</span>
+    <span class="kw">skip_sum</span>(<span class="dv">10</span>:<span class="dv">20</span>, <span class="dt">Start =</span> <span class="dv">4</span>, <span class="dt">Step =</span> <span class="dv">3</span>)
+<span class="co">#&gt; [1] 48</span>
+    <span class="kw">skip_sum</span>(<span class="dt">Start =</span> <span class="dv">4</span>, <span class="dt">Step =</span> <span class="dv">3</span>, <span class="dv">10</span>:<span class="dv">20</span>)
+<span class="co">#&gt; [1] 48</span>
+    <span class="kw">skip_sum</span>(<span class="dt">Start=</span><span class="dv">4</span>, <span class="dv">10</span>:<span class="dv">20</span>, <span class="dv">3</span>)
+<span class="co">#&gt; [1] 48</span></code></pre>
+
+<h3>Defining default parameter values</h3>
+
+<ul>
+<li>What if we realized that most the time we are using <code>skip_sum</code> we just want it set with <code>Start = 2</code> and <code>Step = 2</code> so that it behaves like <code>evensum</code>.<br /></li>
+<li>This is a job for defaults!</li>
+<li>You can set default values for parameters by using an <code>=</code> sign in the function definition. If no arguments are passed in for those parameters, then the defaults are applied.</li>
+</ul>
+
+<pre class="sourceCode r"><code class="sourceCode r">    <span class="co"># new definition with defaults</span>
+    skip_sum &lt;-<span class="st"> </span>function(x, <span class="dt">Start =</span> <span class="dv">2</span>, <span class="dt">Step =</span> <span class="dv">2</span>) <span class="kw">sum</span>(x[<span class="kw">seq</span>(Start, <span class="kw">length</span>(x), <span class="dt">by =</span> Step)])
+
+    <span class="co"># now see how it behaves:</span>
+    <span class="kw">skip_sum</span>(<span class="dv">10</span>:<span class="dv">20</span>)
+<span class="co">#&gt; [1] 75</span>
+
+    <span class="kw">skip_sum</span>(<span class="dv">10</span>:<span class="dv">20</span>, <span class="dv">2</span>, <span class="dv">2</span>)
+<span class="co">#&gt; [1] 75</span>
+
+    <span class="kw">skip_sum</span>(<span class="dv">10</span>:<span class="dv">20</span>, <span class="dt">Step =</span> <span class="dv">2</span>)
+<span class="co">#&gt; [1] 75</span>
+
+    <span class="kw">skip_sum</span>(<span class="dv">10</span>:<span class="dv">20</span>, <span class="dv">4</span>, <span class="dv">5</span>)  <span class="co"># this overrides the defaults</span>
+<span class="co">#&gt; [1] 31</span></code></pre>
+
+<h3>The Curious “…”&quot; parameter</h3>
+
+<ul>
+<li>Sometimes, it would be nice to be able to pass other <em>named</em> parameters to a function that is called from inside your own function. This is what the <code>...</code> parameter is for.</li>
+<li>You have probably seen <code>...</code> in the help files for certain functions. It just means “any other named parameters that make sense”.</li>
+<li>Of course, they only make sense if your function takes whatever else was passed in and does something appropriate with them.</li>
+<li>Example: our <code>skip_sum</code> function won’t do so well with NAs:</li>
+</ul>
+
+<pre class="sourceCode r"><code class="sourceCode r">    vec &lt;-<span class="st"> </span><span class="dv">10</span>:<span class="dv">20</span>
+    vec[<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">8</span>,<span class="dv">9</span>)] &lt;-<span class="st"> </span><span class="ot">NA</span>
+    
+    <span class="co"># here is what vec looks like</span>
+    vec
+<span class="co">#&gt;  [1] 10 11 NA 13 NA 15 16 NA NA 19 20</span>
+
+    <span class="co"># try it:</span>
+    <span class="kw">skip_sum</span>(vec)
+<span class="co">#&gt; [1] NA</span>
+
+    <span class="co"># Wait, I want it to treat NAs as zeroes</span></code></pre>
+
+<ul>
+<li>If you want it to treat NAs as zeroes you can redefine <code>skip_sum</code> like this:</li>
+</ul>
+
+<pre class="sourceCode r"><code class="sourceCode r">    skip_sum &lt;-<span class="st"> </span>function(x, <span class="dt">Start =</span> <span class="dv">2</span>, <span class="dt">Step =</span> <span class="dv">2</span>, ...) <span class="kw">sum</span>(x[<span class="kw">seq</span>(Start, <span class="kw">length</span>(x), <span class="dt">by =</span> Step)], ...)</code></pre>
+
+<ul>
+<li>Note the “…” in the argument list and in the body. It is being passed in as an argument to the <code>sum</code> function.</li>
+<li>Try it:</li>
+</ul>
+
+<pre class="sourceCode r"><code class="sourceCode r">    <span class="kw">skip_sum</span>(vec, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)  <span class="co"># we pass in a named argument that does not match Start, or Step.</span>
+<span class="co">#&gt; [1] 58</span>
+    
+    <span class="co"># that gave us the same as:</span>
+    <span class="kw">skip_sum</span>({vec[<span class="kw">is.na</span>(vec)]&lt;-<span class="dv">0</span>; vec})  <span class="co"># note use of compound expression...</span>
+<span class="co">#&gt; [1] 58</span>
+    
+    <span class="co"># If we don&#39;t pass in na.rm = TRUE then it doesn&#39;t get passed to sum:</span>
+    <span class="kw">skip_sum</span>(vec)
+<span class="co">#&gt; [1] 58</span></code></pre>
+
+<h3>Listing a function</h3>
+
+<ul>
+<li>If you type a function name, without the parentheses, R will list the code that went into the function definition</li>
+<li>Try it:</li>
+</ul>
+
+<pre class="sourceCode r"><code class="sourceCode r">    <span class="co"># list evensum</span>
+    evensum
+<span class="co">#&gt; function(x) {</span>
+<span class="co">#&gt;       idx &lt;- seq(2, length(x), by = 2)</span>
+<span class="co">#&gt;       y &lt;- x[idx]</span>
+<span class="co">#&gt;       return(sum(y))</span>
+<span class="co">#&gt;     }</span>
+
+    <span class="co"># list skip_sum</span>
+    skip_sum
+<span class="co">#&gt; function(x, Start = 2, Step = 2, ...) sum(x[seq(Start, length(x), by = Step)], ...)</span>
+
+    <span class="co"># have a look at read.csv, which is just read.table with some defaults:</span>
+    read.csv
+<span class="co">#&gt; function (file, header = TRUE, sep = &quot;,&quot;, quote = &quot;\&quot;&quot;, dec = &quot;.&quot;, </span>
+<span class="co">#&gt;     fill = TRUE, comment.char = &quot;&quot;, ...) </span>
+<span class="co">#&gt; read.table(file = file, header = header, sep = sep, quote = quote, </span>
+<span class="co">#&gt;     dec = dec, fill = fill, comment.char = comment.char, ...)</span>
+<span class="co">#&gt; &lt;bytecode: 0x7f84a8e22358&gt;</span>
+<span class="co">#&gt; &lt;environment: namespace:utils&gt;</span></code></pre>
+
+<h2 id="s3-overloading">A Brief Journey into S3 function overloading</h2>
+
+<h3>What’s this UseMethod stuff?</h3>
+
+<ul>
+<li>Sometimes, when you list a function, like <code>print</code> for example, you get something like this:</li>
+</ul>
+
+<pre class="sourceCode r"><code class="sourceCode r">    print
+<span class="co">#&gt; function (x, ...) </span>
+<span class="co">#&gt; UseMethod(&quot;print&quot;)</span>
+<span class="co">#&gt; &lt;bytecode: 0x7f84a9125d10&gt;</span>
+<span class="co">#&gt; &lt;environment: namespace:base&gt;</span></code></pre>
+
+<ul>
+<li>Hey! I don’t see any code listing there! What is going on!</li>
+<li>The <code>UseMethod</code> call in there actually <em>is</em> the function inside the <code>print</code> function.</li>
+<li><code>UseMethod</code> is the (somewhat klugie and limited) way that R <em>overloads</em> its functions.</li>
+<li>What is overloading? It means that if you pass something to the <code>print</code> function, it will behave differently depending on what the class of the first argument is.<br /></li>
+<li>Aha! This is why data frames print out differently than lists, etc.</li>
+</ul>
+
+<h3>How this works</h3>
+
+<ul>
+<li>The print function has been defined so that when it is called it looks to see what <em>class</em> the first argument (corresponding to the named parameter <code>x</code>). let’s say that argument is of class <code>weird</code>. In that case, the print function looks for another function called <code>print.weird()</code>. If it finds it, it will execute that function on the argument.</li>
+</ul>
+
+<h3>How many class-specific print functions are there?</h3>
+
+<p>You can list them with <code>methods()</code></p>
+
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">methods</span>(print)
+<span class="co">#&gt;   [1] print.acf*                                   </span>
+<span class="co">#&gt;   [2] print.AES*                                   </span>
+<span class="co">#&gt;   [3] print.anova*                                 </span>
+<span class="co">#&gt;   [4] print.aov*                                   </span>
+<span class="co">#&gt;   [5] print.aovlist*                               </span>
+<span class="co">#&gt;   [6] print.ar*                                    </span>
+<span class="co">#&gt;   [7] print.Arima*                                 </span>
+<span class="co">#&gt;   [8] print.arima0*                                </span>
+<span class="co">#&gt;   [9] print.AsIs                                   </span>
+<span class="co">#&gt;  [10] print.aspell*                                </span>
+<span class="co">#&gt;  [11] print.aspell_inspect_context*                </span>
+<span class="co">#&gt;  [12] print.bibentry*                              </span>
+<span class="co">#&gt;  [13] print.Bibtex*                                </span>
+<span class="co">#&gt;  [14] print.browseVignettes*                       </span>
+<span class="co">#&gt;  [15] print.by                                     </span>
+<span class="co">#&gt;  [16] print.changedFiles*                          </span>
+<span class="co">#&gt;  [17] print.check_code_usage_in_package*           </span>
+<span class="co">#&gt;  [18] print.check_compiled_code*                   </span>
+<span class="co">#&gt;  [19] print.check_demo_index*                      </span>
+<span class="co">#&gt;  [20] print.check_depdef*                          </span>
+<span class="co">#&gt;  [21] print.check_dotInternal*                     </span>
+<span class="co">#&gt;  [22] print.check_make_vars*                       </span>
+<span class="co">#&gt;  [23] print.check_nonAPI_calls*                    </span>
+<span class="co">#&gt;  [24] print.check_package_code_assign_to_globalenv*</span>
+<span class="co">#&gt;  [25] print.check_package_code_attach*             </span>
+<span class="co">#&gt;  [26] print.check_package_code_data_into_globalenv*</span>
+<span class="co">#&gt;  [27] print.check_package_code_startup_functions*  </span>
+<span class="co">#&gt;  [28] print.check_package_code_syntax*             </span>
+<span class="co">#&gt;  [29] print.check_package_code_unload_functions*   </span>
+<span class="co">#&gt;  [30] print.check_package_compact_datasets*        </span>
+<span class="co">#&gt;  [31] print.check_package_CRAN_incoming*           </span>
+<span class="co">#&gt;  [32] print.check_package_datasets*                </span>
+<span class="co">#&gt;  [33] print.check_package_depends*                 </span>
+<span class="co">#&gt;  [34] print.check_package_description*             </span>
+<span class="co">#&gt;  [35] print.check_package_description_encoding*    </span>
+<span class="co">#&gt;  [36] print.check_package_license*                 </span>
+<span class="co">#&gt;  [37] print.check_packages_used*                   </span>
+<span class="co">#&gt;  [38] print.check_po_files*                        </span>
+<span class="co">#&gt;  [39] print.check_Rd_contents*                     </span>
+<span class="co">#&gt;  [40] print.check_Rd_line_widths*                  </span>
+<span class="co">#&gt;  [41] print.check_Rd_metadata*                     </span>
+<span class="co">#&gt;  [42] print.check_Rd_xrefs*                        </span>
+<span class="co">#&gt;  [43] print.check_so_symbols*                      </span>
+<span class="co">#&gt;  [44] print.check_T_and_F*                         </span>
+<span class="co">#&gt;  [45] print.check_vignette_index*                  </span>
+<span class="co">#&gt;  [46] print.checkDocFiles*                         </span>
+<span class="co">#&gt;  [47] print.checkDocStyle*                         </span>
+<span class="co">#&gt;  [48] print.checkFF*                               </span>
+<span class="co">#&gt;  [49] print.checkRd*                               </span>
+<span class="co">#&gt;  [50] print.checkReplaceFuns*                      </span>
+<span class="co">#&gt;  [51] print.checkS3methods*                        </span>
+<span class="co">#&gt;  [52] print.checkTnF*                              </span>
+<span class="co">#&gt;  [53] print.checkVignettes*                        </span>
+<span class="co">#&gt;  [54] print.citation*                              </span>
+<span class="co">#&gt;  [55] print.codoc*                                 </span>
+<span class="co">#&gt;  [56] print.codocClasses*                          </span>
+<span class="co">#&gt;  [57] print.codocData*                             </span>
+<span class="co">#&gt;  [58] print.colorConverter*                        </span>
+<span class="co">#&gt;  [59] print.compactPDF*                            </span>
+<span class="co">#&gt;  [60] print.condition                              </span>
+<span class="co">#&gt;  [61] print.connection                             </span>
+<span class="co">#&gt;  [62] print.data.frame                             </span>
+<span class="co">#&gt;  [63] print.Date                                   </span>
+<span class="co">#&gt;  [64] print.default                                </span>
+<span class="co">#&gt;  [65] print.dendrogram*                            </span>
+<span class="co">#&gt;  [66] print.density*                               </span>
+<span class="co">#&gt;  [67] print.difftime                               </span>
+<span class="co">#&gt;  [68] print.dist*                                  </span>
+<span class="co">#&gt;  [69] print.DLLInfo                                </span>
+<span class="co">#&gt;  [70] print.DLLInfoList                            </span>
+<span class="co">#&gt;  [71] print.DLLRegisteredRoutines                  </span>
+<span class="co">#&gt;  [72] print.dummy_coef*                            </span>
+<span class="co">#&gt;  [73] print.dummy_coef_list*                       </span>
+<span class="co">#&gt;  [74] print.ecdf*                                  </span>
+<span class="co">#&gt;  [75] print.factanal*                              </span>
+<span class="co">#&gt;  [76] print.factor                                 </span>
+<span class="co">#&gt;  [77] print.family*                                </span>
+<span class="co">#&gt;  [78] print.fileSnapshot*                          </span>
+<span class="co">#&gt;  [79] print.findLineNumResult*                     </span>
+<span class="co">#&gt;  [80] print.formula*                               </span>
+<span class="co">#&gt;  [81] print.ftable*                                </span>
+<span class="co">#&gt;  [82] print.function                               </span>
+<span class="co">#&gt;  [83] print.getAnywhere*                           </span>
+<span class="co">#&gt;  [84] print.glm*                                   </span>
+<span class="co">#&gt;  [85] print.hclust*                                </span>
+<span class="co">#&gt;  [86] print.help_files_with_topic*                 </span>
+<span class="co">#&gt;  [87] print.hexmode                                </span>
+<span class="co">#&gt;  [88] print.HoltWinters*                           </span>
+<span class="co">#&gt;  [89] print.hsearch*                               </span>
+<span class="co">#&gt;  [90] print.htest*                                 </span>
+<span class="co">#&gt;  [91] print.html*                                  </span>
+<span class="co">#&gt;  [92] print.infl*                                  </span>
+<span class="co">#&gt;  [93] print.integrate*                             </span>
+<span class="co">#&gt;  [94] print.isoreg*                                </span>
+<span class="co">#&gt;  [95] print.kmeans*                                </span>
+<span class="co">#&gt;  [96] print.knitr_kable*                           </span>
+<span class="co">#&gt;  [97] print.Latex*                                 </span>
+<span class="co">#&gt;  [98] print.LaTeX*                                 </span>
+<span class="co">#&gt;  [99] print.libraryIQR                             </span>
+<span class="co">#&gt; [100] print.listof                                 </span>
+<span class="co">#&gt; [101] print.lm*                                    </span>
+<span class="co">#&gt; [102] print.loadings*                              </span>
+<span class="co">#&gt; [103] print.loess*                                 </span>
+<span class="co">#&gt; [104] print.logLik*                                </span>
+<span class="co">#&gt; [105] print.ls_str*                                </span>
+<span class="co">#&gt; [106] print.medpolish*                             </span>
+<span class="co">#&gt; [107] print.MethodsFunction*                       </span>
+<span class="co">#&gt; [108] print.mtable*                                </span>
+<span class="co">#&gt; [109] print.NativeRoutineList                      </span>
+<span class="co">#&gt; [110] print.news_db*                               </span>
+<span class="co">#&gt; [111] print.nls*                                   </span>
+<span class="co">#&gt; [112] print.noquote                                </span>
+<span class="co">#&gt; [113] print.numeric_version                        </span>
+<span class="co">#&gt; [114] print.object_size*                           </span>
+<span class="co">#&gt; [115] print.octmode                                </span>
+<span class="co">#&gt; [116] print.packageDescription*                    </span>
+<span class="co">#&gt; [117] print.packageInfo                            </span>
+<span class="co">#&gt; [118] print.packageIQR*                            </span>
+<span class="co">#&gt; [119] print.packageStatus*                         </span>
+<span class="co">#&gt; [120] print.pairwise.htest*                        </span>
+<span class="co">#&gt; [121] print.PDF_Array*                             </span>
+<span class="co">#&gt; [122] print.PDF_Dictionary*                        </span>
+<span class="co">#&gt; [123] print.pdf_doc*                               </span>
+<span class="co">#&gt; [124] print.pdf_fonts*                             </span>
+<span class="co">#&gt; [125] print.PDF_Indirect_Reference*                </span>
+<span class="co">#&gt; [126] print.pdf_info*                              </span>
+<span class="co">#&gt; [127] print.PDF_Keyword*                           </span>
+<span class="co">#&gt; [128] print.PDF_Name*                              </span>
+<span class="co">#&gt; [129] print.PDF_Stream*                            </span>
+<span class="co">#&gt; [130] print.PDF_String*                            </span>
+<span class="co">#&gt; [131] print.person*                                </span>
+<span class="co">#&gt; [132] print.POSIXct                                </span>
+<span class="co">#&gt; [133] print.POSIXlt                                </span>
+<span class="co">#&gt; [134] print.power.htest*                           </span>
+<span class="co">#&gt; [135] print.ppr*                                   </span>
+<span class="co">#&gt; [136] print.prcomp*                                </span>
+<span class="co">#&gt; [137] print.princomp*                              </span>
+<span class="co">#&gt; [138] print.proc_time                              </span>
+<span class="co">#&gt; [139] print.raster*                                </span>
+<span class="co">#&gt; [140] print.Rd*                                    </span>
+<span class="co">#&gt; [141] print.recordedplot*                          </span>
+<span class="co">#&gt; [142] print.restart                                </span>
+<span class="co">#&gt; [143] print.RGBcolorConverter*                     </span>
+<span class="co">#&gt; [144] print.rle                                    </span>
+<span class="co">#&gt; [145] print.roman*                                 </span>
+<span class="co">#&gt; [146] print.sessionInfo*                           </span>
+<span class="co">#&gt; [147] print.shiny.tag*                             </span>
+<span class="co">#&gt; [148] print.shiny.tag.list*                        </span>
+<span class="co">#&gt; [149] print.simple.list                            </span>
+<span class="co">#&gt; [150] print.smooth.spline*                         </span>
+<span class="co">#&gt; [151] print.socket*                                </span>
+<span class="co">#&gt; [152] print.srcfile                                </span>
+<span class="co">#&gt; [153] print.srcref                                 </span>
+<span class="co">#&gt; [154] print.stepfun*                               </span>
+<span class="co">#&gt; [155] print.stl*                                   </span>
+<span class="co">#&gt; [156] print.StructTS*                              </span>
+<span class="co">#&gt; [157] print.subdir_tests*                          </span>
+<span class="co">#&gt; [158] print.summarize_CRAN_check_status*           </span>
+<span class="co">#&gt; [159] print.summary.aov*                           </span>
+<span class="co">#&gt; [160] print.summary.aovlist*                       </span>
+<span class="co">#&gt; [161] print.summary.ecdf*                          </span>
+<span class="co">#&gt; [162] print.summary.glm*                           </span>
+<span class="co">#&gt; [163] print.summary.lm*                            </span>
+<span class="co">#&gt; [164] print.summary.loess*                         </span>
+<span class="co">#&gt; [165] print.summary.manova*                        </span>
+<span class="co">#&gt; [166] print.summary.nls*                           </span>
+<span class="co">#&gt; [167] print.summary.packageStatus*                 </span>
+<span class="co">#&gt; [168] print.summary.ppr*                           </span>
+<span class="co">#&gt; [169] print.summary.prcomp*                        </span>
+<span class="co">#&gt; [170] print.summary.princomp*                      </span>
+<span class="co">#&gt; [171] print.summary.table                          </span>
+<span class="co">#&gt; [172] print.summaryDefault                         </span>
+<span class="co">#&gt; [173] print.table                                  </span>
+<span class="co">#&gt; [174] print.tables_aov*                            </span>
+<span class="co">#&gt; [175] print.terms*                                 </span>
+<span class="co">#&gt; [176] print.ts*                                    </span>
+<span class="co">#&gt; [177] print.tskernel*                              </span>
+<span class="co">#&gt; [178] print.TukeyHSD*                              </span>
+<span class="co">#&gt; [179] print.tukeyline*                             </span>
+<span class="co">#&gt; [180] print.tukeysmooth*                           </span>
+<span class="co">#&gt; [181] print.undoc*                                 </span>
+<span class="co">#&gt; [182] print.vignette*                              </span>
+<span class="co">#&gt; [183] print.warnings                               </span>
+<span class="co">#&gt; [184] print.xgettext*                              </span>
+<span class="co">#&gt; [185] print.xngettext*                             </span>
+<span class="co">#&gt; [186] print.xtabs*                                 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;    Non-visible functions are asterisked</span></code></pre>
+
+<p>OK! That is a bunch. But notice that there is not a <code>print.weird</code> function.</p>
+
+<h3>Make a new print function</h3>
+
+<p>I am going to make a print function that will be invoked on objects of class weird:</p>
+
+<pre class="sourceCode r"><code class="sourceCode r">print.weird &lt;-<span class="st"> </span>function(x) {
+  <span class="kw">print</span>(<span class="st">&quot;Object of class weird&quot;</span>)
+  <span class="kw">print</span>(<span class="kw">paste</span>(<span class="st">&quot;Length:&quot;</span>, <span class="kw">length</span>(x)))
+  <span class="kw">print</span>(<span class="kw">head</span>(x))
+}</code></pre>
+
+<p>Our print.weird function doesn’t do much, it just shows the length and the first few lines, and lets the user know the object is of class weird.</p>
+
+<p>Let’s watch it in action:</p>
+
+<pre class="sourceCode r"><code class="sourceCode r">boing &lt;-<span class="st"> </span><span class="dv">1</span>:<span class="dv">100</span>
+
+<span class="kw">print</span>(boing) <span class="co"># does what we expect</span>
+<span class="co">#&gt;   [1]   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17</span>
+<span class="co">#&gt;  [18]  18  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34</span>
+<span class="co">#&gt;  [35]  35  36  37  38  39  40  41  42  43  44  45  46  47  48  49  50  51</span>
+<span class="co">#&gt;  [52]  52  53  54  55  56  57  58  59  60  61  62  63  64  65  66  67  68</span>
+<span class="co">#&gt;  [69]  69  70  71  72  73  74  75  76  77  78  79  80  81  82  83  84  85</span>
+<span class="co">#&gt;  [86]  86  87  88  89  90  91  92  93  94  95  96  97  98  99 100</span>
+
+<span class="co"># make boing an object of class weird</span>
+<span class="kw">class</span>(boing) &lt;-<span class="st"> &quot;weird&quot;</span>
+
+<span class="kw">print</span>(boing)
+<span class="co">#&gt; [1] &quot;Object of class weird&quot;</span>
+<span class="co">#&gt; [1] &quot;Length: 100&quot;</span>
+<span class="co">#&gt; [1] 1 2 3 4 5 6</span></code></pre>
+
+<p>It is good keep in mind that R is full of overloaded functions — that is functions that behave differently depending on the class of their arguments.</p>
+
+<h2 id="applying-over-lists">Applying functions to list elements</h2>
+
+<p>One of the great things about understanding how to define your own functions is that it lets you harness the power of the <code>lapply()</code> function which takes two main arguments:</p>
+
+<ul>
+<li>a list (really any vector…)</li>
+<li>a function</li>
+</ul>
+
+<p>And it cycles over the list and applies the function to each of the list’s components, and returns the results in a list!</p>
+
+<p>Here is its usage from its help file: <code>lapply(X, FUN, ...)</code></p>
+
+<h3>An example: baby rockfish</h3>
+
+<p>To motivate our discussion of <code>lapply()</code> I have a simple example. In the directory <code>data/rockfish_larvae</code> there are 7 files, each with the genotypes of 96 larval rockfish that are the offspring of a single female. Here is what one file looks like:</p>
+
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cat</span>(<span class="kw">readLines</span>(<span class="st">&quot;data/rockfish_larvae/K17larvae.txt&quot;</span>)[<span class="dv">1</span>:<span class="dv">10</span>], <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)
+<span class="co">#&gt; Loc1_a Loc1_b Loc2_a Loc2_b Loc3_a Loc3_b Loc4_a Loc4_b Loc5_a Loc5_b Loc6_a Loc6_b Loc7_a Loc7_b</span>
+<span class="co">#&gt; 227 267 127 127 155 187 128 133 184 184 85 87 275 278</span>
+<span class="co">#&gt; 231 267 123 127 159 169 128 133 184 184 85 85 275 278</span>
+<span class="co">#&gt; 217 223 127 131 159 169 123 133 184 188 0 0 275 278</span>
+<span class="co">#&gt; 217 219 127 127 187 187 128 133 184 184 85 87 275 275</span>
+<span class="co">#&gt; 217 227 127 131 187 187 128 133 184 186 85 85 275 278</span>
+<span class="co">#&gt; 231 267 123 127 187 193 123 123 184 184 85 85 275 278</span>
+<span class="co">#&gt; 217 219 127 127 155 187 128 133 184 186 85 89 275 275</span>
+<span class="co">#&gt; 217 223 123 127 187 193 123 133 184 184 85 85 275 275</span>
+<span class="co">#&gt; 0 0 127 127 187 187 128 133 184 184 0 0 275 278</span></code></pre>
+
+<p>Each pair of columns are the genotypes at a single location (a locus) in the genome. The numbers refer to different alleles. 0’s denote missing data.</p>
+
+<p>One quick and dirty way of detecting whether a rockfish mother has mated with more than one male is to see if any loci have more than 4 alleles amongst the female’s offspring.</p>
+
+<p>So, our goal is to cycle over the 7 files, read them in, cycle over the loci, and for each locus, count the number of each allele observed, and ultimately count up the number of alleles.</p>
+
+<p>Here goes…</p>
+
+<h3>Step 1: Get a named vector of file names</h3>
+
+<ul>
+<li>We can use the <code>dir()</code> function to get the paths to the files we want.</li>
+<li>We will throw some regex foo in there to name the elements of the vector the way we want:</li>
+</ul>
+
+<pre class="sourceCode r"><code class="sourceCode r">    <span class="kw">library</span>(stringr)
+    fpaths &lt;-<span class="st"> </span><span class="kw">dir</span>(<span class="st">&quot;data/rockfish_larvae&quot;</span>, <span class="dt">full.names =</span> <span class="ot">TRUE</span>)
+    
+    <span class="co"># they look like this</span>
+    fpaths
+<span class="co">#&gt; [1] &quot;data/rockfish_larvae/K17larvae.txt&quot;</span>
+<span class="co">#&gt; [2] &quot;data/rockfish_larvae/K18larvae.txt&quot;</span>
+<span class="co">#&gt; [3] &quot;data/rockfish_larvae/K20larvae.txt&quot;</span>
+<span class="co">#&gt; [4] &quot;data/rockfish_larvae/K22larvae.txt&quot;</span>
+<span class="co">#&gt; [5] &quot;data/rockfish_larvae/K23larvae.txt&quot;</span>
+<span class="co">#&gt; [6] &quot;data/rockfish_larvae/K24larvae.txt&quot;</span>
+<span class="co">#&gt; [7] &quot;data/rockfish_larvae/K26larvae.txt&quot;</span>
+
+    <span class="co"># grab the &quot;nice&quot; part to be their names</span>
+    <span class="kw">names</span>(fpaths) &lt;-<span class="st"> </span><span class="kw">str_match</span>(fpaths, <span class="st">&quot;data.*/(K[12][0-9]larvae)&quot;</span>)[,<span class="dv">2</span>]
+
+    <span class="co"># here is what we now have:</span>
+    fpaths
+<span class="co">#&gt;                            K17larvae                            K18larvae </span>
+<span class="co">#&gt; &quot;data/rockfish_larvae/K17larvae.txt&quot; &quot;data/rockfish_larvae/K18larvae.txt&quot; </span>
+<span class="co">#&gt;                            K20larvae                            K22larvae </span>
+<span class="co">#&gt; &quot;data/rockfish_larvae/K20larvae.txt&quot; &quot;data/rockfish_larvae/K22larvae.txt&quot; </span>
+<span class="co">#&gt;                            K23larvae                            K24larvae </span>
+<span class="co">#&gt; &quot;data/rockfish_larvae/K23larvae.txt&quot; &quot;data/rockfish_larvae/K24larvae.txt&quot; </span>
+<span class="co">#&gt;                            K26larvae </span>
+<span class="co">#&gt; &quot;data/rockfish_larvae/K26larvae.txt&quot;</span></code></pre>
+
+<h3>Step 2: Read the files into a list of 7 data frames</h3>
+
+<p>Here we can use <code>lapply()</code>.</p>
+
+<p>Here is one way to do it:</p>
+
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># note we are lapplying over a character vector. But the result</span>
+<span class="co"># still comes back as a list!</span>
+dframes &lt;-<span class="st"> </span><span class="kw">lapply</span>(fpaths, function(x) <span class="kw">read.table</span>(x, <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">na.strings =</span> <span class="st">&quot;0&quot;</span>)) </code></pre>
+
+<p>And this is another way we could do it, using the … to pass the extra named parameters to <code>read.table</code></p>
+
+<pre class="sourceCode r"><code class="sourceCode r">dframes &lt;-<span class="st"> </span><span class="kw">lapply</span>(fpaths, read.table, <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">na.strings =</span> <span class="st">&quot;0&quot;</span>)</code></pre>
+
+<p>Two important points to make:</p>
+
+<ol style="list-style-type: decimal">
+<li><code>function(x) read.table(x, header = TRUE, na.strings = &quot;0&quot;)</code> returns a function which is used as <code>lapply()</code>’s <code>FUN</code> argument. That expression is as good as passing in the name of a function. Pretty cool…
+<ul>
+<li>You might see this sort of construction where a function is defined but not returned into a variable called an <em>anonymous function</em>.</li>
+</ul></li>
+<li>Defining a function and being explicit about passing the argument in is more flexible than passing the name of a function and extra named parameters.</li>
+</ol>
+
+<h3>Step 3: Make sure we have what we want</h3>
+
+<p>Note that <code>dframes</code> is a list of length 7, and it has names that are appropriate:</p>
+
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">length</span>(dframes)
+<span class="co">#&gt; [1] 7</span>
+<span class="kw">names</span>(dframes)
+<span class="co">#&gt; [1] &quot;K17larvae&quot; &quot;K18larvae&quot; &quot;K20larvae&quot; &quot;K22larvae&quot; &quot;K23larvae&quot; &quot;K24larvae&quot;</span>
+<span class="co">#&gt; [7] &quot;K26larvae&quot;</span></code></pre>
+
+<p>This shows that <code>lapply()</code> propagates names to the list that it returns.</p>
+
+<p>It would be nice to make sure that every component of it was a data frame of the correct size.</p>
+
+<p><strong>Class exercise:</strong> Use lapply to quickly compute the dimensions of every data frame that was just read in.</p>
+
+<p>I want to pause for a moment and reiterate that each component of the list <code>dframes</code> is a data frame! Remember that a list can store any object of any class or structure. It is easy to forget that….But when you remember it, you can have fun throwing all manner of objects into lists if need be.</p>
+
+<h3>Step 4: Prepare to count alleles of different types</h3>
+
+<ul>
+<li>These data frames are not particularly <em>tidy</em>. It is particularly annoying that data for each locus are in two separate columns.</li>
+<li>There are lots of ways we could deal with this. One would be to <em>reshape</em> the data into one big tidy data frame with five colums (Mother, Larva, Locus, GeneCopy (a or b), Allele).</li>
+<li>But since we are working with lapply, we will do it differently.</li>
+<li>We are just counting up the alleles, so we can just stack the first and second columns for each locus on top of each other. Then all the alleles are in a single vector. Here we will do this.</li>
+<li>We can experiment with a single component first. It is convenient to call it <code>x</code>.</li>
+</ul>
+
+<pre class="sourceCode r"><code class="sourceCode r">    x &lt;-<span class="st"> </span>dframes[[<span class="dv">1</span>]]
+    first_cols &lt;-<span class="st"> </span>x[, <span class="kw">c</span>(T,F)]  <span class="co"># pick out the first columns of each locus</span>
+    second_cols &lt;-<span class="st"> </span>x[, <span class="kw">c</span>(F,T)] <span class="co"># second columns of each locus</span>
+
+    <span class="co"># now, name the colums so they are the same, and just refer to locus</span>
+    <span class="co"># this involves a stringr function</span>
+    <span class="kw">names</span>(first_cols) &lt;-<span class="st"> </span><span class="kw">str_replace</span>(<span class="kw">names</span>(first_cols), <span class="st">&quot;_a&quot;</span>, <span class="st">&quot;&quot;</span>)
+    <span class="kw">names</span>(second_cols) &lt;-<span class="st"> </span><span class="kw">str_replace</span>(<span class="kw">names</span>(second_cols), <span class="st">&quot;_b&quot;</span>, <span class="st">&quot;&quot;</span>)
+
+    <span class="co"># now, stack those up:</span>
+    tmp &lt;-<span class="st"> </span><span class="kw">rbind</span>(first_cols, second_cols)
+
+    <span class="co"># see how big it is and what it looks like</span>
+    <span class="kw">dim</span>(tmp)
+<span class="co">#&gt; [1] 192   7</span>
+
+    <span class="kw">head</span>(tmp)
+<span class="co">#&gt;   Loc1 Loc2 Loc3 Loc4 Loc5 Loc6 Loc7</span>
+<span class="co">#&gt; 1  227  127  155  128  184   85  275</span>
+<span class="co">#&gt; 2  231  123  159  128  184   85  275</span>
+<span class="co">#&gt; 3  217  127  159  123  184   NA  275</span>
+<span class="co">#&gt; 4  217  127  187  128  184   85  275</span>
+<span class="co">#&gt; 5  217  127  187  128  184   85  275</span>
+<span class="co">#&gt; 6  231  123  187  123  184   85  275</span></code></pre>
+
+<ul>
+<li>OK! That works, but it was only for a single component that we had named <code>x</code>. We want to apply the same series of operations to every single component of <code>dframes</code>.
+<ul>
+<li>This is a job for <code>lapply</code> and a function!</li>
+</ul></li>
+<li>Here we define a function and apply it:</li>
+</ul>
+
+<pre class="sourceCode r"><code class="sourceCode r">    <span class="co"># define a function of x (see how useful it was to call that thing x when we were experimenting?)</span>
+    stack_em &lt;-<span class="st"> </span>function(x) {
+      first_cols &lt;-<span class="st"> </span>x[, <span class="kw">c</span>(T,F)]
+      second_cols &lt;-<span class="st"> </span>x[, <span class="kw">c</span>(F,T)]
+      <span class="kw">names</span>(first_cols) &lt;-<span class="st"> </span><span class="kw">str_replace</span>(<span class="kw">names</span>(first_cols), <span class="st">&quot;_a&quot;</span>, <span class="st">&quot;&quot;</span>)
+      <span class="kw">names</span>(second_cols) &lt;-<span class="st"> </span><span class="kw">str_replace</span>(<span class="kw">names</span>(second_cols), <span class="st">&quot;_b&quot;</span>, <span class="st">&quot;&quot;</span>)
+      <span class="kw">rbind</span>(first_cols, second_cols)
+    }
+
+    <span class="co"># now, lapply that function over dframes:</span>
+    dframes_stacked &lt;-<span class="st"> </span><span class="kw">lapply</span>(dframes, stack_em)
+
+    <span class="co"># note that we also could have done:</span>
+    dframes_stacked &lt;-<span class="st"> </span><span class="kw">lapply</span>(dframes, function(x) {
+      first_cols &lt;-<span class="st"> </span>x[, <span class="kw">c</span>(T,F)]
+      second_cols &lt;-<span class="st"> </span>x[, <span class="kw">c</span>(F,T)]
+      <span class="kw">names</span>(first_cols) &lt;-<span class="st"> </span><span class="kw">str_replace</span>(<span class="kw">names</span>(first_cols), <span class="st">&quot;_a&quot;</span>, <span class="st">&quot;&quot;</span>)
+      <span class="kw">names</span>(second_cols) &lt;-<span class="st"> </span><span class="kw">str_replace</span>(<span class="kw">names</span>(second_cols), <span class="st">&quot;_b&quot;</span>, <span class="st">&quot;&quot;</span>)
+      <span class="kw">rbind</span>(first_cols, second_cols)
+      }
+    )</code></pre>
+
+<h3>Step 5: Count up the occurrences of each allele in each column of dframes_stacked</h3>
+
+<ul>
+<li>Recall that a data frame is just a special kind of a list. The columns of the data frame are the components of the list. So you can lapply over them.</li>
+<li>We will apply the table function to each column of each component of dframes_stacked.</li>
+<li>Far out! That requires nested lapply()’s:</li>
+</ul>
+
+<pre class="sourceCode r"><code class="sourceCode r">    alle_counts &lt;-<span class="st"> </span><span class="kw">lapply</span>(dframes_stacked, function(x) <span class="kw">lapply</span>(x, table))
+
+    <span class="co"># see what the first component of the result looks like:</span>
+    alle_counts[<span class="dv">1</span>]
+<span class="co">#&gt; $K17larvae</span>
+<span class="co">#&gt; $K17larvae$Loc1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; 217 219 223 227 231 267 </span>
+<span class="co">#&gt;  50  24  20  33  17  44 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $K17larvae$Loc2</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; 123 127 131 </span>
+<span class="co">#&gt;  19 123  48 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $K17larvae$Loc3</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; 155 159 169 187 193 </span>
+<span class="co">#&gt;  28  20  48  76  16 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $K17larvae$Loc4</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; 123 128 133 </span>
+<span class="co">#&gt;  63  75  50 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $K17larvae$Loc5</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; 184 186 188 </span>
+<span class="co">#&gt; 144  28  20 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $K17larvae$Loc6</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  85  87  89 </span>
+<span class="co">#&gt; 117  44  23 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $K17larvae$Loc7</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; 275 278 </span>
+<span class="co">#&gt; 138  50</span></code></pre>
+
+<h3>Step 6: Count up the total number of alleles at each locus</h3>
+
+<ul>
+<li>The above result shows clear evidence of having more than four alleles, at least among some loci.</li>
+<li>But it is hard to look at. Can we summarize it further? Yes!</li>
+<li>We can take the length of each component to see how many distinct alleles there were:</li>
+</ul>
+
+<pre class="sourceCode r"><code class="sourceCode r">    list_result &lt;-<span class="st"> </span><span class="kw">lapply</span>(alle_counts, function(x) <span class="kw">lapply</span>(x, length))
+
+    <span class="co"># what does it look like?</span>
+    list_result[<span class="dv">1</span>]
+<span class="co">#&gt; $K17larvae</span>
+<span class="co">#&gt; $K17larvae$Loc1</span>
+<span class="co">#&gt; [1] 6</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $K17larvae$Loc2</span>
+<span class="co">#&gt; [1] 3</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $K17larvae$Loc3</span>
+<span class="co">#&gt; [1] 5</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $K17larvae$Loc4</span>
+<span class="co">#&gt; [1] 3</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $K17larvae$Loc5</span>
+<span class="co">#&gt; [1] 3</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $K17larvae$Loc6</span>
+<span class="co">#&gt; [1] 3</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $K17larvae$Loc7</span>
+<span class="co">#&gt; [1] 2</span></code></pre>
+
+<ul>
+<li>OK, that is nice, but it is hard to look at as a list.</li>
+</ul>
+
+<h3>Step 6 do-over: using sapply</h3>
+
+<ul>
+<li>Because each locus yields just a single number, and there are exactly 7 loci per mother, we could simplify all these results into a table that is easier to look at.</li>
+<li>A nice function for this is <code>sapply()</code> which does this:
+<ol style="list-style-type: decimal">
+<li>Run <code>lapply</code></li>
+<li>Pass the result through the <code>simplify2array</code> function</li>
+</ol></li>
+<li><code>simplify2array()</code> looks at a list, and if it could be simply expressed as an array (like a matrix) without losing any information, then it does that, whilst preserving the names in a sensible fashion.<br /></li>
+<li>Check this out:</li>
+</ul>
+
+<pre class="sourceCode r"><code class="sourceCode r">    array_result &lt;-<span class="st"> </span><span class="kw">sapply</span>(alle_counts, function(x) <span class="kw">sapply</span>(x, length))
+  
+    array_result
+<span class="co">#&gt;      K17larvae K18larvae K20larvae K22larvae K23larvae K24larvae K26larvae</span>
+<span class="co">#&gt; Loc1         6         4         4         4         5         4         5</span>
+<span class="co">#&gt; Loc2         3         5         4         4         3         4         3</span>
+<span class="co">#&gt; Loc3         5         5         4         3         3         5         4</span>
+<span class="co">#&gt; Loc4         3         3         3         3         3         3         3</span>
+<span class="co">#&gt; Loc5         3         3         3         3         2         3         2</span>
+<span class="co">#&gt; Loc6         3         2         2         2         3         2         3</span>
+<span class="co">#&gt; Loc7         2         2         2         2         2         2         2</span></code></pre>
+
+<h2 id="function-wrap-up">Wrap up</h2>
+
+<ul>
+<li>we’ve just scratched the surface of a whole family of <code>apply</code>-like functions that are present in R.</li>
+<li>If you want to get more into them, I recommend Hadley Wickham’s <code>plyr</code> package.</li>
+<li>If you are careful about keeping your data in a tidy format, then you can probably just use Hadley’s <code>dplyr</code> package which is phenomenally cool.</li>
+<li>What you’ve learned here about functions will be useful all over the R world.</li>
+</ul>
+
+          <hr>
+           <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'rep-res-course'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    
+        </div>
+      </div>
+
+            <div class="footer">
+        <hr>
+        <p>
+          <small>
+            Authored by Eric C. Anderson working as a Federal employee.  Content on this website is a government work in the public domain in the U.S. and under the CC0 1.0 internationally. Templates and plugins to build the site are modified from Hadley Wickham's <a href="https://github.com/hadley/adv-r/">Advanced R</a> website. Powered by <a href="http://jekyllrb.com/">jekyll</a>,
+          <a href="http://yihui.name/knitr/">knitr</a>, and
+          <a href="http://johnmacfarlane.net/pandoc/">pandoc</a>. Source
+          available on <a href="https://github.com/eriqande/rep-res-course/">github</a>.
+          </small>
+        </p>
+      </div>
+
+
+    </div> <!-- /container -->
+
+  <script src="//code.jquery.com/jquery.js"></script>
+  <script src="http://eriqande.github.io/rep-res-web/www/bootstrap.min.js"></script>
+  <script src="http://eriqande.github.io/rep-res-web/www/toc.js"></script>
+  <script type="text/javascript"
+    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  </body>
+</html>
+
