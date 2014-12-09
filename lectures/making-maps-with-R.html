@@ -64,12 +64,19 @@
 
         <div id="content" class="col-sm-8 pull-right">
           <h1 id="map-making-in-R">Making Maps with R</h1>
+
 <h2 id="map-making-intro">Intro</h2>
+
 <p>For a long time, R has had a relatively simple mechanism, via the <code>maps</code> package, for making simple outlines of maps and plotting lat-long points and paths on them.</p>
+
 <p>More recently, with the advent of packages like <code>sp</code>, <code>rgdal</code>, and <code>rgeos</code>, R has been acquiring much of the functionality of traditional GIS packages (like ArcGIS, etc). This is an exciting development, but not always easily accessible for the beginner, as it requires installation of specialized external libraries (that may, on some platforms, not be straightforward) and considerable familiarity with GIS concepts.</p>
+
 <p>More recently, a third approach to convenient mapping, using <code>ggmap</code> has been developed that allows the tiling of detailed base maps from Google Earth or Open Street Maps, upon which spatial data may be plotted. Today, we are going to focus on mapping using base maps from R’s tried and true <code>maps</code> package and also using the <code>ggmap</code> package. We won’t cover the more advanced GIS-related topics nor using <code>rgdal</code>, or <code>sp</code> to plot maps with different projections, etc. Nor will cover the somewhat more simplified approach to projections using the <code>mapproj</code> package.</p>
+
 <p>As in our previous explorations in this course, when it comes to plotting, we are going to completely skip over R’s base graphics system and head directly to Hadley Wickham’s <code>ggplot2</code> package. Hadley has included a few functions that make it relatively easy to interact with the data in R’s <code>maps</code> package, and of course, once a map layer is laid down, you have all the power of ggplot at your fingertips to overlay whatever you may want to over the map. <code>ggmap</code> is a package that goes out to different map servers and grabs base maps to plot things on, then it sets up the coordinate system and writes it out as the base layer for further ggplotting. It is pretty sweet, but does not support different projections.</p>
+
 <h3>Today’s Goals</h3>
+
 <ol style="list-style-type: decimal">
 <li>Introduce readers to the map outlines available in the <code>maps</code> package
 <ul>
@@ -78,10 +85,15 @@
 </ul></li>
 <li>Use <code>ggmap</code> to make some pretty decent looking maps</li>
 </ol>
+
 <p>I feel that the above twp topics should cover a large part of what people will need for making useful maps of field sites, or sampling locations, or fishing track lines, etc.</p>
+
 <p>For today we will be skipping how to read in traditional GIS “shapefiles” so as to minimize the number of packages that need installation, but keep in mind that it isn’t too hard to do that in R, too.</p>
+
 <h3>Prerequisites</h3>
+
 <p>You are going to need to install a few extra packages to follow along with this lecture.</p>
+
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># these are packages you will need, but probably already have.</span>
 <span class="co"># Don&#39;t bother installing if you already have them</span>
 <span class="kw">install.packages</span>(<span class="kw">c</span>(<span class="st">&quot;ggplot2&quot;</span>, <span class="st">&quot;devtools&quot;</span>, <span class="st">&quot;dplyr&quot;</span>, <span class="st">&quot;stringr&quot;</span>))
@@ -92,25 +104,34 @@
 <span class="co"># the github version of ggmap, which recently pulled in a small fix I had</span>
 <span class="co"># for a bug </span>
 devtools::<span class="kw">install_github</span>(<span class="st">&quot;dkahle/ggmap&quot;</span>)</code></pre>
+
 <h3>Load up a few of the libraries we will use</h3>
+
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
 <span class="kw">library</span>(ggmap)
 <span class="kw">library</span>(maps)
 <span class="kw">library</span>(mapdata)</code></pre>
+
 <h2 id="maps-package-and-ggplot">Plotting maps-package maps with ggplot</h2>
+
 <h3>The main players:</h3>
+
 <ul>
 <li>The <code>maps</code> package contains a lot of outlines of continents, countries, states, and counties that have been with R for a long time.<br /></li>
 <li>The <code>mapdata</code> package contains a few more, higher-resolution outlines.</li>
 <li>The <code>maps</code> package comes with a plotting function, but, we will opt to use <code>ggplot2</code> to plot the maps in the <code>maps</code> package.<br /></li>
 <li>Recall that <code>ggplot2</code> operates on data frames. Therefore we need some way to translate the <code>maps</code> data into a data frame format the <code>ggplot</code> can use.</li>
 </ul>
+
 <h3>Maps in the maps package</h3>
+
 <ul>
 <li>Package <code>maps</code> provides lots of different map outlines and points for cities, etc.<br /></li>
 <li>Some examples: <code>usa</code>, <code>nz</code>, <code>state</code>, <code>world</code>, etc.</li>
 </ul>
+
 <h3>Makin’ data frames from map outlines</h3>
+
 <ul>
 <li><code>ggplot2</code> provides the <code>map_data()</code> function.
 <ul>
@@ -124,22 +145,22 @@ devtools::<span class="kw">install_github</span>(<span class="st">&quot;dkahle/g
 <span class="co">#&gt; [1] 7243    6</span>
 
 <span class="kw">head</span>(usa)
-<span class="co">#&gt;     long   lat group order region subregion</span>
-<span class="co">#&gt; 1 -101.4 29.74     1     1   main      &lt;NA&gt;</span>
-<span class="co">#&gt; 2 -101.4 29.74     1     2   main      &lt;NA&gt;</span>
-<span class="co">#&gt; 3 -101.4 29.65     1     3   main      &lt;NA&gt;</span>
-<span class="co">#&gt; 4 -101.4 29.64     1     4   main      &lt;NA&gt;</span>
-<span class="co">#&gt; 5 -101.3 29.63     1     5   main      &lt;NA&gt;</span>
-<span class="co">#&gt; 6 -101.3 29.64     1     6   main      &lt;NA&gt;</span>
+<span class="co">#&gt;        long      lat group order region subregion</span>
+<span class="co">#&gt; 1 -101.4078 29.74224     1     1   main      &lt;NA&gt;</span>
+<span class="co">#&gt; 2 -101.3906 29.74224     1     2   main      &lt;NA&gt;</span>
+<span class="co">#&gt; 3 -101.3620 29.65056     1     3   main      &lt;NA&gt;</span>
+<span class="co">#&gt; 4 -101.3505 29.63911     1     4   main      &lt;NA&gt;</span>
+<span class="co">#&gt; 5 -101.3219 29.63338     1     5   main      &lt;NA&gt;</span>
+<span class="co">#&gt; 6 -101.3047 29.64484     1     6   main      &lt;NA&gt;</span>
 
 <span class="kw">tail</span>(usa)
-<span class="co">#&gt;        long   lat group order         region subregion</span>
-<span class="co">#&gt; 7247 -122.6 48.37    10  7247 whidbey island      &lt;NA&gt;</span>
-<span class="co">#&gt; 7248 -122.6 48.36    10  7248 whidbey island      &lt;NA&gt;</span>
-<span class="co">#&gt; 7249 -122.7 48.31    10  7249 whidbey island      &lt;NA&gt;</span>
-<span class="co">#&gt; 7250 -122.7 48.24    10  7250 whidbey island      &lt;NA&gt;</span>
-<span class="co">#&gt; 7251 -122.7 48.21    10  7251 whidbey island      &lt;NA&gt;</span>
-<span class="co">#&gt; 7252 -122.7 48.17    10  7252 whidbey island      &lt;NA&gt;</span></code></pre></li>
+<span class="co">#&gt;           long      lat group order         region subregion</span>
+<span class="co">#&gt; 7247 -122.6187 48.37482    10  7247 whidbey island      &lt;NA&gt;</span>
+<span class="co">#&gt; 7248 -122.6359 48.35764    10  7248 whidbey island      &lt;NA&gt;</span>
+<span class="co">#&gt; 7249 -122.6703 48.31180    10  7249 whidbey island      &lt;NA&gt;</span>
+<span class="co">#&gt; 7250 -122.7218 48.23732    10  7250 whidbey island      &lt;NA&gt;</span>
+<span class="co">#&gt; 7251 -122.7104 48.21440    10  7251 whidbey island      &lt;NA&gt;</span>
+<span class="co">#&gt; 7252 -122.6703 48.17429    10  7252 whidbey island      &lt;NA&gt;</span></code></pre></li>
 <li><p>Here is the high-res world map centered on the Pacific Ocean from <code>mapdata</code></p>
 <pre class="sourceCode r"><code class="sourceCode r">w2hr &lt;-<span class="st"> </span><span class="kw">map_data</span>(<span class="st">&quot;world2Hires&quot;</span>)
 
@@ -147,25 +168,28 @@ devtools::<span class="kw">install_github</span>(<span class="st">&quot;dkahle/g
 <span class="co">#&gt; [1] 2274539       6</span>
 
 <span class="kw">head</span>(w2hr)
-<span class="co">#&gt;    long   lat group order region subregion</span>
-<span class="co">#&gt; 1 226.6 58.42     1     1 Canada      &lt;NA&gt;</span>
-<span class="co">#&gt; 2 226.6 58.42     1     2 Canada      &lt;NA&gt;</span>
-<span class="co">#&gt; 3 226.6 58.41     1     3 Canada      &lt;NA&gt;</span>
-<span class="co">#&gt; 4 226.6 58.40     1     4 Canada      &lt;NA&gt;</span>
-<span class="co">#&gt; 5 226.6 58.39     1     5 Canada      &lt;NA&gt;</span>
-<span class="co">#&gt; 6 226.6 58.38     1     6 Canada      &lt;NA&gt;</span>
+<span class="co">#&gt;       long      lat group order region subregion</span>
+<span class="co">#&gt; 1 226.6336 58.42416     1     1 Canada      &lt;NA&gt;</span>
+<span class="co">#&gt; 2 226.6314 58.42336     1     2 Canada      &lt;NA&gt;</span>
+<span class="co">#&gt; 3 226.6122 58.41196     1     3 Canada      &lt;NA&gt;</span>
+<span class="co">#&gt; 4 226.5911 58.40027     1     4 Canada      &lt;NA&gt;</span>
+<span class="co">#&gt; 5 226.5719 58.38864     1     5 Canada      &lt;NA&gt;</span>
+<span class="co">#&gt; 6 226.5528 58.37724     1     6 Canada      &lt;NA&gt;</span>
 
 <span class="kw">tail</span>(w2hr)
-<span class="co">#&gt;         long   lat group   order      region subregion</span>
-<span class="co">#&gt; 2276817  125 11.18  2284 2276817 Philippines     Leyte</span>
-<span class="co">#&gt; 2276818  125 11.17  2284 2276818 Philippines     Leyte</span>
-<span class="co">#&gt; 2276819  125 11.16  2284 2276819 Philippines     Leyte</span>
-<span class="co">#&gt; 2276820  125 11.16  2284 2276820 Philippines     Leyte</span>
-<span class="co">#&gt; 2276821  125 11.15  2284 2276821 Philippines     Leyte</span>
-<span class="co">#&gt; 2276822  125 11.14  2284 2276822 Philippines     Leyte</span></code></pre></li>
+<span class="co">#&gt;             long      lat group   order      region subregion</span>
+<span class="co">#&gt; 2276817 125.0258 11.18471  2284 2276817 Philippines     Leyte</span>
+<span class="co">#&gt; 2276818 125.0172 11.17142  2284 2276818 Philippines     Leyte</span>
+<span class="co">#&gt; 2276819 125.0114 11.16110  2284 2276819 Philippines     Leyte</span>
+<span class="co">#&gt; 2276820 125.0100 11.15555  2284 2276820 Philippines     Leyte</span>
+<span class="co">#&gt; 2276821 125.0111 11.14861  2284 2276821 Philippines     Leyte</span>
+<span class="co">#&gt; 2276822 125.0155 11.13887  2284 2276822 Philippines     Leyte</span></code></pre></li>
 </ul>
+
 <h3>The structure of those data frames</h3>
+
 <p>These are pretty straightforward:</p>
+
 <ul>
 <li><code>long</code> is longitude. Things to the west of the prime meridian are negative.</li>
 <li><code>lat</code> is latitude.</li>
@@ -176,20 +200,28 @@ devtools::<span class="kw">install_github</span>(<span class="st">&quot;dkahle/g
 <li>Essentially, having to points in different groups means that <code>ggplot</code> “lifts the pen” when going between them.</li>
 </ul></li>
 </ul>
+
 <h3>Plot the USA map</h3>
+
 <ul>
 <li>Maps in this format can be plotted with the polygon geom. i.e. using <code>geom_polygon()</code>.</li>
 <li><code>geom_polygon()</code> drawn lines between points and “closes them up” (i.e. draws a line from the last point back to the first point)</li>
 <li>You have to map the <code>group</code> aesthetic to the <code>group</code> column</li>
 <li>Of course, <code>x = long</code> and <code>y = lat</code> are the other aesthetics.</li>
 </ul>
+
 <h4>Simple black map</h4>
+
 <p>By default, <code>geom_polygon()</code> draws with no line color, but with a black fill:</p>
+
 <pre class="sourceCode r"><code class="sourceCode r">usa &lt;-<span class="st"> </span><span class="kw">map_data</span>(<span class="st">&quot;usa&quot;</span>) <span class="co"># we already did this, but we can do it again</span>
 <span class="kw">ggplot</span>() +<span class="st"> </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> usa, <span class="kw">aes</span>(<span class="dt">x=</span>long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group)) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">coord_fixed</span>(<span class="fl">1.3</span>)</code></pre>
-<p><img src="lecture_figs/making-maps-unnamed-chunk-6.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" width="600px" height="420px" /></p>
+
+<p><img src="lecture_figs/making-maps-unnamed-chunk-6-1.png" title="" alt="" width="600px" height="420px" /></p>
+
 <h4>What is this coord_fixed()?</h4>
+
 <ul>
 <li>This is very important when drawing maps.</li>
 <li>It fixes the relationship between one unit in the <span class="math"><em>y</em></span> direction and one unit in the <span class="math"><em>x</em></span> direction.</li>
@@ -199,21 +231,25 @@ devtools::<span class="kw">install_github</span>(<span class="st">&quot;dkahle/g
 <li>A different value might be needed closer to the poles.</li>
 </ul></li>
 </ul>
+
 <h4>Mess with line and fill colors</h4>
+
 <ul>
 <li><p>Here is no fill, with a red line. Remember, fixed value of aesthetics go <em>outside</em> the <code>aes</code> function.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() +<span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> usa, <span class="kw">aes</span>(<span class="dt">x=</span>long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group), <span class="dt">fill =</span> <span class="ot">NA</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">coord_fixed</span>(<span class="fl">1.3</span>)</code></pre>
-<p><img src="lecture_figs/making-maps-unnamed-chunk-7.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" width="600px" height="420px" /></p></li>
+<p><img src="lecture_figs/making-maps-unnamed-chunk-7-1.png" title="" alt="" width="600px" height="420px" /></p></li>
 <li><p>Here is violet fill, with a blue line.</p>
 <pre class="sourceCode r"><code class="sourceCode r">gg1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>() +<span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> usa, <span class="kw">aes</span>(<span class="dt">x=</span>long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group), <span class="dt">fill =</span> <span class="st">&quot;violet&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">coord_fixed</span>(<span class="fl">1.3</span>)
 gg1</code></pre>
-<p><img src="lecture_figs/making-maps-unnamed-chunk-8.png" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" width="600px" height="420px" /></p></li>
+<p><img src="lecture_figs/making-maps-unnamed-chunk-8-1.png" title="" alt="" width="600px" height="420px" /></p></li>
 </ul>
+
 <h4>Adding points to the map</h4>
+
 <ul>
 <li><p>Let’s add black and yellow points at our lab and at the NWFSC in Seattle.</p>
 <pre class="sourceCode r"><code class="sourceCode r">labs &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
@@ -226,49 +262,64 @@ gg1</code></pre>
 gg1 +<span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> labs, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat), <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) +
 <span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> labs, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat), <span class="dt">color =</span> <span class="st">&quot;yellow&quot;</span>, <span class="dt">size =</span> <span class="dv">4</span>)</code></pre>
-<p><img src="lecture_figs/making-maps-unnamed-chunk-9.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" width="600px" height="420px" /></p></li>
+<p><img src="lecture_figs/making-maps-unnamed-chunk-9-1.png" title="" alt="" width="600px" height="420px" /></p></li>
 </ul>
+
 <h4>See how important the group aesthetic is</h4>
+
 <p>Here we plot that map without using the group aesthetic:</p>
+
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() +<span class="st"> </span>
 <span class="st">      </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> usa, <span class="kw">aes</span>(<span class="dt">x=</span>long, <span class="dt">y =</span> lat), <span class="dt">fill =</span> <span class="st">&quot;violet&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) +<span class="st"> </span>
 <span class="st">      </span><span class="kw">geom_point</span>(<span class="dt">data =</span> labs, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat), <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) +
 <span class="st">      </span><span class="kw">geom_point</span>(<span class="dt">data =</span> labs, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat), <span class="dt">color =</span> <span class="st">&quot;yellow&quot;</span>, <span class="dt">size =</span> <span class="dv">4</span>) +
 <span class="st">      </span><span class="kw">coord_fixed</span>(<span class="fl">1.3</span>)</code></pre>
-<p><img src="lecture_figs/making-maps-unnamed-chunk-10.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" width="600px" height="420px" /></p>
+
+<p><img src="lecture_figs/making-maps-unnamed-chunk-10-1.png" title="" alt="" width="600px" height="420px" /></p>
+
 <p>That is no bueno! The lines are connecting points that should not be connected!</p>
+
 <h3>State maps</h3>
+
 <p>We can also get a data frame of polygons that tell us above state boundaries:</p>
+
 <pre class="sourceCode r"><code class="sourceCode r">states &lt;-<span class="st"> </span><span class="kw">map_data</span>(<span class="st">&quot;state&quot;</span>)
 <span class="kw">dim</span>(states)
 <span class="co">#&gt; [1] 15537     6</span>
 
 <span class="kw">head</span>(states)
-<span class="co">#&gt;     long   lat group order  region subregion</span>
-<span class="co">#&gt; 1 -87.46 30.39     1     1 alabama      &lt;NA&gt;</span>
-<span class="co">#&gt; 2 -87.48 30.37     1     2 alabama      &lt;NA&gt;</span>
-<span class="co">#&gt; 3 -87.53 30.37     1     3 alabama      &lt;NA&gt;</span>
-<span class="co">#&gt; 4 -87.53 30.33     1     4 alabama      &lt;NA&gt;</span>
-<span class="co">#&gt; 5 -87.57 30.33     1     5 alabama      &lt;NA&gt;</span>
-<span class="co">#&gt; 6 -87.59 30.33     1     6 alabama      &lt;NA&gt;</span>
+<span class="co">#&gt;        long      lat group order  region subregion</span>
+<span class="co">#&gt; 1 -87.46201 30.38968     1     1 alabama      &lt;NA&gt;</span>
+<span class="co">#&gt; 2 -87.48493 30.37249     1     2 alabama      &lt;NA&gt;</span>
+<span class="co">#&gt; 3 -87.52503 30.37249     1     3 alabama      &lt;NA&gt;</span>
+<span class="co">#&gt; 4 -87.53076 30.33239     1     4 alabama      &lt;NA&gt;</span>
+<span class="co">#&gt; 5 -87.57087 30.32665     1     5 alabama      &lt;NA&gt;</span>
+<span class="co">#&gt; 6 -87.58806 30.32665     1     6 alabama      &lt;NA&gt;</span>
 
 <span class="kw">tail</span>(states)
-<span class="co">#&gt;         long   lat group order  region subregion</span>
-<span class="co">#&gt; 15594 -106.3 41.01    63 15594 wyoming      &lt;NA&gt;</span>
-<span class="co">#&gt; 15595 -106.9 41.01    63 15595 wyoming      &lt;NA&gt;</span>
-<span class="co">#&gt; 15596 -107.3 41.02    63 15596 wyoming      &lt;NA&gt;</span>
-<span class="co">#&gt; 15597 -107.9 41.02    63 15597 wyoming      &lt;NA&gt;</span>
-<span class="co">#&gt; 15598 -109.1 40.99    63 15598 wyoming      &lt;NA&gt;</span>
-<span class="co">#&gt; 15599 -109.1 41.00    63 15599 wyoming      &lt;NA&gt;</span></code></pre>
+<span class="co">#&gt;            long      lat group order  region subregion</span>
+<span class="co">#&gt; 15594 -106.3295 41.00659    63 15594 wyoming      &lt;NA&gt;</span>
+<span class="co">#&gt; 15595 -106.8566 41.01232    63 15595 wyoming      &lt;NA&gt;</span>
+<span class="co">#&gt; 15596 -107.3093 41.01805    63 15596 wyoming      &lt;NA&gt;</span>
+<span class="co">#&gt; 15597 -107.9223 41.01805    63 15597 wyoming      &lt;NA&gt;</span>
+<span class="co">#&gt; 15598 -109.0568 40.98940    63 15598 wyoming      &lt;NA&gt;</span>
+<span class="co">#&gt; 15599 -109.0511 40.99513    63 15599 wyoming      &lt;NA&gt;</span></code></pre>
+
 <h4>Plot all the states, all colored a little differently</h4>
+
 <p>This is just like it is above, but we can map fill to <code>region</code> and make sure the the lines of state borders are white.</p>
+
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> states) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">fill =</span> region, <span class="dt">group =</span> group), <span class="dt">color =</span> <span class="st">&quot;white&quot;</span>) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">coord_fixed</span>(<span class="fl">1.3</span>) +
 <span class="st">  </span><span class="kw">guides</span>(<span class="dt">fill=</span><span class="ot">FALSE</span>)  <span class="co"># do this to leave off the color legend</span></code></pre>
-<p><img src="lecture_figs/making-maps-unnamed-chunk-12.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" width="600px" height="420px" /></p>
+
+<p><img src="lecture_figs/making-maps-unnamed-chunk-12-1.png" title="" alt="" width="600px" height="420px" /></p>
+
 <p>Boom! That is easy.</p>
+
 <h4>Plot just a subset of states in the contiguous 48:</h4>
+
 <ul>
 <li>Read about the <code>subset</code> command. It provides another way of subsetting data frames (sort of like using the <code>[ ]</code> operator with a logical vector).</li>
 <li><p>We can use it to grab just CA, OR, and WA:</p>
@@ -276,9 +327,11 @@ gg1 +<span class="st"> </span>
 
 <span class="kw">ggplot</span>(<span class="dt">data =</span> west_coast) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat), <span class="dt">fill =</span> <span class="st">&quot;palegreen&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) </code></pre>
-<p><img src="lecture_figs/making-maps-unnamed-chunk-13.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" width="600px" height="420px" /></p></li>
+<p><img src="lecture_figs/making-maps-unnamed-chunk-13-1.png" title="" alt="" width="600px" height="420px" /></p></li>
 </ul>
+
 <h4>Man that is ugly!!</h4>
+
 <ul>
 <li>I am just keeping people on their toes. What have we forgotten here?
 <ul>
@@ -289,53 +342,59 @@ gg1 +<span class="st"> </span>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> west_coast) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group), <span class="dt">fill =</span> <span class="st">&quot;palegreen&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">coord_fixed</span>(<span class="fl">1.3</span>)</code></pre>
-<p><img src="lecture_figs/making-maps-unnamed-chunk-14.png" title="plot of chunk unnamed-chunk-14" alt="plot of chunk unnamed-chunk-14" width="600px" height="420px" /></p></li>
+<p><img src="lecture_figs/making-maps-unnamed-chunk-14-1.png" title="" alt="" width="600px" height="420px" /></p></li>
 </ul>
+
 <p>Phew! That is a little better!</p>
+
 <h4>Zoom in on California and look at counties</h4>
+
 <ul>
 <li><p>Getting the california data is easy:</p>
 <pre class="sourceCode r"><code class="sourceCode r">ca_df &lt;-<span class="st"> </span><span class="kw">subset</span>(states, region ==<span class="st"> &quot;california&quot;</span>)
 
 <span class="kw">head</span>(ca_df)
-<span class="co">#&gt;     long   lat group order     region subregion</span>
-<span class="co">#&gt; 667 -120 42.01     4   667 california      &lt;NA&gt;</span>
-<span class="co">#&gt; 668 -120 41.20     4   668 california      &lt;NA&gt;</span>
-<span class="co">#&gt; 669 -120 39.70     4   669 california      &lt;NA&gt;</span>
-<span class="co">#&gt; 670 -120 39.44     4   670 california      &lt;NA&gt;</span>
-<span class="co">#&gt; 671 -120 39.32     4   671 california      &lt;NA&gt;</span>
-<span class="co">#&gt; 672 -120 39.16     4   672 california      &lt;NA&gt;</span></code></pre></li>
+<span class="co">#&gt;          long      lat group order     region subregion</span>
+<span class="co">#&gt; 667 -120.0060 42.00927     4   667 california      &lt;NA&gt;</span>
+<span class="co">#&gt; 668 -120.0060 41.20139     4   668 california      &lt;NA&gt;</span>
+<span class="co">#&gt; 669 -120.0060 39.70024     4   669 california      &lt;NA&gt;</span>
+<span class="co">#&gt; 670 -119.9946 39.44241     4   670 california      &lt;NA&gt;</span>
+<span class="co">#&gt; 671 -120.0060 39.31636     4   671 california      &lt;NA&gt;</span>
+<span class="co">#&gt; 672 -120.0060 39.16166     4   672 california      &lt;NA&gt;</span></code></pre></li>
 <li><p>Now, let’s also get the county lines there</p>
 <pre class="sourceCode r"><code class="sourceCode r">counties &lt;-<span class="st"> </span><span class="kw">map_data</span>(<span class="st">&quot;county&quot;</span>)
 ca_county &lt;-<span class="st"> </span><span class="kw">subset</span>(counties, region ==<span class="st"> &quot;california&quot;</span>)
 
 <span class="kw">head</span>(ca_county)
-<span class="co">#&gt;        long   lat group order     region subregion</span>
-<span class="co">#&gt; 6965 -121.5 37.48   157  6965 california   alameda</span>
-<span class="co">#&gt; 6966 -121.5 37.48   157  6966 california   alameda</span>
-<span class="co">#&gt; 6967 -121.9 37.48   157  6967 california   alameda</span>
-<span class="co">#&gt; 6968 -121.9 37.47   157  6968 california   alameda</span>
-<span class="co">#&gt; 6969 -121.9 37.46   157  6969 california   alameda</span>
-<span class="co">#&gt; 6970 -121.9 37.48   157  6970 california   alameda</span></code></pre></li>
+<span class="co">#&gt;           long      lat group order     region subregion</span>
+<span class="co">#&gt; 6965 -121.4785 37.48290   157  6965 california   alameda</span>
+<span class="co">#&gt; 6966 -121.5129 37.48290   157  6966 california   alameda</span>
+<span class="co">#&gt; 6967 -121.8853 37.48290   157  6967 california   alameda</span>
+<span class="co">#&gt; 6968 -121.8968 37.46571   157  6968 california   alameda</span>
+<span class="co">#&gt; 6969 -121.9254 37.45998   157  6969 california   alameda</span>
+<span class="co">#&gt; 6970 -121.9483 37.47717   157  6970 california   alameda</span></code></pre></li>
 <li><p>Plot the state first but let’s ditch the axes gridlines, and gray background by using the super-wonderful <code>theme_nothing()</code>.</p>
 <pre class="sourceCode r"><code class="sourceCode r">ca_base &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> ca_df, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group)) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">coord_fixed</span>(<span class="fl">1.3</span>) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;gray&quot;</span>)
 ca_base +<span class="st"> </span><span class="kw">theme_nothing</span>()</code></pre>
-<p><img src="lecture_figs/making-maps-unnamed-chunk-17.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" width="600px" height="420px" /></p></li>
+<p><img src="lecture_figs/making-maps-unnamed-chunk-17-1.png" title="" alt="" width="600px" height="420px" /></p></li>
 <li><p>Now plot the county boundaries in white:</p>
 <pre class="sourceCode r"><code class="sourceCode r">ca_base +<span class="st"> </span><span class="kw">theme_nothing</span>() +<span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> ca_county, <span class="dt">fill =</span> <span class="ot">NA</span>, <span class="dt">color =</span> <span class="st">&quot;white&quot;</span>) +
 <span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>)  <span class="co"># get the state border back on top</span></code></pre>
-<p><img src="lecture_figs/making-maps-unnamed-chunk-18.png" title="plot of chunk unnamed-chunk-18" alt="plot of chunk unnamed-chunk-18" width="600px" height="420px" /></p></li>
+<p><img src="lecture_figs/making-maps-unnamed-chunk-18-1.png" title="" alt="" width="600px" height="420px" /></p></li>
 </ul>
+
 <h4>Get some facts about the counties</h4>
+
 <ul>
 <li>The above is pretty cool, but it seems like it would be a lot cooler if we could plot some information about those counties.<br /></li>
 <li>Now I can go to wikipedia or <a href="http://www.california-demographics.com/counties_by_population" class="uri">http://www.california-demographics.com/counties_by_population</a> and grab population and area data for each county.</li>
-<li>In fact, I copied their little table on Wikipedia and saved it into <code>data/ca-counties-wikipedia.txt</code>.</li>
+<li>In fact, I copied their little table on Wikipedia and saved it into <code>data/ca-counties-wikipedia.txt</code>. In full disclosure I also edited the name of San Francisco from “City and County of San Francisco” to “San Francisco County” to be like the others (and not break my regex!)</li>
 <li>Watch this regex fun:</li>
 </ul>
+
 <pre class="sourceCode r"><code class="sourceCode r">    <span class="kw">library</span>(stringr)
     <span class="kw">library</span>(dplyr)
 
@@ -361,6 +420,7 @@ ca_base +<span class="st"> </span><span class="kw">theme_nothing</span>()</code>
 <span class="co">#&gt; 4     butte     222090 1640</span>
 <span class="co">#&gt; 5 calaveras      44515 1020</span>
 <span class="co">#&gt; 6    colusa      21358 1151</span></code></pre>
+
 <ul>
 <li><p>We now have the numbers that we want, but we need to attach those to every point on polygons of the counties. This is a job for <code>inner_join</code> from the <code>dplyr</code> package</p>
 <pre class="sourceCode r"><code class="sourceCode r">cacopa &lt;-<span class="st"> </span><span class="kw">inner_join</span>(ca_county, pop_and_area, <span class="dt">by =</span> <span class="st">&quot;subregion&quot;</span>)</code></pre></li>
@@ -368,23 +428,26 @@ ca_base +<span class="st"> </span><span class="kw">theme_nothing</span>()</code>
 <pre class="sourceCode r"><code class="sourceCode r">cacopa$people_per_mile &lt;-<span class="st"> </span>cacopa$population /<span class="st"> </span>cacopa$area
 
 <span class="kw">head</span>(cacopa)
-<span class="co">#&gt;   subregion   long   lat group order     region population area</span>
-<span class="co">#&gt; 1   alameda -121.5 37.48   157  6965 california    1578891  738</span>
-<span class="co">#&gt; 2   alameda -121.5 37.48   157  6966 california    1578891  738</span>
-<span class="co">#&gt; 3   alameda -121.9 37.48   157  6967 california    1578891  738</span>
-<span class="co">#&gt; 4   alameda -121.9 37.47   157  6968 california    1578891  738</span>
-<span class="co">#&gt; 5   alameda -121.9 37.46   157  6969 california    1578891  738</span>
-<span class="co">#&gt; 6   alameda -121.9 37.48   157  6970 california    1578891  738</span>
+<span class="co">#&gt;   subregion      long      lat group order     region population area</span>
+<span class="co">#&gt; 1   alameda -121.4785 37.48290   157  6965 california    1578891  738</span>
+<span class="co">#&gt; 2   alameda -121.5129 37.48290   157  6966 california    1578891  738</span>
+<span class="co">#&gt; 3   alameda -121.8853 37.48290   157  6967 california    1578891  738</span>
+<span class="co">#&gt; 4   alameda -121.8968 37.46571   157  6968 california    1578891  738</span>
+<span class="co">#&gt; 5   alameda -121.9254 37.45998   157  6969 california    1578891  738</span>
+<span class="co">#&gt; 6   alameda -121.9483 37.47717   157  6970 california    1578891  738</span>
 <span class="co">#&gt;   people_per_mile</span>
-<span class="co">#&gt; 1            2139</span>
-<span class="co">#&gt; 2            2139</span>
-<span class="co">#&gt; 3            2139</span>
-<span class="co">#&gt; 4            2139</span>
-<span class="co">#&gt; 5            2139</span>
-<span class="co">#&gt; 6            2139</span></code></pre></li>
+<span class="co">#&gt; 1        2139.419</span>
+<span class="co">#&gt; 2        2139.419</span>
+<span class="co">#&gt; 3        2139.419</span>
+<span class="co">#&gt; 4        2139.419</span>
+<span class="co">#&gt; 5        2139.419</span>
+<span class="co">#&gt; 6        2139.419</span></code></pre></li>
 </ul>
+
 <h4>Now plot population density by county</h4>
+
 <p>If you were needing a little more elbow room in the great Golden State, this shows you where you can find it:</p>
+
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># prepare to drop the axes and ticks but leave the guides and legends</span>
 <span class="co"># We can&#39;t just throw down a theme_nothing()!</span>
 ditch_the_axes &lt;-<span class="st"> </span><span class="kw">theme</span>(
@@ -403,29 +466,45 @@ elbow_room1 &lt;-<span class="st"> </span>ca_base +<span class="st"> </span>
 <span class="st">      </span>ditch_the_axes
 
 elbow_room1 </code></pre>
-<p><img src="lecture_figs/making-maps-unnamed-chunk-22.png" title="plot of chunk unnamed-chunk-22" alt="plot of chunk unnamed-chunk-22" width="600px" height="420px" /></p>
+
+<p><img src="lecture_figs/making-maps-unnamed-chunk-22-1.png" title="" alt="" width="600px" height="420px" /></p>
+
 <h4>Lame!</h4>
+
 <ul>
 <li>The popuation density in San Francisco is so great that it makes it hard to discern differences between other areas.</li>
 <li>This is a job for a scale transformation. Let’s take the log-base-10 of the population density.</li>
 <li>Instead of making a new column which is log10 of the <code>people_per_mile</code> we can just apply the transformation in the gradient using the <code>trans</code> argument</li>
 </ul>
+
 <pre class="sourceCode r"><code class="sourceCode r">elbow_room1 +<span class="st"> </span><span class="kw">scale_fill_gradient</span>(<span class="dt">trans =</span> <span class="st">&quot;log10&quot;</span>)</code></pre>
-<p><img src="lecture_figs/making-maps-unnamed-chunk-23.png" title="plot of chunk unnamed-chunk-23" alt="plot of chunk unnamed-chunk-23" width="600px" height="420px" /></p>
+
+<p><img src="lecture_figs/making-maps-unnamed-chunk-23-1.png" title="" alt="" width="600px" height="420px" /></p>
+
 <h4>Still not great</h4>
+
 <p>I personally like more color than ggplot uses in its default gradient. In that respect I gravitate more toward Matlab’s default color gradient. Can we do something similar with <code>ggplot</code>?</p>
+
 <pre class="sourceCode r"><code class="sourceCode r">eb2 &lt;-<span class="st"> </span>elbow_room1 +<span class="st"> </span>
 <span class="st">    </span><span class="kw">scale_fill_gradientn</span>(<span class="dt">colours =</span> <span class="kw">rev</span>(<span class="kw">rainbow</span>(<span class="dv">7</span>)),
                          <span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">10</span>, <span class="dv">100</span>, <span class="dv">1000</span>, <span class="dv">10000</span>),
                          <span class="dt">trans =</span> <span class="st">&quot;log10&quot;</span>)
 eb2</code></pre>
-<p><img src="lecture_figs/making-maps-unnamed-chunk-24.png" title="plot of chunk unnamed-chunk-24" alt="plot of chunk unnamed-chunk-24" width="600px" height="420px" /></p>
+
+<p><img src="lecture_figs/making-maps-unnamed-chunk-24-1.png" title="" alt="" width="600px" height="420px" /></p>
+
 <p>That is reasonably cool.</p>
+
 <h3>zoom in?</h3>
+
 <p>Note that the scale of these maps from package <code>maps</code> are not great. We can zoom in to the Bay region, and it sort of works scale-wise, but if we wanted to zoom in more, it would be tough.</p>
+
 <p>Let’s try!</p>
+
 <pre class="sourceCode r"><code class="sourceCode r">eb2 +<span class="st"> </span><span class="kw">xlim</span>(-<span class="dv">123</span>, -<span class="fl">121.0</span>) +<span class="st"> </span><span class="kw">ylim</span>(<span class="dv">36</span>, <span class="dv">38</span>)</code></pre>
-<p><img src="lecture_figs/making-maps-unnamed-chunk-25.png" title="plot of chunk unnamed-chunk-25" alt="plot of chunk unnamed-chunk-25" width="600px" height="420px" /></p>
+
+<p><img src="lecture_figs/making-maps-unnamed-chunk-25-1.png" title="" alt="" width="600px" height="420px" /></p>
+
 <ul>
 <li>Whoa! That is an epic fail. Why?</li>
 <li>Recall that <code>geom_polygon()</code> connects the end point of a <code>group</code> to its starting point.</li>
@@ -434,16 +513,22 @@ eb2</code></pre>
 <li>Hence there are new starting points and ending points for some groups (or in this case the black-line permiter of California) and those points get connected. Not good.</li>
 </ul></li>
 </ul>
+
 <h3>True zoom.</h3>
+
 <ul>
 <li>If you want to keep all the data the same but just zoom in, you can use the <code>xlim</code> and <code>ylim</code> arguments to <code>coord_cartesian()</code>. Though, to keep the aspect ratio correct we must use <code>coord_fixed()</code> instead of <code>coord_cartesian()</code>.</li>
 <li><p>This chops stuff off but doesn’t discard it from the data set:</p>
 <pre class="sourceCode r"><code class="sourceCode r">eb2 +<span class="st"> </span><span class="kw">coord_fixed</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(-<span class="dv">123</span>, -<span class="fl">121.0</span>),  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">36</span>, <span class="dv">38</span>), <span class="dt">ratio =</span> <span class="fl">1.3</span>)</code></pre>
-<p><img src="lecture_figs/making-maps-unnamed-chunk-26.png" title="plot of chunk unnamed-chunk-26" alt="plot of chunk unnamed-chunk-26" width="600px" height="420px" /></p></li>
+<p><img src="lecture_figs/making-maps-unnamed-chunk-26-1.png" title="" alt="" width="600px" height="420px" /></p></li>
 </ul>
+
 <h2 id="ggmap-hooray">ggmap</h2>
+
 <p>The <code>ggmap</code> package is the most exciting R mapping tool in a long time! You might be able to get better looking maps at some resolutions by using shapefiles and rasters from naturalearthdata.com but <code>ggmap</code> will get you 95% of the way there with only 5% of the work!</p>
+
 <h3>Three examples</h3>
+
 <ul>
 <li>I am going to run through three examples. Working from the small spatial scale up to a larger spatial scale.
 <ol style="list-style-type: decimal">
@@ -452,44 +537,48 @@ eb2</code></pre>
 <li>Fish sampling locations from the coded wire tag data base.</li>
 </ol></li>
 </ul>
+
 <h3>How ggmap works</h3>
+
 <ul>
 <li>ggmap simplifies the process of downloading base maps from Google or Open Street Maps or Stamen Maps to use in the background of your plots.</li>
 <li>It also sets the axis scales, etc, in a nice way.<br /></li>
 <li>Once you have gotten your maps, you make a call with <code>ggmap()</code> much as you would with <code>ggplot()</code></li>
 <li>Let’s do by example.</li>
 </ul>
+
 <h3>Sisquoctober</h3>
+
 <ul>
 <li><p>Here is a small data frame of points from the Sisquoc River.</p>
 <pre class="sourceCode r"><code class="sourceCode r">sisquoc &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;data/sisquoc-points.txt&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)
 sisquoc
-<span class="co">#&gt;     name    lon   lat</span>
-<span class="co">#&gt; 1    a17 -119.8 34.75</span>
-<span class="co">#&gt; 2 a20-24 -119.8 34.75</span>
-<span class="co">#&gt; 3 a25-28 -119.8 34.75</span>
-<span class="co">#&gt; 4 a18,19 -119.8 34.75</span>
-<span class="co">#&gt; 5 a35,36 -119.7 34.75</span>
-<span class="co">#&gt; 6    a31 -119.7 34.75</span>
-<span class="co">#&gt; 7    a38 -119.7 34.75</span>
-<span class="co">#&gt; 8    a43 -119.7 34.75</span>
+<span class="co">#&gt;     name       lon      lat</span>
+<span class="co">#&gt; 1    a17 -119.7603 34.75474</span>
+<span class="co">#&gt; 2 a20-24 -119.7563 34.75380</span>
+<span class="co">#&gt; 3 a25-28 -119.7537 34.75371</span>
+<span class="co">#&gt; 4 a18,19 -119.7573 34.75409</span>
+<span class="co">#&gt; 5 a35,36 -119.7467 34.75144</span>
+<span class="co">#&gt; 6    a31 -119.7478 34.75234</span>
+<span class="co">#&gt; 7    a38 -119.7447 34.75230</span>
+<span class="co">#&gt; 8    a43 -119.7437 34.75251</span>
 
 <span class="co"># note that ggmap tends to use &quot;lon&quot; instead of &quot;long&quot; for longitude.</span></code></pre></li>
 <li><p><code>ggmap</code> typically asks you for a zoom level, but we can try using <code>ggmap</code>’s <code>make_bbox</code> function:</p>
 <pre class="sourceCode r"><code class="sourceCode r">sbbox &lt;-<span class="st"> </span><span class="kw">make_bbox</span>(<span class="dt">lon =</span> sisquoc$lon, <span class="dt">lat =</span> sisquoc$lat, <span class="dt">f =</span> .<span class="dv">1</span>)
 sbbox
-<span class="co">#&gt;    left  bottom   right     top </span>
-<span class="co">#&gt; -119.76   34.75 -119.74   34.76</span></code></pre></li>
+<span class="co">#&gt;       left     bottom      right        top </span>
+<span class="co">#&gt; -119.76198   34.75111 -119.74201   34.75507</span></code></pre></li>
 <li><p>Now, when we grab the map ggmap will try to fit it into that bounding box. Let’s try:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># First get the map. By default it gets it from Google.  I want it to be a satellite map</span>
 sq_map &lt;-<span class="st"> </span><span class="kw">get_map</span>(<span class="dt">location =</span> sbbox, <span class="dt">maptype =</span> <span class="st">&quot;satellite&quot;</span>, <span class="dt">source =</span> <span class="st">&quot;google&quot;</span>)
 <span class="co">#&gt; Warning: bounding box given to google - spatial extent only approximate.</span>
 <span class="co">#&gt; converting bounding box to center/zoom specification. (experimental)</span>
-<span class="co">#&gt; Map from URL : http://maps.googleapis.com/maps/api/staticmap?center=34.75309,-119.751995&amp;zoom=17&amp;size=640x640&amp;scale=2&amp;maptype=satellite&amp;language=en-EN&amp;sensor=false</span>
+<span class="co">#&gt; Map from URL : http://maps.googleapis.com/maps/api/staticmap?center=34.75309,-119.751995&amp;zoom=16&amp;size=640x640&amp;scale=2&amp;maptype=satellite&amp;language=en-EN&amp;sensor=false</span>
 <span class="kw">ggmap</span>(sq_map) +<span class="st"> </span><span class="kw">geom_point</span>(<span class="dt">data =</span> sisquoc, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat), <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>)
-<span class="co">#&gt; Warning: Removed 7 rows containing missing values (geom_point).</span></code></pre>
-<img src="lecture_figs/making-maps-unnamed-chunk-29.png" title="plot of chunk unnamed-chunk-29" alt="plot of chunk unnamed-chunk-29" width="600px" height="420px" /></li>
-<li><p>Nope! That was a fail, but we got a warning about it too. Let’s try using the zoom level. Zoom levels go from 3 (world scale to 20 (house scale)).</p>
+<span class="co">#&gt; Warning: Removed 3 rows containing missing values (geom_point).</span></code></pre>
+<img src="lecture_figs/making-maps-unnamed-chunk-29-1.png" title="" alt="" width="600px" height="420px" /></li>
+<li><p>Nope! That was a fail, but we got a warning about it too. (Actually it is a little better than before because I hacked <code>ggmap</code> a bit…) Let’s try using the zoom level. Zoom levels go from 3 (world scale to 20 (house scale)).</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># compute the mean lat and lon</span>
 ll_means &lt;-<span class="st"> </span><span class="kw">sapply</span>(sisquoc[<span class="dv">2</span>:<span class="dv">3</span>], mean)
 sq_map2 &lt;-<span class="st"> </span><span class="kw">get_map</span>(<span class="dt">location =</span> ll_means,  <span class="dt">maptype =</span> <span class="st">&quot;satellite&quot;</span>, <span class="dt">source =</span> <span class="st">&quot;google&quot;</span>, <span class="dt">zoom =</span> <span class="dv">15</span>)
@@ -497,28 +586,31 @@ sq_map2 &lt;-<span class="st"> </span><span class="kw">get_map</span>(<span clas
 <span class="kw">ggmap</span>(sq_map2) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> sisquoc, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="dv">4</span>) +
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data =</span> sisquoc, <span class="kw">aes</span>(<span class="dt">label =</span> <span class="kw">paste</span>(<span class="st">&quot;  &quot;</span>, <span class="kw">as.character</span>(name), <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)), <span class="dt">angle =</span> <span class="dv">60</span>, <span class="dt">hjust =</span> <span class="dv">0</span>, <span class="dt">color =</span> <span class="st">&quot;yellow&quot;</span>)</code></pre>
-<img src="lecture_figs/making-maps-unnamed-chunk-30.png" title="plot of chunk unnamed-chunk-30" alt="plot of chunk unnamed-chunk-30" width="600px" height="420px" /></li>
+<img src="lecture_figs/making-maps-unnamed-chunk-30-1.png" title="" alt="" width="600px" height="420px" /></li>
 <li><p>That is decent. How about if we use the “terrain” type of map:</p>
 <pre class="sourceCode r"><code class="sourceCode r">sq_map3 &lt;-<span class="st"> </span><span class="kw">get_map</span>(<span class="dt">location =</span> ll_means,  <span class="dt">maptype =</span> <span class="st">&quot;terrain&quot;</span>, <span class="dt">source =</span> <span class="st">&quot;google&quot;</span>, <span class="dt">zoom =</span> <span class="dv">15</span>)
 <span class="co">#&gt; Map from URL : http://maps.googleapis.com/maps/api/staticmap?center=34.753117,-119.751324&amp;zoom=15&amp;size=640x640&amp;scale=2&amp;maptype=terrain&amp;language=en-EN&amp;sensor=false</span>
 <span class="kw">ggmap</span>(sq_map3) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> sisquoc, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="dv">4</span>) +
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data =</span> sisquoc, <span class="kw">aes</span>(<span class="dt">label =</span> <span class="kw">paste</span>(<span class="st">&quot;  &quot;</span>, <span class="kw">as.character</span>(name), <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)), <span class="dt">angle =</span> <span class="dv">60</span>, <span class="dt">hjust =</span> <span class="dv">0</span>, <span class="dt">color =</span> <span class="st">&quot;yellow&quot;</span>)</code></pre>
-<p><img src="lecture_figs/making-maps-unnamed-chunk-31.png" title="plot of chunk unnamed-chunk-31" alt="plot of chunk unnamed-chunk-31" width="600px" height="420px" /></p></li>
+<p><img src="lecture_figs/making-maps-unnamed-chunk-31-1.png" title="" alt="" width="600px" height="420px" /></p></li>
+<li><p>That is cool, but I would search for a better color for the lettering…</p></li>
 </ul>
+
 <h3>How about a bike ride?</h3>
+
 <ul>
 <li>I was riding my bike one day with a my phone and downloaded the GPS readings at short intervals.</li>
 <li><p>We can plot the route like this:</p>
 <pre class="sourceCode r"><code class="sourceCode r">bike &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/bike-ride.csv&quot;</span>)
 <span class="kw">head</span>(bike)
-<span class="co">#&gt;      lon   lat elevation                 time</span>
-<span class="co">#&gt; 1 -122.1 36.95      15.8 2011-12-08T19:37:56Z</span>
-<span class="co">#&gt; 2 -122.1 36.95      15.5 2011-12-08T19:37:59Z</span>
-<span class="co">#&gt; 3 -122.1 36.95      15.4 2011-12-08T19:38:04Z</span>
-<span class="co">#&gt; 4 -122.1 36.95      15.5 2011-12-08T19:38:07Z</span>
-<span class="co">#&gt; 5 -122.1 36.95      15.7 2011-12-08T19:38:10Z</span>
-<span class="co">#&gt; 6 -122.1 36.95      15.8 2011-12-08T19:38:13Z</span>
+<span class="co">#&gt;         lon      lat elevation                 time</span>
+<span class="co">#&gt; 1 -122.0646 36.95144      15.8 2011-12-08T19:37:56Z</span>
+<span class="co">#&gt; 2 -122.0646 36.95191      15.5 2011-12-08T19:37:59Z</span>
+<span class="co">#&gt; 3 -122.0645 36.95201      15.4 2011-12-08T19:38:04Z</span>
+<span class="co">#&gt; 4 -122.0645 36.95218      15.5 2011-12-08T19:38:07Z</span>
+<span class="co">#&gt; 5 -122.0643 36.95224      15.7 2011-12-08T19:38:10Z</span>
+<span class="co">#&gt; 6 -122.0642 36.95233      15.8 2011-12-08T19:38:13Z</span>
 
 
 bikemap1 &lt;-<span class="st"> </span><span class="kw">get_map</span>(<span class="dt">location =</span> <span class="kw">c</span>(-<span class="fl">122.080954</span>, <span class="fl">36.971709</span>), <span class="dt">maptype =</span> <span class="st">&quot;terrain&quot;</span>, <span class="dt">source =</span> <span class="st">&quot;google&quot;</span>, <span class="dt">zoom =</span> <span class="dv">14</span>)
@@ -526,11 +618,172 @@ bikemap1 &lt;-<span class="st"> </span><span class="kw">get_map</span>(<span cla
 <span class="kw">ggmap</span>(bikemap1) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_path</span>(<span class="dt">data =</span> bike, <span class="kw">aes</span>(<span class="dt">color =</span> elevation), <span class="dt">size =</span> <span class="dv">3</span>, <span class="dt">lineend =</span> <span class="st">&quot;round&quot;</span>) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">scale_color_gradientn</span>(<span class="dt">colours =</span> <span class="kw">rainbow</span>(<span class="dv">7</span>), <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">25</span>, <span class="dv">200</span>, <span class="dt">by =</span> <span class="dv">25</span>))</code></pre>
-<img src="lecture_figs/making-maps-unnamed-chunk-32.png" title="plot of chunk unnamed-chunk-32" alt="plot of chunk unnamed-chunk-32" width="600px" height="420px" /></li>
+<img src="lecture_figs/making-maps-unnamed-chunk-32-1.png" title="" alt="" width="600px" height="420px" /></li>
 <li>See how we have mapped elevation to the color of the path using our rainbow colors again.</li>
 <li>Note that getting the right zoom and position for the map is sort of trial and error. You can go to google maps to figure out where the center should be (right click and choose “What’s here?” to get the lat-long of any point. )</li>
 <li><p>The <code>make_bbox</code> function has never really worked for me.</p></li>
 </ul>
+
+<h3>Fish sampling locations</h3>
+
+<p>For this, I have whittled down some stuff in the coded wire tag data base to georeferenced marine locations in British Columbia where at least one Chinook salmon was recovered in between 2000 and 2012 inclusive. To see how I did all that you can check out <a href="https://github.com/eriqande/pbt-feasibility/blob/4ea2fc960f74f66b5ec3a11c107cdc52bfb346dc/Rmd/02-02-explore-recovery-and-catch-sample-data.Rmd#looking-at-locations-of-location-codes">this</a></p>
+
+<p>Let’s have a look at the data:</p>
+
+<pre class="sourceCode r"><code class="sourceCode r">bc &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;data/bc_sites.rds&quot;</span>)
+
+<span class="co"># look at some of it:</span>
+bc %&gt;%<span class="st"> </span><span class="kw">select</span>(state_or_province:sub_location, longitude, latitude)
+<span class="co">#&gt; Source: local data frame [1,113 x 9]</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;    state_or_province water_type sector region area location sub_location</span>
+<span class="co">#&gt; 1                  2          M      S     22 016   THOR IS           01</span>
+<span class="co">#&gt; 2                  2          M      N     26 012   MITC BY           18</span>
+<span class="co">#&gt; 3                  2          M      S     22 015   HARW IS           02</span>
+<span class="co">#&gt; 4                  2          M      N     26 006   HOPK PT           01</span>
+<span class="co">#&gt; 5                  2          M      S     23 017   TENT IS           06</span>
+<span class="co">#&gt; 6                  2          M      S     28 23A   NAHM BY           02</span>
+<span class="co">#&gt; 7                  2          M      N     26 006   GIL IS            06</span>
+<span class="co">#&gt; 8                  2          M      S     27 024   CLEL IS           06</span>
+<span class="co">#&gt; 9                  2          M      S     27 23B   SAND IS           04</span>
+<span class="co">#&gt; 10                 2          M      N     26 012   DUVA IS           16</span>
+<span class="co">#&gt; ..               ...        ...    ...    ...  ...      ...          ...</span>
+<span class="co">#&gt; Variables not shown: longitude (dbl), latitude (dbl)</span></code></pre>
+
+<p>So, we have 1,113 points to play with.</p>
+
+<h4>What do we hope to learn?</h4>
+
+<ul>
+<li><p>These locations in BC are hierarchically structured. I am basically interested in how close together sites in the same “region” or “area” or “sector” are, and pondering whether it is OK to aggregate fish recoveries at a certain level for the purposes of getting a better overall estimate of the proportion of fish from different hatcheries in these areas.</p></li>
+<li>So, pretty simple stuff. I just want to plot these points on a map, and paint them a different color according to their sector, region, area, etc.</li>
+<li><p>Let’s just enumerate things first, using <code>dplyr</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r">bc %&gt;%<span class="st"> </span><span class="kw">group_by</span>(sector, region, area) %&gt;%<span class="st"> </span><span class="kw">tally</span>()
+<span class="co">#&gt; Source: local data frame [42 x 4]</span>
+<span class="co">#&gt; Groups: sector, region</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;    sector region area   n</span>
+<span class="co">#&gt; 1             48 008    1</span>
+<span class="co">#&gt; 2             48 028    1</span>
+<span class="co">#&gt; 3             48 311    1</span>
+<span class="co">#&gt; 4       N     25 001   33</span>
+<span class="co">#&gt; 5       N     25 003   15</span>
+<span class="co">#&gt; 6       N     25 004   44</span>
+<span class="co">#&gt; 7       N     25 02E    2</span>
+<span class="co">#&gt; 8       N     25 02W   34</span>
+<span class="co">#&gt; 9       N     26 006   28</span>
+<span class="co">#&gt; 10      N     26 007   23</span>
+<span class="co">#&gt; 11      N     26 008   10</span>
+<span class="co">#&gt; 12      N     26 009   27</span>
+<span class="co">#&gt; 13      N     26 010    3</span>
+<span class="co">#&gt; 14      N     26 011   11</span>
+<span class="co">#&gt; 15      N     26 012   72</span>
+<span class="co">#&gt; 16      S     22 013   67</span>
+<span class="co">#&gt; 17      S     22 014   58</span>
+<span class="co">#&gt; 18      S     22 015   34</span>
+<span class="co">#&gt; 19      S     22 016   32</span>
+<span class="co">#&gt; 20      S     23 017   53</span>
+<span class="co">#&gt; 21      S     23 018   27</span>
+<span class="co">#&gt; 22      S     23 028   30</span>
+<span class="co">#&gt; 23      S     23 029   14</span>
+<span class="co">#&gt; 24      S     23 19A   12</span>
+<span class="co">#&gt; 25      S     24 020   44</span>
+<span class="co">#&gt; 26      S     24 19B   49</span>
+<span class="co">#&gt; 27      S     27 021    4</span>
+<span class="co">#&gt; 28      S     27 022    1</span>
+<span class="co">#&gt; 29      S     27 023    2</span>
+<span class="co">#&gt; 30      S     27 024   38</span>
+<span class="co">#&gt; 31      S     27 025   58</span>
+<span class="co">#&gt; 32      S     27 026   11</span>
+<span class="co">#&gt; 33      S     27 027   23</span>
+<span class="co">#&gt; 34      S     27 23B  109</span>
+<span class="co">#&gt; 35      S     27 P025   1</span>
+<span class="co">#&gt; 36      S     28 23A   23</span>
+<span class="co">#&gt; 37      S     61 013   49</span>
+<span class="co">#&gt; 38      S     62 014   29</span>
+<span class="co">#&gt; 39      S     62 015   17</span>
+<span class="co">#&gt; 40      S     62 016   20</span>
+<span class="co">#&gt; 41      S     AF 23A    2</span>
+<span class="co">#&gt; 42      S     AF SMRV   1</span></code></pre></li>
+<li><p>That looks good. It appears like we could probably color code over the whole area down to region, and then down to area within subregions.</p></li>
+</ul>
+
+<h4>Makin’ a map.</h4>
+
+<ul>
+<li>Let us try again to use <code>make_bbox()</code> to see if it will work better when used on a large scale.</li>
+</ul>
+
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># compute the bounding box</span>
+bc_bbox &lt;-<span class="st"> </span><span class="kw">make_bbox</span>(<span class="dt">lat =</span> latitude, <span class="dt">lon =</span> longitude, <span class="dt">data =</span> bc)
+bc_bbox
+<span class="co">#&gt;       left     bottom      right        top </span>
+<span class="co">#&gt; -133.63297   47.92497 -122.33652   55.80833</span>
+
+<span class="co"># grab the maps from google</span>
+bc_big &lt;-<span class="st"> </span><span class="kw">get_map</span>(<span class="dt">location =</span> bc_bbox, <span class="dt">source =</span> <span class="st">&quot;google&quot;</span>, <span class="dt">maptype =</span> <span class="st">&quot;terrain&quot;</span>)
+<span class="co">#&gt; Warning: bounding box given to google - spatial extent only approximate.</span>
+<span class="co">#&gt; converting bounding box to center/zoom specification. (experimental)</span>
+<span class="co">#&gt; Map from URL : http://maps.googleapis.com/maps/api/staticmap?center=51.86665,-127.98475&amp;zoom=6&amp;size=640x640&amp;scale=2&amp;maptype=terrain&amp;language=en-EN&amp;sensor=false</span>
+
+<span class="co"># plot the points and color them by sector</span>
+<span class="kw">ggmap</span>(bc_big) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> bc, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> longitude, <span class="dt">y =</span> latitude, <span class="dt">color =</span> sector))</code></pre>
+
+<p><img src="lecture_figs/making-maps-unnamed-chunk-35-1.png" title="" alt="" width="600px" height="420px" /></p>
+
+<ul>
+<li>Cool! That was about as easy as could be. North is in the north, south is in the south, and the three reddish points are clearly aberrant ones at the mouths of rivers.</li>
+</ul>
+
+<h4>Coloring it by region</h4>
+
+<ul>
+<li>We should be able to color these all by region to some extent (it might get overwhelming), but let us have a go with it.</li>
+<li>Notice that region names are unique overall (not just within N or S) so we can just color by region name.</li>
+</ul>
+
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggmap</span>(bc_big) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> bc, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> longitude, <span class="dt">y =</span> latitude, <span class="dt">color =</span> region))</code></pre>
+
+<p><img src="lecture_figs/making-maps-unnamed-chunk-36-1.png" title="" alt="" width="600px" height="420px" /></p>
+
+<ul>
+<li>Once again that was dirt easy, though at this scale with all the different regions, it is hard to resolve all the colors.</li>
+</ul>
+
+<h4>Zooming in on each region and coloring by area</h4>
+
+<ul>
+<li>It is time to really put this thing through its paces. (Keeping in mind that <code>make_bbox()</code> might fail…)</li>
+<li>I want to make series of maps. One for each region, in which the the areas in that region are colored differently.</li>
+<li>How? Let’s make a function: you pass it the region and it makes the plot.</li>
+<li>Keep in mind that there are no factors in this data frame so we don’t have to worry about dropping levels, etc.</li>
+</ul>
+
+<pre class="sourceCode r"><code class="sourceCode r">region_plot &lt;-<span class="st"> </span>function(MyRegion) {
+  tmp &lt;-<span class="st"> </span>bc %&gt;%<span class="st"> </span><span class="kw">filter</span>(region ==<span class="st"> </span>MyRegion)
+  bbox &lt;-<span class="st"> </span><span class="kw">make_bbox</span>(<span class="dt">lon =</span> longitude, <span class="dt">lat =</span> latitude, <span class="dt">data =</span> tmp)
+  mymap &lt;-<span class="st"> </span><span class="kw">get_map</span>(<span class="dt">location =</span> bbox, <span class="dt">source =</span> <span class="st">&quot;google&quot;</span>, <span class="dt">maptype =</span> <span class="st">&quot;terrain&quot;</span>)
+  <span class="co"># now we want to count up how many areas there are</span>
+  NumAreas &lt;-<span class="st"> </span>tmp %&gt;%<span class="st"> </span><span class="kw">summarise</span>(<span class="kw">n_distinct</span>(area))
+  NumPoints &lt;-<span class="st"> </span><span class="kw">nrow</span>(tmp)
+  
+  the_map &lt;-<span class="st"> </span><span class="kw">ggmap</span>(mymap) +
+<span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">data =</span> tmp, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> longitude, <span class="dt">y =</span> latitude), <span class="dt">size =</span> <span class="dv">4</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) +
+<span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">data =</span> tmp, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> longitude, <span class="dt">y =</span> latitude, <span class="dt">color =</span> area), <span class="dt">size =</span> <span class="dv">3</span>) +
+<span class="st">    </span><span class="kw">ggtitle</span>(
+      <span class="kw">paste</span>(<span class="st">&quot;BC Region: &quot;</span>, MyRegion, <span class="st">&quot; with &quot;</span>, NumPoints, <span class="st">&quot; locations in &quot;</span>, NumAreas, <span class="st">&quot; area(s)&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>)
+      )
+  
+  <span class="kw">ggsave</span>(<span class="kw">paste</span>(<span class="st">&quot;bc_region&quot;</span>, MyRegion, <span class="st">&quot;.pdf&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>), the_map, <span class="dt">width =</span> <span class="dv">9</span>, <span class="dt">height =</span> <span class="dv">9</span>)
+}</code></pre>
+
+<p>So, with that function we just need to cycle over the regions and make all those plots.</p>
+
+<p>Note that I am saving them to PDFs because it is no fun to make a web page with all of those in there.</p>
+
+<pre class="sourceCode r"><code class="sourceCode r">dump &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="kw">unique</span>(bc$region), region_plot)</code></pre>
 
           <hr>
            <div id="disqus_thread"></div>
