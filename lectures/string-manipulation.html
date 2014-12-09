@@ -64,21 +64,13 @@
 
         <div id="content" class="col-sm-8 pull-right">
           <h1 id="string-manipulation">String manipulation with R</h1>
-
 <h2 id="string-manipulation-intro">Intro</h2>
-
 <p>R comes with some fairly well-developed tools for string manipulation and the application of <em>regular expressions</em>. If you are a fan of Perl or Python, or you have a penchant for Unix utilities like <em>sed</em> and <em>awk</em>, then you might find that you prefer those languages/workflows for doing your text processing. However, you can do quite a lot with R, and if all of your other analyses are done in R, there is some advantage to also doing your text processing within R.</p>
-
 <p>If you are not yet familiar with any other text-processing systems and R is your first real programming language, then you might as well learn string manipulation in R!</p>
-
 <p>If you are used to a “line-by-line” loop-based processing paradigm like that used in <em>awk</em>, then R’s focus on vectors of strings can take some getting used to. However, once you get comfortable with it and the sorts of operations that are useful within that framework, it can be quite powerful.</p>
-
 <p>The base R package comes with a full set of string manipulation functions that are quite versatile. However, they don’t have consistent interfaces and they come with a lot of options that most people will never need to learn. So, while we are learning this stuff, we will focus on using the functions in Hadley Wickham’s package <code>stringr</code> which preserves about 95% of the functionality of the base R string functions, but don’t carry around a lot of extra function-parameter shrubbery that will trip up a lot of users. For a quick intro to <code>stringr</code> check out <a href="http://journal.r-project.org/archive/2010-2/RJournal_2010-2_Wickham.pdf">this</a></p>
-
 <p>To illustrate these ideas we will use a real example from my own work: processing a text file containing data specifications for the coded wire tag data base.</p>
-
 <h3 id="string-manip-prereq">Prerequisites</h3>
-
 <ul>
 <li>To work through the examples you will the <code>stringr</code> package.</li>
 <li>Please download/install this before coming to class:
@@ -88,28 +80,21 @@
 <li><p>Pull the most recent version of the rep-res-course repo just before coming to class.</p></li>
 </ol></li>
 </ul>
-
 <h3>Goals for this hour:</h3>
-
 <ul>
 <li>Present example text-processing problem</li>
 <li>Briefly cover the idea of <em>regular expressions</em></li>
 <li>Show how to use functions in <code>stringr</code> to solve the problem</li>
 </ul>
-
 <h2 id="rmis-example-problem">Example problem</h2>
-
 <h3>RMIS</h3>
-
 <ul>
 <li>The Regional Mark Processing Center (RMPC) maintains data bases having to do with catch, sampling, release and recovery of salmon and coded wire tags. These data bases are known collectively as the Regional Mark Information System (RMIS).</li>
 <li>You can query the data bases and get information from <a href="http://www.rmpc.org" class="uri">http://www.rmpc.org</a></li>
 <li>Many of the fields in the data base use codes to denote certain values. For example, in the <em>species</em> column in each data base, a 1 = Chinook salmon and a 2 = Coho, a 3 = Steelhead, etc.<br /></li>
 <li>If you are going to be analyzing these data in R, or plotting them, or just looking at them, it might be nice to recode such columns as <em>factors</em> with levels that are the actual species names. (This beats trying to remember all sorts of codes).</li>
 </ul>
-
 <h3>The PSC data specification</h3>
-
 <ul>
 <li>First, the good news:
 <ul>
@@ -123,16 +108,13 @@
 <li>The folks who run the RMPC are pretty cool, though, and were able to supply me with a Microsoft Word document from whence the PDF file was created.<br /></li>
 <li>MS Word, as we’ve all learned in this course is not a reproducible or easily-parseable format, but we are going to do our best with it.</li>
 </ul>
-
 <h3>PSC Spec in text</h3>
-
 <ul>
 <li>I was able to copy and paste the specification, make sure it had Unix, instead of Mac line endings, and save it.</li>
 <li>A copy is in the course repo at: <code>data/PSC-Specification-ver-4.1_7-1-14.txt</code></li>
 <li>Go ahead and have a look at it in a suitably good text editor. If you are using TextWrangler on your Mac then you can have it View -&gt; Text Display -&gt; Show Invisibles to see what are tabs and what are spaces, etc.</li>
 <li>Here is a little section of the 2,855 lines in the file:</li>
 </ul>
-
 <pre class="sourceCode r"><code class="sourceCode r">CHAPTER <span class="dv">2</span>
 Release Data
 
@@ -177,13 +159,10 @@ Fld <span class="co">#   and Data Field Name Cols            </span>
                 ‘<span class="dv">16</span>’              =NEZP
                 ‘<span class="dv">17</span>’              =QDNR
                 ‘<span class="dv">18</span>’              =STIL             </code></pre>
-
 <ul>
 <li>What a freakshow! I can’t believe that we have to do this! (But on the other hand it is kind of fun…)</li>
 </ul>
-
 <h3>A closer look at the format</h3>
-
 <ul>
 <li><p>The specification is organized into a series of chapters that start with lines that look like:</p>
 <pre class="sourceCode r"><code class="sourceCode r">CHAPTER <span class="dv">2</span></code></pre>
@@ -224,14 +203,11 @@ Shows that field 4 is <code>reporting_agency</code>, etc.</li>
                 ‘<span class="dv">18</span>’              =STIL             </code></pre>
 <p>These codes take the form of string (usually a single character or a number) that is quoted in some special quotes that are sometimes upside down and sometimes right side up; then a TAB, then an equals sign followed by another string with no space.</p></li>
 </ul>
-
 <h3>Our mission</h3>
-
 <ul>
 <li>For every field (in each of the five data bases) that has specialized codes, we want to know what the codes are and what they means.</li>
 <li>In the end we will want to have a tidy data frame of these that looks something like this:</li>
 </ul>
-
 <table>
 <thead>
 <tr class="header">
@@ -268,23 +244,17 @@ Shows that field 4 is <code>reporting_agency</code>, etc.</li>
 </tr>
 </tbody>
 </table>
-
 <ul>
 <li>If we wanted to be old school about it we could just spend two weeks copying and pasting everything, and hope that the spec doesn’t change any time soon, because we wouldn’t want to waste a full two weeks doing that again (even if our wrists were not totally trashed after that.)</li>
 <li>But we are going to try to automate this.</li>
 </ul>
-
 <h2 id="reg-exp">Regular expressions</h2>
-
 <p>Before we can get rolling on this we are going to have to cover some <em>regular expressions</em>.</p>
-
 <h3>What is a regular expression?</h3>
-
 <ul>
 <li>You can think of a regular expression as a “fuzzy find” pattern that let’s you match text strings while including “wildcards” and “character classes”, and maybe even capturing text that matches in certain ways to your pattern.</li>
 <li>Here is a simple example.</li>
 </ul>
-
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(stringr)  <span class="co"># load the package</span>
 
 <span class="co"># now make a character vector</span>
@@ -306,14 +276,11 @@ vec &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&qu
 <span class="co"># see if any end with an &quot;o&quot;</span>
 <span class="kw">str_detect</span>(vec, <span class="st">&quot;o$&quot;</span>)
 <span class="co">#&gt; [1] FALSE  TRUE FALSE FALSE FALSE</span></code></pre>
-
 <h3>Holy cow! That looks funky</h3>
-
 <ul>
 <li>Yes, there is a whole pantheon of regular expression “metacharacters” that you will want to get familiar with.<br /></li>
 <li>Entire books have been written on regular expressions, so I won’t attempt to teach you all of it now, but I will point out some things that you will want to know.</li>
 </ul>
-
 <ol style="list-style-type: decimal">
 <li>The simplest pattern is a single character. So, a regular expression of “<code>a</code>”&quot; says, match anything with an “<code>a</code>”&quot; in it.<br /></li>
 <li>You can do things like specify how many times a pattern must occur to be considered a match. For example maybe you had strings of DNA and you wanted to detect runs of 7 “A”’s in a row in it. The regular expression that matched that would be <code>&quot;A{7}&quot;</code>.</li>
@@ -325,11 +292,8 @@ vec &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&qu
 </ul></li>
 <li>You can group patterns together by wrapping them in <code>(</code> and <code>)</code>. Then you can treat those things as patterns that must occur a certain number of times to be considered a match, etc.</li>
 </ol>
-
 <p>We will see examples of these things as we solve our problem at hand. For now, just know that you can build up regular expressions to search for very complex patterns in strings using this regex syntax that can seem quite baffling or even daunting at first.</p>
-
 <p>For now, here are some important things to know</p>
-
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># special meaning is given to these characters:</span>
 . \ |<span class="st"> </span>( ) [ ] { } ^<span class="st"> </span><span class="er">$</span><span class="st"> </span><span class="er">*</span><span class="st"> </span>+<span class="st"> </span>?
 
@@ -353,21 +317,13 @@ vec &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&qu
 {n,} <span class="co"># The preceding item is matched n or more times.</span>
 
 {n,m} <span class="co"># The preceding item is matched at least n times, but not more than m times.</span></code></pre>
-
 <p>For a more complete description do <code>?regex</code> and see the “Extended Regular Expressions” section.</p>
-
 <h2 id="getting-to-business">Getting down to business</h2>
-
 <p>Quick note on <code>stringr</code> functions. Most of them have the syntax of:</p>
-
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str_something</span>( string,  pattern )</code></pre>
-
 <p>where <em>something</em> is like “detect” or “match” or “replace”, and <em>pattern</em> is a regular expression passed in as a quoted string (or even a character <em>vector</em> in some cases)</p>
-
 <h3>Step 1: read the strings in!</h3>
-
 <p>The delightful <code>readLines()</code> function will let us read each line of <code>PSC-Specification-ver-4.1_7-1-14.txt</code> into a character vector:</p>
-
 <pre class="sourceCode r"><code class="sourceCode r">spec &lt;-<span class="st"> </span><span class="kw">readLines</span>(<span class="st">&quot;data/PSC-Specification-ver-4.1_7-1-14.txt&quot;</span>)
 <span class="kw">length</span>(spec)
 <span class="co">#&gt; [1] 2855</span>
@@ -378,21 +334,15 @@ vec &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&qu
 <span class="co">#&gt; [4] &quot;&quot;                                                                                                 </span>
 <span class="co">#&gt; [5] &quot;CWT data must be exchanged in the form of a PSC Format Version 4.1 dataset.&quot;                      </span>
 <span class="co">#&gt; [6] &quot;The definition and specification of PSC Format Version 4.1 is described in this set of documents.&quot;</span></code></pre>
-
 <h3>Step 2: figure out which chapter we are in</h3>
-
 <p>Here is what our strategy is going to be for dealing with this</p>
-
 <ol style="list-style-type: decimal">
 <li>Start with a vector of NA’s of length(spec)</li>
 <li>Put values in where each “CHAPTER” is found</li>
 <li>Propagate those values forward, overwriting any NAs with the value that came before.</li>
 </ol>
-
 <p>In this way we get a vector, of, for example, what chapter we are in.</p>
-
 <p>Let’s do it for the chapter names:</p>
-
 <pre class="sourceCode r"><code class="sourceCode r">chapter &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA</span>, <span class="kw">length</span>(spec))  <span class="co"># make a vector of NAs</span>
 chap_positions &lt;-<span class="st"> </span><span class="kw">which</span>(<span class="kw">str_detect</span>(spec, <span class="st">&quot;^CHAPTER&quot;</span>))
 
@@ -408,21 +358,15 @@ chapter_names &lt;-<span class="st"> </span><span class="kw">na.locf</span>(chap
 
 <span class="co"># if you are following along, do this to see what we have done:</span>
 <span class="co">#   cbind(chapter_names)</span></code></pre>
-
 <h3>Step 2.5: Let’s get the chapter numbers while we are at it</h3>
-
 <p>Now, we want to extract the number of each chapter. We can use a regular expression that finds strings in <code>spec</code> that</p>
-
 <ol style="list-style-type: decimal">
 <li>first have to match “^CHAPTER”</li>
 <li>but then also have at least one space</li>
 <li>and then one or more digits</li>
 </ol>
-
 <p><strong>AND</strong> we can use the <code>str_match</code> function to pull out the part that matches the 3rd part of the expression (i.e. the one or more digits). Check out <code>?str_match</code></p>
-
 <p>Here we go!</p>
-
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># grab them</span>
 chap_nums &lt;-<span class="st"> </span><span class="kw">str_match</span>(spec, <span class="st">&quot;^CHAPTER +([[:digit:]]+)&quot;</span>)
 
@@ -450,24 +394,17 @@ chapter_numbers &lt;-<span class="st"> </span><span class="kw">na.locf</span>(ch
 <span class="co">#&gt; [4,] &quot;1&quot;             &quot;INTRODUCTION, DEFINITIONS, AND RULES&quot;</span>
 <span class="co">#&gt; [5,] &quot;1&quot;             &quot;INTRODUCTION, DEFINITIONS, AND RULES&quot;</span>
 <span class="co">#&gt; [6,] &quot;1&quot;             &quot;INTRODUCTION, DEFINITIONS, AND RULES&quot;</span></code></pre>
-
 <h3>Step 3: Figure out which field each line of the file is in</h3>
-
 <p>Our main concern is going to be extracting codes that have to do with fields that we can identify according to which chapter they are in (which corresponds to the data base) and then which field name we are in.</p>
-
 <p>Happily, it is easy to find the beginnings of field heading sections. They are the only lines in the file I see that start with one or two digits, followed immediately by a TAB. (At least that is the case for the five chapters we are interested in.)</p>
-
 <p>Recall that these things look like:</p>
-
 <pre class="sourceCode r"><code class="sourceCode r"><span class="dv">2</span>  Format Version   <span class="dv">4</span>   Yes ’<span class="fl">4.1</span>’   Format version used to report data
     format_version              Must have the value:<span class="st">   </span>’<span class="fl">4.1</span>’
                     
 <span class="dv">3</span>   Submission Date <span class="dv">8</span>   Yes YYYYMMDD    Date of submission for this set of records.  Date should be close to actual date when this row is sent to the Mark Center
     submission_date             Must have the same value for all records in this data submission
                     Should match submission_date in corresponding Description file</code></pre>
-
 <p>So, we are going to get those positions, and then try to extract the field names, which appear on the following lines, stuck between TABS:</p>
-
 <pre class="sourceCode r"><code class="sourceCode r">field_starts &lt;-<span class="st"> </span><span class="kw">which</span>(<span class="kw">str_detect</span>(spec, <span class="st">&quot;^[[:digit:]]{1,2}</span><span class="ch">\t</span><span class="st">&quot;</span>))
 field_names &lt;-<span class="st"> </span><span class="kw">str_match</span>(spec[field_starts +<span class="st"> </span><span class="dv">1</span>], <span class="st">&quot;^</span><span class="ch">\t</span><span class="st">([_[:alnum:]]+)</span><span class="ch">\t</span><span class="st">&quot;</span>)
 field_names[,<span class="dv">2</span>]
@@ -584,9 +521,7 @@ field_names[,<span class="dv">2</span>]
 <span class="co">#&gt; [221] NA                          NA                         </span>
 <span class="co">#&gt; [223] NA                          NA                         </span>
 <span class="co">#&gt; [225] NA                          NA</span></code></pre>
-
 <p>Hmmm, some of these are not looking right. The NAs in the early numbers are not so good, and the ones with uppercase letters look wrong. Let’s get the line numbers and look at the original file:</p>
-
 <pre class="sourceCode r"><code class="sourceCode r">linenos_to_investigate &lt;-<span class="st"> </span>field_starts[<span class="kw">which</span>(<span class="kw">is.na</span>(field_names[,<span class="dv">2</span>]) |<span class="st"> </span><span class="kw">str_detect</span>(field_names[,<span class="dv">2</span>], <span class="st">&quot;[[:upper:]]&quot;</span>))] +<span class="st"> </span><span class="dv">1</span> 
 linenos_to_investigate
 <span class="co">#&gt;  [1]  750  942 1009 1039 1043 1047 1051 1055 1069 1097 1122 1127 1267 1688</span>
@@ -594,21 +529,14 @@ linenos_to_investigate
 <span class="co">#&gt; [29] 2209 2210 2211 2212 2216 2217 2218 2219 2224 2225 2226 2227 2231 2232</span>
 <span class="co">#&gt; [43] 2233 2234 2238 2239 2240 2241 2242 2246 2247 2251 2252 2253 2254 2258</span>
 <span class="co">#&gt; [57] 2259 2260 2261 2575 2576 2577 2758 2761 2763 2766 2769 2771</span></code></pre>
-
 <p>When we take a look at all those linenumbers in the original file we see in one case a typo in the specification, and in a lot of other places you find the problem is due to lines being broken where they probably weren’t supposed to be, etc. In other words, the sort of inconsistent formatting that is probably an unavoidable consequence of trying to scrape <em>data</em> out of a medium (i.e. an MS Word doc) that is unsuited to actually storing data.</p>
-
 <p>This mirrors one of the themes of this course that we’ve seen a few times: If your stuff is in a Word file or an Excel file, you should not expect your research to be reproducible.<br />It would be preferable if those PSC data specifications lived in their own SQL table within the RMIS data base.</p>
-
 <p>But anyway, from the looks of it, we can safely ignore those inconsistent spots, because those fields don’t actually have codes that we are going to be scraping out in the next step.</p>
-
 <p>So, now we have to put those <code>field_names</code> into a <code>fields</code> vector and roll them forward over the NAs:</p>
-
 <pre class="sourceCode r"><code class="sourceCode r">fields_0 &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA</span>, <span class="kw">length</span>(spec))
 fields_0[field_starts] &lt;-<span class="st"> </span>field_names[,<span class="dv">2</span>]
 fields &lt;-<span class="st"> </span><span class="kw">na.locf</span>(fields_0, <span class="dt">na.rm =</span> <span class="ot">FALSE</span>)</code></pre>
-
 <p>Now, that this is done, let’s see what we are working on so far. We have something looking like this:</p>
-
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(<span class="kw">na.omit</span>(<span class="kw">data.frame</span>(chapter_numbers, chapter_names, fields, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)))
 <span class="co">#&gt;     chapter_numbers chapter_names         fields</span>
 <span class="co">#&gt; 164               2  Release Data    record_code</span>
@@ -617,28 +545,19 @@ fields &lt;-<span class="st"> </span><span class="kw">na.locf</span>(fields_0, <
 <span class="co">#&gt; 167               2  Release Data    record_code</span>
 <span class="co">#&gt; 168               2  Release Data    record_code</span>
 <span class="co">#&gt; 169               2  Release Data format_version</span></code></pre>
-
 <p>Rippin! That looks tidy!</p>
-
 <h3>Step 4: Extract the codes and values</h3>
-
 <p>Now we just have to extract the lines that have the code definitions on them!</p>
-
 <p>When we find occurrences of these things, it always seems that they follow a pattern of:</p>
-
 <pre class="sourceCode r"><code class="sourceCode r">TAB +<span class="st"> </span>Quote +<span class="st"> </span>AlphaNumericOrDash +<span class="st"> </span>Quote +<span class="st"> </span>TAB +<span class="st"> </span>EqualsSign +<span class="st"> </span>ValueWithNoSpaceAfterEqualsSign</code></pre>
-
 <p>So, we can write a regex pattern for that. Some things must be noticed though:</p>
-
 <ol style="list-style-type: decimal">
 <li>The single quotes are not simple—they can be upside down or right side up and they are not consistent.</li>
 <li>AlphaNumericOrDash is risky. Let’s start by matching one or more of anycharacter between those quotation marks.</li>
 <li>All we can really do is plan to grab the value all the way out to the end of the line.</li>
 <li>Sometimes they do have a space after the equals sign.</li>
 </ol>
-
 <p>Here is what our basic regex to capture each of those things looks like in the <code>str_detect</code> function:</p>
-
 <pre class="sourceCode r"><code class="sourceCode r">gotem &lt;-<span class="st"> </span><span class="kw">str_detect</span>(spec, <span class="st">&quot;</span><span class="ch">\t</span><span class="st">[‘’].+[‘’]</span><span class="ch">\t</span><span class="st">=.*$&quot;</span>)
 
 <span class="co"># note that the quotes might not look different in the font in the HTML.</span>
@@ -653,41 +572,26 @@ fields &lt;-<span class="st"> </span><span class="kw">na.locf</span>(fields_0, <
 <span class="co">#&gt; [4] &quot;\t\t\t\t’02’\t=NMFS – Alaska&quot;                  </span>
 <span class="co">#&gt; [5] &quot;\t\t\t\t’03’\t=CDFO&quot;                           </span>
 <span class="co">#&gt; [6] &quot;\t\t\t\t’04’\t=WDFW&quot;</span></code></pre>
-
 <p>That is all fine and well, but what we really want to do is capture particular parts of those lines that match certain subpatterns. So, prepare yourself for a parenthesis bonanza.</p>
-
 <p>Recall that parentheses group patterns and we can extract the parts that match those sub-patterns explicitly with <code>str_match()</code>:</p>
-
 <pre class="sourceCode r"><code class="sourceCode r">codes_and_values &lt;-<span class="st"> </span><span class="kw">str_match</span>(spec, <span class="st">&quot;</span><span class="ch">\t</span><span class="st">[‘’](.+)[‘’]</span><span class="ch">\t</span><span class="st">=(.*)$&quot;</span>)</code></pre>
-
 <p>The above grabs the “1 or more occurrences of any character” between the quotes and also all the characters after the equals sign. <code>str_match</code> returns a matrix. The first column is the whole match, and each successive column is a successive grouping (a different set of parentheses.)</p>
-
 <p>If there isn’t a match then you get NAs.</p>
-
 <h3>Step 5: Trim whitspace and bung these all into a data frame</h3>
-
 <p>We now just need to stick these all into a data frame, but we will want to trim leading and trailing whitespace off of all of the codes and values in case someone left some in there… So we can use <code>str_trim()</code>:</p>
-
 <pre class="sourceCode r"><code class="sourceCode r">codes_and_values &lt;-<span class="st"> </span><span class="kw">str_trim</span>(codes_and_values)</code></pre>
-
 <p>Then make that data frame</p>
-
 <pre class="sourceCode r"><code class="sourceCode r">code_frame &lt;-<span class="st"> </span><span class="kw">data.frame</span>(chapter_numbers, 
                          chapter_names,
                          fields,
                          <span class="dt">codes =</span> codes_and_values[,<span class="dv">2</span>],
                          <span class="dt">values =</span> codes_and_values[,<span class="dv">3</span>],
                          <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</code></pre>
-
 <p>Finally, remember that we only want to grab the codes for Chapters 2 through 6 inclusive. And, of course, we can drop any rows that have NAs since there were no codes or values on those lines. So</p>
-
 <pre class="sourceCode r"><code class="sourceCode r">final_codes &lt;-<span class="st"> </span><span class="kw">na.omit</span>(<span class="kw">subset</span>(code_frame, chapter_numbers &gt;=<span class="st"> </span><span class="dv">2</span> &amp;<span class="st"> </span>chapter_numbers &lt;=<span class="st"> </span><span class="dv">6</span>))</code></pre>
-
 <p>Phew! How does it look? Let’s look at the first 100 lines of it:</p>
-
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># i have to change some #&#39;s because the renderer confuses them with links</span>
 <span class="kw">kable</span>(<span class="kw">str_replace_all</span>(<span class="dt">string =</span> <span class="kw">as.matrix</span>(final_codes[<span class="dv">1</span>:<span class="dv">100</span>,]), <span class="dt">pattern =</span> <span class="st">&quot;#&quot;</span>, <span class="st">&quot;--&quot;</span>), <span class="dt">row.names =</span> <span class="ot">FALSE</span>)</code></pre>
-
 <table>
 <thead>
 <tr class="header">
@@ -1401,11 +1305,8 @@ fields &lt;-<span class="st"> </span><span class="kw">na.locf</span>(fields_0, <
 </tr>
 </tbody>
 </table>
-
 <p><strong>Booyah!</strong> It looks great. (There are some issues though with location codes which are hierarchical and thus require special treatment.)</p>
-
 <p>Of course, it would be better if we didn’t have to go through all this rigmarole to get there. But what can you do?</p>
-
 <p>Note that the above format is tidy, and if we had any of the data bases loaded as data frames then it would be pretty straightforward to replace the codes with their values and keep them as factors.</p>
 
           <hr>

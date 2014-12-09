@@ -64,20 +64,14 @@
 
         <div id="content" class="col-sm-8 pull-right">
           <h1 id="trial-homework-thoughts">Comments and thoughts on Homework #1 (Trial Homework)</h1>
-
 <h2>Preliminaries</h2>
-
 <h3>First off!</h3>
-
 <ol style="list-style-type: decimal">
 <li>Woo-hoo! Way to go everyone who got those in!</li>
 <li>Woo-hoo! Way to go everyone who is still working on it!</li>
 </ol>
-
 <p>I’m pumped by how many people made their first pull request.</p>
-
 <h3>What does a pull request look like to me?</h3>
-
 <ul>
 <li>Check it out!
 <ul>
@@ -97,36 +91,24 @@
 <li>Note, please keep your pull requests <strong>Open</strong>. That way my scripts can fetch your work easily.</li>
 <li>I will <strong>Close</strong> them when we are done with them. You can always Re-open them.</li>
 </ul>
-
 <h3>What if I want to change an answer?</h3>
-
 <ul>
 <li>By all means, feel free. This is where GitHub really excels.</li>
 <li>Just make your changes, commit them, and push them up and the pull request should be automatically updated (I think…)</li>
 </ul>
-
 <h3>My responses data base</h3>
-
 <p>Show it to them. View(ans)</p>
-
 <h2>General comments from what I saw</h2>
-
 <p>It is great to have everyone’s responses. Here are some comments that should be helpful to everyone.</p>
-
 <h3>Strive for Economy of characters</h3>
-
 <p>When you are writing code, usually, but not always) shorter is going to be</p>
-
 <ol style="list-style-type: decimal">
 <li>easier to read</li>
 <li>easier to debug</li>
 <li>easier to maintain</li>
 </ol>
-
 <p>As long as it clearly expresses the intent of the program.</p>
-
 <p>Along those lines, (intermixed with some of my OCD code-style ideas) some guidelines are:</p>
-
 <ol style="list-style-type: decimal">
 <li><p>You don’t have to define intermediate variables. Sometimes it is helpful to break up long calculation with some intermediates, but not always. So:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># this is preferred</span>
@@ -181,11 +163,8 @@ isAfterGithub &lt;-<span class="st"> </span>gnames &gt;<span class="st"> &quot;g
 gnames &gt;<span class="st"> &quot;github&quot;</span>  <span class="co"># best: no intermediate assignment when not needed</span></code></pre></li>
 </ol></li>
 </ol>
-
 <h3>Don’t use a for loop if the vectorized operation will get you there</h3>
-
 <p>This was one of the hardest things for me as a C programmer, and I suspect that python programmers might find it a difficult too.</p>
-
 <ul>
 <li><p>Remember. R is a vectorized language. If you give it a vector it wants to operate elementwise on every element in that vector. This means that quite often you needn’t write for loops for operations that you do have to write for loops for in C or python.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># this is concise and precise (and computationlly efficient)</span>
@@ -204,7 +183,6 @@ The latter is clearly harder to write, harder to maintain, and easier to hide bu
 <ul>
 <li>Try this at home, comparing 10^5 numbers:</li>
 </ul>
-
 <pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="dv">10</span>^<span class="dv">5</span>, <span class="dt">mean=</span><span class="fl">1.0</span>, <span class="dt">sd=</span><span class="dv">5</span>)  <span class="co"># make 10^5 numbers</span>
 
 <span class="co"># test if any are greater than 2.</span>
@@ -221,9 +199,8 @@ for(i in <span class="dv">1</span>:<span class="kw">length</span>(x)) {
 <span class="co"># see that you get the same result with either method:</span>
 <span class="kw">all</span>(g2_fast ==<span class="st"> </span>gt_slow)
 <span class="co"># but clearly the vectorized operation is faster</span></code></pre>
-
-<p><p>The much maligned “slowness” of R, is sometimes attributable to not doing vectorized operations.</p></li>
-</ul></p>
+<p>The much maligned “slowness” of R, is sometimes attributable to not doing vectorized operations.</p></li>
+</ul>
 
           <hr>
            <div id="disqus_thread"></div>

@@ -64,44 +64,31 @@
 
         <div id="content" class="col-sm-8 pull-right">
           <h1 id="vectorization-and-indexing">Vectorization, Recycling, and Indexing in R</h1>
-
 <p>Many functions and almost all the <em>operators</em> (like <code>+</code> and <code>*</code>, etc.) are vectorized.</p>
-
 <p>They operate very quickly on each element of an atomic vector.</p>
-
 <p>Goals: we want to learn about:</p>
-
 <ul>
 <li>Vectorization</li>
 <li>Recycling</li>
 <li>Indexing</li>
 </ul>
-
 <p>These three ideas of fundamental to R.</p>
-
 <p>We will also discuss:</p>
-
 <ul>
 <li>Comparison operators</li>
 <li>Logical operators</li>
 <li>Mathematical operators</li>
 </ul>
-
 <h2 id="bin-comp-ops">Binary Comparison Operators</h2>
-
 <p>These are “binary” because they involve <em>two</em> arguments.<br />Operate <em>elementwise</em> on vectors and return //logical vectors//</p>
-
 <pre class="sourceCode r"><code class="sourceCode r">x &lt;<span class="st"> </span>y    <span class="co"># less than</span>
 x &gt;<span class="st"> </span>y    <span class="co"># greater than</span>
 x &lt;=<span class="st"> </span>y   <span class="co"># less than or equal to </span>
 x &gt;=<span class="st"> </span>y   <span class="co"># greater than or equal to</span>
 x ==<span class="st"> </span>y   <span class="co"># equal to </span>
 x !=<span class="st"> </span>y   <span class="co"># not equal to</span></code></pre>
-
 <p><code>==</code> is the “<em>comparison equals</em>” which tests for equality. (Be careful not to use <code>=</code> which, in today’s versions of R, is actually interpreted as leftwards assignment.)</p>
-
 <h3>Binary Comparison Examples</h3>
-
 <ul>
 <li><p>With numeric vectors</p>
 <pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">5</span>)
@@ -121,11 +108,8 @@ a &lt;<span class="st"> </span>b   <span class="co"># alphabetical order</span>
 <pre class="sourceCode r"><code class="sourceCode r">(a &lt;<span class="st"> </span>b) &lt;=<span class="st"> </span>(x ==<span class="st"> </span>y)  <span class="co"># trickier...notice the parentheses to force precedence</span>
 <span class="co">#&gt; [1]  TRUE FALSE  TRUE</span></code></pre></li>
 </ul>
-
 <h3>Binary Comparison Between a Vector and a Scalar</h3>
-
 <p>Check this out:</p>
-
 <pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="dv">1</span>:<span class="dv">10</span>  <span class="co"># the colon operator returns a sequence</span>
 
 x
@@ -137,13 +121,9 @@ x &lt;=<span class="st"> </span><span class="dv">3</span>
 <span class="co"># compare this to:</span>
 x &lt;=<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>)
 <span class="co">#&gt;  [1]  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE</span></code></pre>
-
 <p>What is going on here?</p>
-
 <h3>Comparison With Different-Lengths of Vectors</h3>
-
 <p>Try this one:</p>
-
 <pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="dv">1</span>:<span class="dv">10</span>
 
 x
@@ -155,47 +135,33 @@ x &gt;<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</spa
 <span class="co"># compare this to:</span>
 x &gt;<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">7</span>,  <span class="dv">1</span>,<span class="dv">7</span>,  <span class="dv">1</span>,<span class="dv">7</span>,  <span class="dv">1</span>,<span class="dv">7</span>,  <span class="dv">1</span>,<span class="dv">7</span>)
 <span class="co">#&gt;  [1] FALSE FALSE  TRUE FALSE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE</span></code></pre>
-
 <p>To understand what is going on here we need to talk about <em>recycling</em></p>
-
 <h2 id="recycling">Recycling of Vectors in R</h2>
-
 <p>A <em>very <strong>super-wickedly</strong>, important</em>, concept: R likes to operate on vectors of the same length, so if it encounters two vectors of different lengths in a binary operation, it merely replicates (<em>recycles</em>) the smaller vector until it is the same length as the longest vector, then it does the operation.</p>
-
 <p>If the recycled smaller vector has to be “chopped off” to make it the length of the longer vector, you will get a warning, but it will still return a result:</p>
-
 <pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>)
 y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">10</span>)
 
 x *<span class="st"> </span>y
-<span class="co">#&gt; Warning in x * y: longer object length is not a multiple of shorter object</span>
-<span class="co">#&gt; length</span>
+<span class="co">#&gt; Warning: longer object length is not a multiple of shorter object length</span>
 <span class="co">#&gt; [1]  1 20  3</span></code></pre>
-
 <h3>We will see Recycling In Many contexts</h3>
-
 <p>Recycling occurs wherever two or more vectors get operated on elementwise, not just with comparison operators. It also happens (as we saw above) with mathematical operators. And it also happens with indexing operators when indexing by logical vectors (you’ll see that later)!!</p>
-
 <p>You gotta know it! Here are some more examples:</p>
-
 <pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="dv">1</span>:<span class="dv">20</span>
 
 x *<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>)  <span class="co"># turns the even numbers to 0</span>
 <span class="co">#&gt;  [1]  1  0  3  0  5  0  7  0  9  0 11  0 13  0 15  0 17  0 19  0</span>
 
 x *<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>) <span class="co"># turns non-multiples of 3 to 0</span>
-<span class="co">#&gt; Warning in x * c(0, 0, 1): longer object length is not a multiple of</span>
-<span class="co">#&gt; shorter object length</span>
+<span class="co">#&gt; Warning: longer object length is not a multiple of shorter object length</span>
 <span class="co">#&gt;  [1]  0  0  3  0  0  6  0  0  9  0  0 12  0  0 15  0  0 18  0  0</span>
 
 x &lt;<span class="st"> </span>((<span class="dv">1</span>:<span class="dv">4</span>)^<span class="dv">2</span>) <span class="co"># recycling c(1, 4, 9, 16)</span>
 <span class="co">#&gt;  [1] FALSE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE FALSE</span>
 <span class="co">#&gt; [12]  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE</span></code></pre>
-
 <h2 id="combo-comps">Combinations of Comparisons; Logical Ops</h2>
-
 <p><strong>A Weather Example</strong></p>
-
 <ul>
 <li>Suppose two variables, <code>temp</code> (in degrees Celsius) and <code>precip</code> (in mm) each a vector of length 365.</li>
 <li>Tell me how you test for:
@@ -205,11 +171,8 @@ x &lt;<span class="st"> </span>((<span class="dv">1</span>:<span class="dv">4</s
 <li>Days with temp greater than 15 or with no precip (but not both)</li>
 </ul></li>
 </ul>
-
 <h3>Logical Operators-I</h3>
-
 <p>These operate on <code>logical</code>s and return <code>logical</code>s. <code>numeric</code> and <code>complex</code> vectors are coerced to <code>logical</code> before applying these.</p>
-
 <ul>
 <li>Unary operators (those that operate elementwise on a single vector)
 <ul>
@@ -223,9 +186,7 @@ x
 <span class="co">#&gt; [1] FALSE FALSE  TRUE  TRUE</span></code></pre></li>
 </ul></li>
 </ul>
-
 <h3>Logical Operators-II</h3>
-
 <ul>
 <li>Binary operators (operate elementwise on two vectors)
 <ul>
@@ -251,11 +212,8 @@ x |<span class="st"> </span>y
 <span class="co">#&gt; [1]    NA FALSE FALSE  TRUE    NA</span></code></pre></li>
 </ul></li>
 </ul>
-
 <h2 id="math-ops">Mathematical Operators</h2>
-
 <p>Operate on <code>numeric</code> or <code>complex</code> mode data and return the same</p>
-
 <pre class="sourceCode r"><code class="sourceCode r">x +<span class="st"> </span>y   <span class="co"># addition</span>
 x -<span class="st"> </span>y   <span class="co"># subtraction</span>
 x *<span class="st"> </span>y   <span class="co"># multiplication</span>
@@ -263,17 +221,11 @@ x /<span class="st"> </span>y   <span class="co"># division</span>
 x ^<span class="st"> </span>y   <span class="co"># exponentiation</span>
 x %%<span class="st"> </span>y  <span class="co"># modulo division (remainder) 10 %% 3 = 1 </span>
 x %/%<span class="st"> </span>y <span class="co"># integer division: 10 %/% 3 = 3</span></code></pre>
-
 <h3>Grouping Parts of Expressions</h3>
-
 <p>Parentheses are good for ensuring that parts of complex expressions are evaluated in the right order.</p>
-
 <p>But, in case you want to appear like a real code jock and don’t want to use parentheses, learn the rules of precence.</p>
-
 <h3>Precedence of Operators we Have seen</h3>
-
 <p>From highest to lowest:</p>
-
 <pre class="sourceCode r"><code class="sourceCode r">^<span class="st">                    </span><span class="co"># exponentiation (right to left)</span>
 -<span class="st"> </span>+<span class="st">                </span><span class="co"># unary minus and plus</span>
 <span class="er">:</span><span class="st">                    </span><span class="co"># sequence operator</span>
@@ -286,9 +238,7 @@ x %/%<span class="st"> </span>y <span class="co"># integer division: 10 %/% 3 = 
 -&gt;<span class="st">                 </span><span class="co"># rightwards assignment</span>
 <span class="er">=</span><span class="st">                    </span><span class="co"># assignment (right to left)</span>
 <span class="er">&lt;</span>-<span class="st">                 </span><span class="co"># assignment (right to left)</span></code></pre>
-
 <p>Higher precedence operators “stick” more tightly to their arguments. So, for example:</p>
-
 <pre class="sourceCode r"><code class="sourceCode r">x&lt;-<span class="dv">3</span>
 y&lt;-<span class="dv">2</span>
 
@@ -297,21 +247,15 @@ y&lt;-<span class="dv">2</span>
 
 -x ^<span class="st"> </span>y  <span class="co"># this is like -(x ^ y)</span>
 <span class="co">#&gt; [1] -9</span></code></pre>
-
 <h3>One very important precedence rule</h3>
-
 <p>Notice that the <code>:</code> has higher precedence than the <code>+</code>, <code>-</code>, <code>*</code>, or <code>/</code>.</p>
-
 <p>Thus</p>
-
 <pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span>:<span class="dv">5</span>*<span class="dv">3</span>   <span class="co"># this is (1:5)*3</span>
 <span class="co">#&gt; [1]  3  6  9 12 15</span>
 
 <span class="dv">1</span>:(<span class="dv">5</span>*<span class="dv">3</span>) <span class="co"># this is 1:15</span>
 <span class="co">#&gt;  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15</span></code></pre>
-
 <p>Or, if you want the sequence of numbers from 0 to n-1, be careful:</p>
-
 <pre class="sourceCode r"><code class="sourceCode r">n &lt;-<span class="st"> </span><span class="dv">5</span>
 
 <span class="dv">0</span>:n<span class="dv">-1</span>    <span class="co"># wrong</span>
@@ -319,46 +263,31 @@ y&lt;-<span class="dv">2</span>
 
 <span class="dv">0</span>:(n<span class="dv">-1</span>)  <span class="co"># right</span>
 <span class="co">#&gt; [1] 0 1 2 3 4</span></code></pre>
-
 <h3>Built In Help On Functions and Operators</h3>
-
 <p>Recall that <code>?function_name</code> returns help (if available) for the function with name <code>function_name</code>:</p>
-
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># examples:</span>
 ?c
 ?sum
 ?mean</code></pre>
-
 <p>Builtin help on topics we have discussed today can be found at <code>?Syntax</code>, <code>?Logic</code>, <code>?Comparison</code>, <code>?Arithmetic</code>.</p>
-
 <p>Also, all material here is covered in parts of sections 1 through 3 in <a href="http://cran.r-project.org/doc/manuals/R-intro.pdf">intro.pdf</a> available on CRAN.</p>
-
 <h2 id="indexing">Indexing</h2>
-
 <p>There are times when we want to access one or just a few elements from a vector. We’ve already seen an example of extracting a single element, for example:</p>
-
 <pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;devon&quot;</span>, <span class="st">&quot;alicia&quot;</span>, <span class="st">&quot;cassie&quot;</span>)
 
 x[<span class="dv">2</span>]  <span class="co"># this extracts the second element of x</span>
 <span class="co">#&gt; [1] &quot;alicia&quot;</span></code></pre>
-
 <p>Vectors in R are <em>base-1</em> subscripted. i.e. elements are subscripted “1, 2, 3, …” instead of “0, 1, 2, …”</p>
-
 <h3>Overview: 4 Ways To Extract from a Vector</h3>
-
 <p>Single square brackets are the <em>indexing</em> operators. There are four (common) ways of using the indexing operators. They differ by putting different things inside of the square brackets:</p>
-
 <ol style="list-style-type: decimal">
 <li>A vector of <em>positive</em> indices: <code>x[c(1,6,4)]</code></li>
 <li>A vector of <em>negative</em> indices: <code>x[-c(1,6,4)</code></li>
 <li>A <em>logical vector</em> of the appropriate length: <code>x[c(T,F,F,T,T)]</code></li>
 <li>A <em>character vector</em> of <em>names</em>: <code>x[c(&quot;Sept10&quot;,&quot;Sept24&quot;)]</code> <em>if the vector has a</em> <code>names</code> <em>attribute</em>.</li>
 </ol>
-
 <p>Number four should not make sense to you yet!</p>
-
 <h3>Indexing With Positive Integers</h3>
-
 <ul>
 <li><p>A vector of positive integers extracts the corresponding elements, <em>in the same order</em> and <em>as many times</em> as the indices are listed in the vector</p>
 <pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">7</span>,<span class="dv">8</span>)
@@ -372,9 +301,7 @@ x[<span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">1</span>,
 <span class="co">#&gt; [1]  8  5  7 NA</span></code></pre>
 <p>and gives <em>no warning</em> of this.</p></li>
 </ul>
-
 <h3>Indexing With Negative Integers</h3>
-
 <ul>
 <li>A vector of negative integers says, “extract everything <em>except</em> these indices.”
 <ul>
@@ -383,7 +310,6 @@ x[<span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">1</span>,
 <li>Negative integers exceeding the length of the vector are just ignored</li>
 </ul></li>
 </ul>
-
 <pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">7</span>,<span class="dv">8</span>) <span class="co"># here is our vector...</span>
 
 x[-<span class="dv">2</span>]
@@ -397,36 +323,27 @@ x[-<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>
 
 x[-<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">18</span>)]
 <span class="co">#&gt; [1] 5 7</span></code></pre>
-
 <p>You <em>cannot</em> mix positive and negative indices!</p>
-
 <h3>Indexing with Logical Vectors</h3>
-
 <ul>
 <li>You can supply a logical vector that is “parallel” to the vector you want to extract from. Any element where a <code>TRUE</code> occurs in the index vector gets returned. Order of elements is preserved and elements can’t get replicated.</li>
 </ul>
-
 <pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">7</span>,<span class="dv">8</span>)
 
 x[<span class="kw">c</span>(<span class="ot">FALSE</span>, <span class="ot">TRUE</span>, <span class="ot">TRUE</span>, <span class="ot">FALSE</span>)]
 <span class="co">#&gt; [1] 4 7</span></code></pre>
-
 <ul>
 <li>If the index vector is shorter than the vector being indexed, the index vector is <em>recycled</em></li>
 </ul>
-
 <pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">7</span>,<span class="dv">8</span>)
 
 x[<span class="kw">c</span>(<span class="ot">FALSE</span>, <span class="ot">TRUE</span>)]
 <span class="co">#&gt; [1] 4 8</span></code></pre>
-
 <h3>Empty Subscript Indexing</h3>
-
 <ul>
 <li>Here is a quirky feature that you should get to know well, as it will help to understand matrix and data.frame subscripting.</li>
 <li>If you apply an empty indexing operator <code>[]</code> to a vector, then it returns everything in the vector. Observe:</li>
 </ul>
-
 <pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">7</span>,<span class="dv">8</span>)
 
 x[]
@@ -434,13 +351,10 @@ x[]
 
 x
 <span class="co">#&gt; [1] 5 4 7 8</span></code></pre>
-
 <ul>
 <li>“When you give R nothing it gives you everything in return!”</li>
 </ul>
-
 <h2 id="replacement-form-indexing">The Replacement form of Indexing</h2>
-
 <ul>
 <li>Also called the <em>assignment</em> form. Allows you to change specified elements of a vector while leaving the others untouched (<em>except for mode changes due to coercion!</em>)</li>
 <li><p>This usually takes some getting used to, but you will use it all over in R. So get comfortable with it!</p>
@@ -477,9 +391,7 @@ x
 <span class="co">#&gt; [1] &quot;boing2&quot; &quot;boing3&quot; &quot;boing3&quot; &quot;8&quot;</span></code></pre>
 <p>The vector that is being assigned gets <em>recycled</em> as need be to match the length of the (extracted part of the) vector being indexed and assigned to.</p></li>
 </ul>
-
 <h3>Assignment Beyond the length of the Vector</h3>
-
 <ul>
 <li><p>This is allowable when using the replacement form. Intermediate elements are set to NA</p>
 <pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">7</span>,<span class="dv">8</span>)

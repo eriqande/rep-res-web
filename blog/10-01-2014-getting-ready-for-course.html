@@ -64,27 +64,16 @@
 
         <div id="content" class="col-sm-8 pull-right">
           <h1>Getting ready for the course</h1>
-
 <p>2014-10-01</p>
-
 <h2 id="blog-website-setup">Website setup</h2>
-
 <p>I spent the better part of last night wrangling with CSS/bootstrap related things. I don’t really do any web-stuff or CSS-schmid, so there was a lot of learning (and a painful amount of ignorance) going on last night. I had a good time putting most of the components into little html snippets in the <code>_includes</code> directory and then using the Liquid <code>include</code> type tags. That makes things a lot cleaner. Then I totally frittered away an hour trying to figure out how to put some extra padding on top of the body to keep the fixed top navbar from covering up the page title. Turns out I had to wrap the <code>body { top-padding: 70px }</code> directive in some <code>&lt;style&gt;</code> tags (told you I was a total CSS noob). I finally got it to work, but then decided that a static top bar was the way to go b/c of the way I will present the “lectures” (see below).</p>
-
 <p>I decided that rather than render the lectures into <code>slidy</code> format or <code>ioslides</code> it would be better to just set my browser to full screen and crank up the font size. Bootstrap is so brilliant that when I do that, the mini column on the left eventually gets stacked on top of the main content in the lecture notes so I can just go through it serially. This seems way better because there are always problems with code getting chopped off in <code>slidy</code> on the right of the window, and also with losing stuff off the bottom of the slides. So, not only will it be easier, I think it will be better.</p>
-
 <p>I do want to modify the left hand side-bar, however. Currently it doesn’t flow up the screen when scrolling. I really like the one that the Bootstrap site uses on the right hand side in its documentation section. It would be cool to get that going, and use several different levels of headers. Not sure if I will be able to pull that off, though.</p>
-
 <h2 id="blog-head-around-forking">Getting my head around forking and pull requests</h2>
-
 <p>Ultimately I want students to submit their completed homeworks through pull requests. And, then I would like pairs of students to comment on each other’s pull requests. I think that I can do that all on the single repository—i.e. there is no need or individuals to submit pull requests to other people’s forks of the course repo. But I am not sure how that all works (this is a serious example of learning something just days before I want to teach it!)</p>
-
 <p>The big questions to me now have to do with updating branches on one’s fork after the upstream repository has added a new branch. For example, if someone has already forked my repo, and then I make a new branch called <code>hw3</code> (homework 3) and I would like them to fetch that and pull it into their own <code>hw3</code> branch and then send me a pull request on that, I am not entirely clear of what the best way forward on that is.</p>
-
 <p>So, I am going to make myself a new GitHub account tied to my personal email so that I can test some forking stuff. And then I have a lot of reading to do, starting with <a href="https://help.github.com/categories/18/articles" class="uri">https://help.github.com/categories/18/articles</a></p>
-
 <p>For future reference when I have the students do it, these are the steps to setting up a GitHub account:</p>
-
 <ol style="list-style-type: decimal">
 <li>Go to github.com</li>
 <li>Fill out the input boxes for <code>Pick a username</code>, <code>Your email</code>, <code>Create a password</code>, using your name and email and password.</li>
@@ -93,13 +82,9 @@
 <li>After that, GitHub will send you an email at the address you gave them and ask you to click on the link in that email to verify that the email is correct and valid.</li>
 <li>That takes you to GitHub and they ask if you want your email to be private or not. You can do whatever you feel comfortable with there. I have never gotten any spam from having my email on GitHub.</li>
 </ol>
-
 <p>And that is about it. I made myself an account called <code>eca-home</code> using my stanford address. I have to use that account with FireFox, because on Chrome I am <code>eriqande</code> at GitHub.</p>
-
 <h3>Try Editing rep-res-course</h3>
-
 <p>I will try editing the index.rmd using the Edit button. So, in FireFox I went to <a href="http://eriqande.github.io/rep-res-web/" class="uri">http://eriqande.github.io/rep-res-web/</a> and hit “Edit this page”. Here is what happened:</p>
-
 <ul>
 <li>Got a page telling me I need to <code>fork this repository and propose changes</code>, with a big green button telling me to do so.</li>
 <li>It then gives a message that says: <em>You are editing a file in a project you do not have write access to. We are forking this project for you (if one does not yet exist) to write your proposed changes to. Submitting a change to this file will write it to a new branch in your fork so you can send a pull request.</em> And you can edit stuff directly write on the web.</li>
@@ -108,7 +93,6 @@
 <li>I then sent the pull request from <code>eca-home</code>.</li>
 <li>Picking that up from <code>eriqande</code> was super easy on GitHub. And I could have merged it directly via the web interface. However, there were super clear instructions on how to test the changes locally, found by clicking on <code>command line</code> where it said: <em>You can also merge branches on the command line</em>. So, I had a go at that:</li>
 </ul>
-
 <pre class="sourceCode r"><code class="sourceCode r"><span class="dv">2014-10-01</span> <span class="dv">10</span>:<span class="dv">05</span> /rep-res-course/--% (master) git checkout -b eca-home-patch<span class="dv">-3</span> master
 
 <span class="co"># Note: the above takes the current state of my master branch and creates a </span>
@@ -136,17 +120,13 @@ Updating 6647cb4..a522320
 Fast-forward
  index.rmd |<span class="st"> </span><span class="dv">3</span> ++-
 <span class="st"> </span><span class="dv">1</span> file changed, <span class="dv">2</span> <span class="kw">insertions</span>(+), <span class="dv">1</span> <span class="kw">deletion</span>(-)</code></pre>
-
 <ul>
 <li>So, at this point I will test those changes and make sure they work:</li>
 </ul>
-
 <pre class="sourceCode r"><code class="sourceCode r"><span class="dv">2014-10-01</span> <span class="dv">10</span>:<span class="dv">11</span> /rep-res-course/--% (eca-home-patch<span class="dv">-3</span>) ./build-site.sh -l</code></pre>
-
 <ul>
 <li>Yep! it is working just fine. So, now we can merge that dude and push it up.</li>
 </ul>
-
 <pre class="sourceCode r"><code class="sourceCode r"><span class="dv">2014-10-01</span> <span class="dv">10</span>:<span class="dv">28</span> /rep-res-course/--% (eca-home-patch<span class="dv">-3</span>) git checkout master
 M  _layouts/post.html
 M   lectures/r_vector_indexing_and_attributes.rmd
@@ -166,12 +146,10 @@ Writing objects:<span class="st"> </span><span class="dv">100</span>% (<span cla
 Total <span class="dv">4</span> (delta <span class="dv">2</span>), reused <span class="dv">0</span> (delta <span class="dv">0</span>)
 To https:<span class="er">//</span>github.com/eriqande/rep-res-course.git
    6647cb4..a2c1af1  master -&gt;<span class="st"> </span>master</code></pre>
-
 <ul>
 <li>Cool! That merged it and pushed the change up to <code>origin/master</code>. And it automatically closed the pull request on GitHub. That is awesome. So, I guess when you merge in a change and push it up GitHub is smart enough to just close the associated pull request.<br /></li>
 <li>For completeness, let’s chuck the branches that we can.</li>
 </ul>
-
 <pre class="sourceCode r"><code class="sourceCode r"><span class="dv">2014-10-01</span> <span class="dv">10</span>:<span class="dv">35</span> /rep-res-course/--% (master) git branch
   eca-home-patch<span class="dv">-3</span>
   gh-pages
@@ -180,15 +158,10 @@ To https:<span class="er">//</span>github.com/eriqande/rep-res-course.git
 
 <span class="dv">2014-10-01</span> <span class="dv">10</span>:<span class="dv">35</span> /rep-res-course/--% (master) git branch -d eca-home-patch<span class="dv">-3</span> 
 Deleted branch eca-home-patch<span class="dv">-3</span> (was a522320).</code></pre>
-
 <p>OK, so, that was pretty easy. Now I just need to figure out how to instruct students to make branches and checkout homework into those branches and make good pull requests. Still not there yet, but getting my head around this.</p>
-
 <h2 id="blog-fork-commline">Forking and pull requests via the command line</h2>
-
 <p>OK, I now have a fork of rep-res-course at <code>eca-home</code>. Now I want to clone that locally and then update to upstream, and then make a branch and edit it and then push it up to my fork and make a pull request on that.</p>
-
 <p>Let’s see how that goes</p>
-
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># first clone it</span>
 <span class="dv">2014-10-01</span> <span class="dv">13</span>:<span class="dv">02</span> /git-eca-home/--% pwd
 /Users/eriq/Documents/git-eca-home
@@ -212,13 +185,9 @@ Eric At Home
 <span class="dv">2014-10-01</span> <span class="dv">13</span>:<span class="dv">06</span> /rep-res-course/--% (master) git remote -v
 origin  https:<span class="er">//</span>github.com/eca-home/rep-res-<span class="kw">course.git</span> (fetch)
 origin  https:<span class="er">//</span>github.com/eca-home/rep-res-<span class="kw">course.git</span> (push)</code></pre>
-
 <p>There is a good post about upstream remotes here <a href="http://felipec.wordpress.com/2013/09/01/advanced-git-concepts-the-upstream-tracking-branch/" class="uri">http://felipec.wordpress.com/2013/09/01/advanced-git-concepts-the-upstream-tracking-branch/</a> in particular the command <code>git remote -vv</code> is handy.</p>
-
 <h3>Hmm…wait a minute. There might be a better way to do this.</h3>
-
 <p>Rather than clone the fork. It might be better to clone the main repository into a master branch which will track the main (eriqande’s) repo as origin/master. Then things can be branched off origin/master. (This is what the Pro Git book seems to recommend). Let’s try that.</p>
-
 <pre class="sourceCode r"><code class="sourceCode r"><span class="dv">2014-10-01</span> <span class="dv">13</span>:<span class="dv">20</span> /git-eca-home/--% sudo rm -r rep-res-course/
 <span class="dv">2014-10-01</span> <span class="dv">13</span>:<span class="dv">22</span> /git-eca-home/--% pwd
 /Users/eriq/Documents/git-eca-home
@@ -227,26 +196,17 @@ origin  https:<span class="er">//</span>github.com/eca-home/rep-res-<span class=
 <span class="dv">2014-10-01</span> <span class="dv">13</span>:<span class="dv">22</span> /rep-res-course/--% (master) git config user.email <span class="st">&quot;eric.anderson@stanfordalmni.org&quot;</span>
 <span class="dv">2014-10-01</span> <span class="dv">13</span>:<span class="dv">23</span> /rep-res-course/--% (master) git branch -vv
 *<span class="st"> </span>master eb8b9a9 [origin/master] minor fix</code></pre>
-
 <p>OK, now with that set up that way I should be able to make a new branch and make some change to it. For this I am just following the ProGit book.</p>
-
 <pre class="sourceCode r"><code class="sourceCode r"><span class="dv">2014-10-01</span> <span class="dv">13</span>:<span class="dv">26</span> /rep-res-course/--% (master) git checkout -b mock-homework<span class="dv">-1</span></code></pre>
-
 <p>Then added some stuff to index.rmd. Now we will see about pushing that to the fork and sending a pull request.</p>
-
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># add the remote for mock-homework-1 branch</span>
 <span class="dv">2014-10-01</span> <span class="dv">13</span>:<span class="dv">39</span> /rep-res-course/--% (mock-homework<span class="dv">-1</span>) git remote add my-rep-res-fork https:<span class="er">//</span>github.com/eca-home/rep-res-course.git
 <span class="co"># push that up there:</span>
 <span class="dv">2014-10-01</span> <span class="dv">13</span>:<span class="dv">40</span> /rep-res-course/--% (mock-homework<span class="dv">-1</span>) git push my-rep-res-fork mock-homework<span class="dv">-1</span> </code></pre>
-
 <p>After that, when I go to my <code>eca-home</code> github account. There is a big green button at the top telling me that I just pushed that branch up, and it asks me if I want to send a pull request.</p>
-
 <p>So, let’s press that big green button. That does just what it is supposed to do. Unfortunately, all of a sudden the colors on my screen got horribly washed out. I’m going to restart here.</p>
-
 <h3>Doing a similar thing with Bookdown</h3>
-
 <p>I wanted to tweak a very minor thing in hadley’s bookdown package (needed it to recursively find all the .rmd files in my repository to index them into toc.yaml). So, I cloned his bookdown repository and then did this:</p>
-
 <pre class="sourceCode r"><code class="sourceCode r">/bookdown/--% (index-recursively) pwd
 /Users/eriq/Documents/git-others-repos/bookdown
 /bookdown/--% (master) git checkout -b index-recursively

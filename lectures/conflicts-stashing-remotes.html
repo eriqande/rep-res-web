@@ -64,7 +64,6 @@
 
         <div id="content" class="col-sm-8 pull-right">
           <h1 id="conflicts-and-remotes">Conflicts, stashing, remotes</h1>
-
 <ul>
 <li>Goals for this lecture
 <ol style="list-style-type: decimal">
@@ -74,11 +73,8 @@
 <li>Remote brances: learn how git interacts with remote repositories via remote branches. Let everyone set up their very own, distinct repository on GitHub.</li>
 </ol></li>
 </ul>
-
 <h2 id="intro-to-lists">Configuring your text editor</h2>
-
 <h3>Git needs messages from you</h3>
-
 <ul>
 <li>When you make commits, git wants you to comment on them</li>
 <li>If you don’t write a commit message, the commit gets aborted</li>
@@ -93,9 +89,7 @@
 </ul></li>
 <li>On PC: did any people on PC’s have an awkward time writing or saving their commit messages?</li>
 </ul>
-
 <h3>What editor does git use?</h3>
-
 <ul>
 <li>You can configure it:
 <ul>
@@ -132,9 +126,7 @@ branch.master.merge=refs/heads/master</code></pre></li>
 <span class="co"># which gives:</span>
 EDITOR=emacs</code></pre></li>
 </ul>
-
 <h3>What should you use?</h3>
-
 <ul>
 <li>In my opinion, the most hassle free terminal editor for newcomers is <code>nano</code> which should already be intsalled on OS X.</li>
 <li><p>If you want a reasonable editor for git, on Mac, do this:</p>
@@ -150,11 +142,8 @@ EDITOR=emacs</code></pre></li>
 <li>Note that your commit message can’t be empty (or git will abort the commit).</li>
 </ul></li>
 </ul>
-
 <h2 id="no-fear-merge-conflicts">Don’t be afraid of merge conflicts</h2>
-
 <h3>Conflicts happen</h3>
-
 <ul>
 <li>Git will report a <em>merge conflict</em> when merging two commits in which the <em>same part</em> of the <em>same file</em> has been modified.</li>
 <li>What is meant by the <em>same part</em> of the <em>same file</em>
@@ -162,11 +151,8 @@ EDITOR=emacs</code></pre></li>
 <li>Same line? Same word? Same “paragraph”?, etc.</li>
 </ul></li>
 </ul>
-
 <h3>Class activity to explore conflicts</h3>
-
 <p><strong>Here is what I did</strong></p>
-
 <ol style="list-style-type: decimal">
 <li>Create new RStudio project with a git repository and call it <code>explore_conflict</code></li>
 <li><p>Create a new R file called <code>three_lines.R</code> and fill it with this:</p>
@@ -232,11 +218,8 @@ git merge a3  <span class="co"># No conflicts!</span></code></pre></li>
 </ul></li>
 </ol></li>
 </ol>
-
 <h2 id="no-switchy-branchy">When git doesn’t let me switch branches (or merge)</h2>
-
 <h3>Git will typically not lot you clobber your working area</h3>
-
 <ul>
 <li>If your working directory is <em>clean</em>, you can switch branches or <em>merge</em> without git shrieking at you.</li>
 <li><p>If you working directory is <em>dirty</em>, you might see this:</p>
@@ -257,9 +240,7 @@ Aborting</code></pre></li>
 <li>For a detailed discussion of when git will and won’t let you switch branches check out this <a href="http://stackoverflow.com/questions/22053757/git-checkout-another-branch-when-there-are-uncommitted-changes-on-the-current">link</a></li>
 <li><p>Big Note: If uncommitted changes wouldn’t be clobbered by switching to a new branch, then that dirty state gets carried over to the branch you are switching to.</p></li>
 </ul>
-
 <h3>What can be done when you can’t switch branches</h3>
-
 <ul>
 <li>First, try to understand just which files will get clobbered.</li>
 <li>Then you have the choice of:
@@ -272,9 +253,7 @@ Aborting</code></pre></li>
 <li>Number 2 is good if you really want to commit that work</li>
 <li>If neither #1 or #2 are good for you, then #3 is a good choice.</li>
 </ul>
-
 <h3>What does stashing do?</h3>
-
 <ul>
 <li>Stashing saves the <em>changes</em> that have been made to the current branch (and the state of the index) AND then wipes them away to return your branch to a clean state.</li>
 <li>Then you can switch branches, work on something else, and when you come back to the original branch you stashed on, you can bring those changes back up.</li>
@@ -295,9 +274,7 @@ git stash apply
 <span class="co"># This can restore earlier stashes</span>
 git stash apply stash@{i}  <span class="co"># where i is 0, 1, 2, ... depending on which stash you want.</span></code></pre></li>
 </ul>
-
 <h3>Applying stashes up on branches they weren’t stashed off of</h3>
-
 <ul>
 <li>This gets complicated. Not recommended for now.</li>
 <li><p>If you have moved way on from where you stashed, you can do:</p>
@@ -311,9 +288,7 @@ which will give you a whole new branch off of the branch you stashed off of, and
 <li>Note: it also drops your stash from the list of stashes!</li>
 </ul></li>
 </ul>
-
 <h2>Remote branches</h2>
-
 <ul>
 <li>We will leave a full discussion of these points:
 <ul>
@@ -322,7 +297,6 @@ which will give you a whole new branch off of the branch you stashed off of, and
 </ul></li>
 <li>Until then, let’s have everyone create their own repository on GitHub if there is time.</li>
 </ul>
-
 <ol style="list-style-type: decimal">
 <li>Make a repository to put on GitHub (just make a new RStudio project with git version control)</li>
 <li>Make a commit on it.</li>

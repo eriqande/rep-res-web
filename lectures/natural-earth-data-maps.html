@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Natural Earth Data Maps With R &middot; Reproducible Research.</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="http://eriqande.github.io/rep-res-web/www/bootstrap.min.css" rel="stylesheet">
+    <link href="http://eriqande.github.io/rep-res-web/www/highlight.css" rel="stylesheet">
+
+    <link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700'
+      rel='stylesheet' type='text/css'>
+  </head>
+
+  <body>
+    <div class="navbar navbar-default navbar-static-top">
+ <div class="navbar-header"><a class="navbar-brand" href="http://eriqande.github.io/rep-res-web">RepResCourse</a>
+      <a class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="http://eriqande.github.io/rep-res-web/syllabus.html">Syllabus</a></li>
+        <li><a href="http://eriqande.github.io/rep-res-web/resources.html">Resources</a></li>
+        <li><a href="http://eriqande.github.io/rep-res-web/blogs.html">Instructor Blog</a></li>
+        <li><a href="#">Results/Gallery</a></li>
+      </ul>
+      <div class="navbar-right">
+    	<p class="navbar-text">I'm navbar-fixed-top</p>
+  	  </div>
+    </div>
+</div>
+
+
+    <div class="container">
+            <!-- The title and stuff is here -->
+      <div class="masthead">
+        <p> </p>
+        <p> </p>
+        <h3 class="muted"><a href="http://eriqande.github.io/rep-res-web/">Reproducible Research Course</a> <small>by Eric C. Anderson for (NOAA/SWFSC)</small></h3>
+        <hr>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-3" id="nav">
+          <div class="well">
+  How's this site built? See all sources at the course <a href="http://github.com/eriqande/rep-res-course">repository</a> on GitHub.
+  <p><hr></p>
+  <p><a class="btn btn-primary" href="https://raw.githubusercontent.com/eriqande/rep-res-course/master/lectures/natural-earth-data-maps.Rmd">Raw on GitHub</a></p>
+</div>
+
+<h4>Page Contents</h4>
+<ul class="list-unstyled" id="toc"></ul>
+
+<hr>
+<p><a href="http://eriqande.github.io/rep-res-web/contribute.html">How to contribute</a></p>
+<p><a class="btn btn-primary" href="https://github.com/eriqande/rep-res-course/edit/master/lectures/natural-earth-data-maps.Rmd">Edit this page</a></p>
+
+
+        </div>
+
+        <div id="content" class="col-sm-8 pull-right">
+          <h1 id="nat-earth-data-maps">Using Natural Earth Data with ggplot</h1>
+<h2>Intro</h2>
+<p>Found a blog post at <a href="http://downwithtime.wordpress.com/2013/12/04/naturalearthdata-and-r-in-ggplot2/" class="uri">http://downwithtime.wordpress.com/2013/12/04/naturalearthdata-and-r-in-ggplot2/</a> that had some stuff about it.</p>
+<p>Going to try to follow it.</p>
+<h3>Install rgdal</h3>
+<p>This apparently needs gdal. So try this:</p>
+<pre><code>2014-12-07 21:33 /~/--% brew install gdal
+Error: You must `brew link libpng&#39; before gdal can be installed
+2014-12-07 21:33 /~/--% brew link libpng
+Linking /usr/local/Cellar/libpng/1.6.10... 18 symlinks created
+2014-12-07 21:33 /~/--% brew install gdal
+==&gt; Installing dependencies for gdal: jpeg, giflib, libtiff, lzlib, proj,
+==&gt; Installing gdal dependency: jpeg
+==&gt; Downloading https://downloads.sf.net/project/machomebrew/Bottles/jpeg-8d.mav
+######################################################################## 100.0%
+[...]</code></pre>
+<p>That installs a boatload of dependencies. However, the build failed because it couldn’t find libjpeg.</p>
+<p>So, I tried brew intalling it and got this:</p>
+<pre><code>2014-12-07 21:35 /~/--% brew link libjpeg
+Linking /usr/local/Cellar/jpeg/8d... 
+Error: Could not symlink bin/wrjpgcom
+Target /usr/local/bin/wrjpgcom
+already exists. You may want to remove it:
+  rm /usr/local/bin/wrjpgcom
+
+To force the link and overwrite all conflicting files:
+  brew link --overwrite jpeg
+
+To list all files that would be deleted:
+  brew link --overwrite --dry-run jpeg
+2014-12-07 21:36 /~/--%  brew link --overwrite --dry-run jpeg
+Would remove:
+/usr/local/bin/wrjpgcom
+/usr/local/bin/rdjpgcom
+/usr/local/bin/jpegtran
+/usr/local/bin/djpeg
+/usr/local/bin/cjpeg
+/usr/local/include/jpeglib.h
+/usr/local/include/jmorecfg.h
+/usr/local/include/jerror.h
+/usr/local/include/jconfig.h
+/usr/local/lib/libjpeg.a</code></pre>
+<p>So I tried it</p>
+<pre><code>brew link --overwrite jpeg</code></pre>
+<p>Then a quick</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;rgdal&quot;</span>, <span class="dt">type =</span> <span class="st">&quot;source&quot;</span>)</code></pre>
+<p>did it for me.</p>
+<p>Great.</p>
+<h3>Getting on with it:</h3>
+<h4>Load libraries</h4>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(raster)
+<span class="co">#&gt; Warning: package &#39;raster&#39; was built under R version 3.1.1</span>
+<span class="co">#&gt; Loading required package: sp</span>
+<span class="kw">library</span>(rgdal)
+<span class="co">#&gt; rgdal: version: 0.9-1, (SVN revision 518)</span>
+<span class="co">#&gt; Geospatial Data Abstraction Library extensions to R successfully loaded</span>
+<span class="co">#&gt; Loaded GDAL runtime: GDAL 1.11.0, released 2014/04/16</span>
+<span class="co">#&gt; Path to GDAL shared files: /usr/local/Cellar/gdal/1.11.0/share/gdal</span>
+<span class="co">#&gt; Loaded PROJ.4 runtime: Rel. 4.8.0, 6 March 2012, [PJ_VERSION: 480]</span>
+<span class="co">#&gt; Path to PROJ.4 shared files: (autodetected)</span>
+<span class="kw">library</span>(ggplot2)
+<span class="kw">library</span>(reshape2)
+<span class="kw">library</span>(plyr)</code></pre>
+<h4>Download Natural Earth Data</h4>
+<p>I grabbed the NE2 stuff at 1:50 with water from a download button at: <a href="http://www.naturalearthdata.com/downloads/50m-raster-data/50m-natural-earth-2/" class="uri">http://www.naturalearthdata.com/downloads/50m-raster-data/50m-natural-earth-2/</a> I downloaded the “small size” which was 83 Mb.</p>
+<p>I just got the rasters for now and put them into <code>/Users/eriq/Maps/NE2_50M_SR_W/</code></p>
+<h4>Just do the base raster layer</h4>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># load raster stack</span>
+nat.earth &lt;-<span class="st"> </span><span class="kw">stack</span>(<span class="st">&#39;~/Maps/NE2_50M_SR_W/NE2_50M_SR_W.tif&#39;</span>)
+
+<span class="co"># I am sure this could be done faster with dplyr, now</span>
+<span class="co"># but this is how the guy did it:</span>
+
+<span class="co">#  I have a domain I&#39;m interested in, but there&#39;s no reason you can&#39;t define something else:</span>
+quick.subset &lt;-<span class="st"> </span>function(x, longlat){
+ 
+<span class="co"># longlat should be a vector of four values: c(xmin, xmax, ymin, ymax)</span>
+  x@data$id &lt;-<span class="st"> </span><span class="kw">rownames</span>(x@data)
+ 
+  x.f =<span class="st"> </span><span class="kw">fortify</span>(x, <span class="dt">region=</span><span class="st">&quot;id&quot;</span>)
+  x.join =<span class="st"> </span><span class="kw">join</span>(x.f, x@data, <span class="dt">by=</span><span class="st">&quot;id&quot;</span>)
+ 
+  x.subset &lt;-<span class="st"> </span><span class="kw">subset</span>(x.join, x.join$long &gt;<span class="st"> </span>longlat[<span class="dv">1</span>] &amp;<span class="st"> </span>x.join$long &lt;<span class="st"> </span>longlat[<span class="dv">2</span>] &amp;
+<span class="st">                           </span>x.join$lat &gt;<span class="st"> </span>longlat[<span class="dv">3</span>] &amp;<span class="st"> </span>x.join$lat &lt;<span class="st"> </span>longlat[<span class="dv">4</span>])
+ 
+  x.subset
+}
+
+<span class="co"># here is the part we want to focus on:</span>
+domain &lt;-<span class="st"> </span><span class="kw">c</span>(-<span class="fl">98.6</span>, -<span class="fl">66.1</span>, <span class="fl">36.5</span>, <span class="fl">49.7</span>)
+
+<span class="co"># here he crops the nat earth base layer</span>
+nat.crop &lt;-<span class="st"> </span><span class="kw">crop</span>(nat.earth, <span class="dt">y=</span><span class="kw">extent</span>(domain))
+
+<span class="co"># this must make a data frame out of the raster:</span>
+rast.table &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">xyFromCell</span>(nat.crop, <span class="dv">1</span>:<span class="kw">ncell</span>(nat.crop)),
+                         <span class="kw">getValues</span>(nat.crop/<span class="dv">255</span>))
+
+
+<span class="co"># this adds color values in there as a single column, using the</span>
+<span class="co"># channels that are named NE2_50M_SR_W.{1,2,3}</span>
+rast.table$rgb &lt;-<span class="st"> </span><span class="kw">with</span>(rast.table, <span class="kw">rgb</span>(NE2_50M_SR_W<span class="fl">.1</span>,
+                                       NE2_50M_SR_W<span class="fl">.2</span>,
+                                       NE2_50M_SR_W<span class="fl">.3</span>,
+                                      <span class="dv">1</span>))</code></pre>
+<p>Now, we should be able to plot the base layer:</p>
+<pre class="sourceCode r"><code class="sourceCode r">g1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> rast.table, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y)) +
+<span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">fill =</span> rast.table$rgb)</code></pre>
+<p>That seems to take a very long time. But mostly that is the time it takes for the thing to get rendered to the screen. But I wonder if <code>geom_raster</code> would be faster. It is supposed to more efficient…</p>
+<pre class="sourceCode r"><code class="sourceCode r">g2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> rast.table, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y)) +
+<span class="st">  </span><span class="kw">geom_raster</span>(<span class="dt">fill =</span> rast.table$rgb)</code></pre>
+<p>That certainly returns from the function quickly. It might be a little quicker.</p>
+<p>I wonder how long it takes to make a png or a jpeg?</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggsave</span>(<span class="dt">filename =</span> <span class="st">&quot;ne.png&quot;</span>, g2)
+<span class="co">#&gt; Saving 10 x 7 in image</span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggsave</span>(<span class="dt">filename =</span> <span class="st">&quot;ne.jpg&quot;</span>, g2)
+<span class="co">#&gt; Saving 10 x 7 in image</span></code></pre>
+<h4>Now, do another part of the world:</h4>
+<p>I am going to do a bit of BC:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># note extent has to be given as min/max for long then lat</span>
+domain &lt;-<span class="st"> </span><span class="kw">c</span>(-<span class="fl">128.673958</span>, -<span class="fl">122.016243</span>, <span class="fl">48.126320</span>, <span class="fl">51.114388</span>)
+nat.crop &lt;-<span class="st"> </span><span class="kw">crop</span>(nat.earth, <span class="dt">y=</span><span class="kw">extent</span>(domain))
+rast.table &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">xyFromCell</span>(nat.crop, <span class="dv">1</span>:<span class="kw">ncell</span>(nat.crop)),
+                         <span class="kw">getValues</span>(nat.crop/<span class="dv">255</span>))
+rast.table$rgb &lt;-<span class="st"> </span><span class="kw">with</span>(rast.table, <span class="kw">rgb</span>(NE2_50M_SR_W<span class="fl">.1</span>,
+                                       NE2_50M_SR_W<span class="fl">.2</span>,
+                                       NE2_50M_SR_W<span class="fl">.3</span>,
+                                      <span class="dv">1</span>))</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">bc1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> rast.table, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y)) +
+<span class="st">  </span><span class="kw">geom_raster</span>(<span class="dt">fill =</span> rast.table$rgb)
+bc1</code></pre>
+<p><img src="lecture_figs/nat-earth-ggplotunnamed-chunk-10.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" width="600px" height="420px" /></p>
+<p>Wow! That is totally unsuitable!! So, this is a very coarse resolution map.</p>
+<p>but the 1:10 couldn’t be that much better. Did I downscale stuff when I made our big map.</p>
+<h4>Try just the coastline</h4>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># note that it apparently does not do tilde expansion on the path</span>
+ne_coast &lt;-<span class="st"> </span><span class="kw">readOGR</span>(<span class="dt">dsn =</span> <span class="st">&quot;/Users/eriq/Maps/NaturalEarth&quot;</span>, <span class="dt">layer =</span> <span class="st">&quot;ne_50m_coastline&quot;</span>)
+<span class="co">#&gt; OGR data source with driver: ESRI Shapefile </span>
+<span class="co">#&gt; Source: &quot;/Users/eriq/Maps/NaturalEarth&quot;, layer: &quot;ne_50m_coastline&quot;</span>
+<span class="co">#&gt; with 1428 features and 2 fields</span>
+<span class="co">#&gt; Feature type: wkbLineString with 2 dimensions</span>
+
+coast.subset &lt;-<span class="st"> </span><span class="kw">quick.subset</span>(ne_coast, domain)</code></pre>
+<p>The try to plot it:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() +<span class="st"> </span><span class="kw">geom_path</span>(<span class="dt">data=</span>coast.subset, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group), <span class="dt">color =</span> <span class="st">&#39;blue&#39;</span>)</code></pre>
+<p><img src="lecture_figs/nat-earth-ggplotunnamed-chunk-12.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" width="600px" height="420px" /></p>
+<p>Boy! That is intended for very zoomed out things.</p>
+<p>What if I do the 1:10 verion?</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># note that it apparently does not do tilde expansion on the path</span>
+ne_coast &lt;-<span class="st"> </span><span class="kw">readOGR</span>(<span class="dt">dsn =</span> <span class="st">&quot;/Users/eriq/Maps/ne_10m_coastline&quot;</span>, <span class="dt">layer =</span> <span class="st">&quot;ne_10m_coastline&quot;</span>)
+<span class="co">#&gt; OGR data source with driver: ESRI Shapefile </span>
+<span class="co">#&gt; Source: &quot;/Users/eriq/Maps/ne_10m_coastline&quot;, layer: &quot;ne_10m_coastline&quot;</span>
+<span class="co">#&gt; with 4132 features and 2 fields</span>
+<span class="co">#&gt; Feature type: wkbLineString with 2 dimensions</span>
+
+coast.subset &lt;-<span class="st"> </span><span class="kw">quick.subset</span>(ne_coast, domain)</code></pre>
+<p>And here we plot it:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() +<span class="st"> </span><span class="kw">geom_path</span>(<span class="dt">data=</span>coast.subset, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group), <span class="dt">color =</span> <span class="st">&#39;blue&#39;</span>)</code></pre>
+<p><img src="lecture_figs/nat-earth-ggplotunnamed-chunk-14.png" title="plot of chunk unnamed-chunk-14" alt="plot of chunk unnamed-chunk-14" width="600px" height="420px" /></p>
+<h2>What if you use ggmap</h2>
+<p>Check this out:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggmap)
+vi &lt;-<span class="st"> </span><span class="kw">get_map</span>(<span class="st">&quot;Vancouver Island&quot;</span>, <span class="dt">zoom =</span> <span class="dv">7</span>)
+<span class="co">#&gt; Map from URL : http://maps.googleapis.com/maps/api/staticmap?center=Vancouver+Island&amp;zoom=7&amp;size=640x640&amp;scale=2&amp;maptype=terrain&amp;language=en-EN&amp;sensor=false</span>
+<span class="co">#&gt; Information from URL : http://maps.googleapis.com/maps/api/geocode/json?address=Vancouver+Island&amp;sensor=false</span>
+<span class="kw">ggmap</span>(vi)</code></pre>
+<p><img src="lecture_figs/nat-earth-ggplotunnamed-chunk-15.png" title="plot of chunk unnamed-chunk-15" alt="plot of chunk unnamed-chunk-15" width="600px" height="420px" /> And if you save that as a jpg or png you can zoom in even further. I don’t think that Natural Earth data can hold a candle to that.</p>
+
+          <hr>
+           <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'rep-res-course'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    
+        </div>
+      </div>
+
+            <div class="footer">
+        <hr>
+        <p>
+          <small>
+            Authored by Eric C. Anderson working as a Federal employee.  Content on this website is a government work in the public domain in the U.S. and under the CC0 1.0 internationally. Templates and plugins to build the site are modified from Hadley Wickham's <a href="https://github.com/hadley/adv-r/">Advanced R</a> website. Powered by <a href="http://jekyllrb.com/">jekyll</a>,
+          <a href="http://yihui.name/knitr/">knitr</a>, and
+          <a href="http://johnmacfarlane.net/pandoc/">pandoc</a>. Source
+          available on <a href="https://github.com/eriqande/rep-res-course/">github</a>.
+          </small>
+        </p>
+      </div>
+
+
+    </div> <!-- /container -->
+
+  <script src="//code.jquery.com/jquery.js"></script>
+  <script src="http://eriqande.github.io/rep-res-web/www/bootstrap.min.js"></script>
+  <script src="http://eriqande.github.io/rep-res-web/www/toc.js"></script>
+  <script type="text/javascript"
+    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  </body>
+</html>
+

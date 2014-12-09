@@ -64,18 +64,14 @@
 
         <div id="content" class="col-sm-8 pull-right">
           <h1 id="branch-and-merge">Branching and Merging</h1>
-
 <h2 id="whats-a-branch">What the heck is a branch?</h2>
-
 <ul>
 <li><p>Note that the motto for git is “<em>local branching on the cheap</em>,” so branches must be important</p>
 <p><img src="diagrams/git.png" alt="branching on the cheap" /></p></li>
 <li>A branch is a “lightweight pointer to a commit”…What?</li>
 <li><p>Let’s refresh our memory on what commits, trees, and blobs are.</p></li>
 </ul>
-
 <h3>Data structure within the .git folder</h3>
-
 <ul>
 <li><p><em>Note: the next four diagrams are from Scott Chacon’s <a href="http://git-scm.com/book/en/">ProGit</a> book and are used under the <a href="https://creativecommons.org/licenses/by-nc/3.0/us/">CC Noncommercial 3.0 Attribution license</a>. I took them from <a href="https://github.com/progit/progit/tree/master/figures">here</a></em></p>
 <p><img src="diagrams/18333fig0301-tn.png" alt="A commit" /></p></li>
@@ -89,8 +85,7 @@
 <li>Unless it is the first commit, it has a pointer to a parent.</li>
 </ul></li>
 </ul>
-
-<p><hr />
+<hr />
 <hr />
 <h3>A chain or sequence of commits</h3>
 <ul>
@@ -301,7 +296,7 @@ Fast-forward
 </ul></li>
 </ul>
 <h3>Now, check out your history</h3>
-<pre><code><img src="diagrams/after-the-merge.png" alt="after the merge"></code></pre>
+<pre><code>![after the merge](diagrams/after-the-merge.png)</code></pre>
 <ul>
 <li>There is a new commit in there and it has two parents.</li>
 <li>Whoa! The <em>changes-on-bottom</em> branch <strong>did not</strong> move forward.</li>
@@ -322,7 +317,7 @@ Fast-forward
 <ul>
 <li>For fun: make a new project that is a clone of it and look at its history and try to understand it.</li>
 </ul></li>
-</ul></p>
+</ul>
 
           <hr>
            <div id="disqus_thread"></div>

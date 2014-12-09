@@ -64,7 +64,6 @@
 
         <div id="content" class="col-sm-8 pull-right">
           <h1 id="data-frame-lecture">Data frames and factors</h1>
-
 <ul>
 <li>Goals of this lecture:
 <ol style="list-style-type: decimal">
@@ -86,11 +85,8 @@
 </ol></li>
 </ol></li>
 </ul>
-
 <h2 id="data-frame-basics">Data frames basics</h2>
-
 <h3>What’s a data frame?</h3>
-
 <ul>
 <li>A <em>data frame</em> is a <strong>list</strong> that:
 <ul>
@@ -119,9 +115,7 @@ d
 <span class="co">#&gt; 4   4   MALE            42                     ballet</span></code></pre></li>
 <li><p>This thing is shaped like a <em>matrix</em> and can be indexed in special ways (below), but at its core it is a //list//.</p></li>
 </ul>
-
 <h3>The <em>data.frame()</em> function</h3>
-
 <ul>
 <li>Syntactically, this is like the <code>list()</code> function, taking “key=value” pairs.
 <ul>
@@ -132,9 +126,7 @@ d
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(d)
 <span class="co">#&gt; [1] &quot;data.frame&quot;</span></code></pre></li>
 </ul>
-
 <h3>The <em>names</em> / <em>colnames</em> of a <em>data frame</em></h3>
-
 <ul>
 <li><p>The <em>names</em> attribute of a data frame holds the “column headers”</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(d)
@@ -148,9 +140,7 @@ d
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rownames</span>(d)
 <span class="co">#&gt; [1] &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot;</span></code></pre></li>
 </ul>
-
 <h3>The <em>rownames</em> of a <em>data frame</em></h3>
-
 <ul>
 <li>You can assign <em>names</em> to the rows of a <em>data frame</em>.</li>
 <li><p>Use the <code>rownames()</code> function. For example:</p>
@@ -165,15 +155,13 @@ d
 <li><p><em>rownames</em> have to be unique!</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rownames</span>(d) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Jon&quot;</span>, <span class="st">&quot;Scarlett&quot;</span>, <span class="st">&quot;Nancy&quot;</span>, <span class="st">&quot;Jon&quot;</span>)
 <span class="co">#&gt; Warning: non-unique value when setting &#39;row.names&#39;: &#39;Jon&#39;</span>
-<span class="co">#&gt; Error in `row.names&lt;-.data.frame`(`*tmp*`, value = value): duplicate &#39;row.names&#39; are not allowed</span></code></pre></li>
+<span class="co">#&gt; Error: duplicate &#39;row.names&#39; are not allowed</span></code></pre></li>
 <li><p>…and the right length, too:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rownames</span>(d) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Jon&quot;</span>, <span class="st">&quot;Scarlett&quot;</span>)
-<span class="co">#&gt; Error in `row.names&lt;-.data.frame`(`*tmp*`, value = value): invalid &#39;row.names&#39; length</span></code></pre></li>
+<span class="co">#&gt; Error: invalid &#39;row.names&#39; length</span></code></pre></li>
 <li><p>If you don’t provide them, they will be integers <code>1:nrow(df)</code></p></li>
 </ul>
-
 <h3>Dimensions of a data frame</h3>
-
 <ul>
 <li><p>A useful summary of the extent of a data frame is <code>dim</code>. Likewise <code>ncol</code> and <code>nrow</code></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(d)
@@ -183,15 +171,11 @@ d
 <span class="kw">ncol</span>(d)
 <span class="co">#&gt; [1] 4</span></code></pre></li>
 </ul>
-
 <h2 id="data-frame-indexing">Data frame indexing</h2>
-
 <ul>
 <li><em>data frames</em> can be indexed like <em>lists</em> or like <em>matrices</em></li>
 </ul>
-
 <h3>Data frame indexing like a list</h3>
-
 <ul>
 <li><p>Single-chome extractor <code>[  ]</code> with a <em>single vector</em> and <em>no commas</em> picks out the columns, and returns it as another data.frame:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># index with integers</span>
@@ -221,9 +205,7 @@ d$height.inches
 <span class="co">#&gt; [1] 4 6 3 4</span></code></pre>
 <p>The <em>rownames</em> don’t come along with the result.</p></li>
 </ul>
-
 <h3>Matrix-like indexing of <em>data frames</em></h3>
-
 <ul>
 <li>This is new thing! Subset with <em>two vectors</em> separated by a <em>comma</em>!</li>
 <li>i.e., <code>[row, col]</code> where:
@@ -280,9 +262,7 @@ d[d$age ==<span class="st"> </span><span class="dv">3</span>, ] <span class="co"
 <span class="co">#&gt;       age    sex height.inches favorite.sport.or.activity</span>
 <span class="co">#&gt; Nancy   3 FEMALE            38               martial_arts</span></code></pre></li>
 </ul>
-
 <h3>Whoa! What happens when <em>[rows, cols]</em> picks out a single column?</h3>
-
 <ul>
 <li><p>Beware, if your <code>[rows, cols]</code> extractor picks out just a <em>single column</em>, then by default, R will just return a (unnamed) vector, not a data frame!</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># ages of Jon and Terry... What! Where&#39;s my data frame?</span>
@@ -295,15 +275,12 @@ d[<span class="kw">c</span>(<span class="st">&quot;Jon&quot;</span>, <span class
 <span class="co">#&gt; Terry   4</span></code></pre></li>
 <li><p>This is <strong>super-important</strong> if you are writing functions that grab variable numbers of columns out of data frames (or matrices)</p></li>
 </ul>
-
 <h3>Replacement form indexing</h3>
-
 <ul>
 <li><p>All these indexing measures have replacement forms:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># change Terry&#39;s favorite activity to soccer</span>
 d[<span class="st">&quot;Terry&quot;</span>, <span class="dv">4</span>] &lt;-<span class="st"> &quot;paint-ball&quot;</span>
-<span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, iseq, value = &quot;paint-ball&quot;): invalid</span>
-<span class="co">#&gt; factor level, NA generated</span>
+<span class="co">#&gt; Warning: invalid factor level, NA generated</span>
 d <span class="co"># print it</span>
 <span class="co">#&gt;          age    sex height.inches favorite.sport.or.activity</span>
 <span class="co">#&gt; Jon        4   MALE            40                     soccer</span>
@@ -313,8 +290,7 @@ d <span class="co"># print it</span>
 
 <span class="co"># what if we tried to change it to &quot;mushroom hunting&quot;?</span>
 d[<span class="st">&quot;Terry&quot;</span>, <span class="dv">4</span>] &lt;-<span class="st"> &quot;mushroom hunting&quot;</span>
-<span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, iseq, value = &quot;mushroom hunting&quot;):</span>
-<span class="co">#&gt; invalid factor level, NA generated</span>
+<span class="co">#&gt; Warning: invalid factor level, NA generated</span>
 d
 <span class="co">#&gt;          age    sex height.inches favorite.sport.or.activity</span>
 <span class="co">#&gt; Jon        4   MALE            40                     soccer</span>
@@ -345,9 +321,7 @@ d
 </ul></li>
 <li><p>Rather than opening .csv files in Excel to look at them, it’s possible to just look at them if they are on GitHub. Try <a href="https://github.com/eriqande/rep-res-course/blob/master/data/big_creek_excerpt.csv">this link</a>.</p></li>
 </ul>
-
 <h3><em>read.table()</em></h3>
-
 <ul>
 <li>A function that reads in “table-shaped” data and returns a <em>data frame</em></li>
 <li><code>read.table()</code> is a rather generic function, that lets you specify:
@@ -359,9 +333,7 @@ d
 <li><code>na.strings</code> : what strings signify values that should be read as <code>NA</code> And many, many others. Do <code>?read.table</code> for the complete list.</li>
 </ul></li>
 </ul>
-
 <h3><em>read.csv()</em></h3>
-
 <ul>
 <li>A function identical to <code>read.table()</code> except that the default values are set up to read in CSV files (like those produced by Excel…)</li>
 <li><p>Let’s try it:</p>
@@ -376,9 +348,7 @@ d
 <span class="co">#&gt; [1] 100  55</span></code></pre>
 <p>Sweet!</p></li>
 </ul>
-
 <h3>Looking at our data frame</h3>
-
 <ul>
 <li>To figure out what is in our data frame, there are several options.
 <ol style="list-style-type: decimal">
@@ -482,9 +452,7 @@ That is a little cumbersome</li>
 </ul></li>
 </ol></li>
 </ul>
-
 <h3>Writing a data frame back out to a .csv file</h3>
-
 <ul>
 <li>There is a <code>write.table</code> function much like <code>read.table</code></li>
 <li>And there is a <code>write.csv</code> function that is similar</li>
@@ -499,9 +467,7 @@ and you can open that with Excel, even.
 <li>Read <code>?write.table</code> for more info.</li>
 </ul></li>
 </ul>
-
 <h2 id="factors-tiny-blurb">A tiny blurb about <em>factors</em></h2>
-
 <ul>
 <li>In <code>read.csv</code> we used the option <code>stringsAsFactors = FALSE</code>
 <ul>
@@ -512,9 +478,7 @@ and you can open that with Excel, even.
 <li>The name derives from the idea of factors in experimental design, which is a shame (I think) since factors in R are useful in many ways.</li>
 <li>My suggestion: when you see <em>factor</em> think <em>vector of <strong>categories</strong></em></li>
 </ul>
-
 <h3>Factors are vectors that record discrete <em>categories</em></h3>
-
 <ul>
 <li>Anything measured on a disrete scale can be said to fall into one of a set of categories.</li>
 <li>The discrete scale could be a summary of a continuous scale
@@ -546,9 +510,7 @@ sml
 <span class="co">#&gt; 14 Fish_14        Large</span>
 <span class="co">#&gt; 15 Fish_15        Large</span></code></pre></li>
 </ul>
-
 <h3>Underlying structure of a <em>factor</em></h3>
-
 <ul>
 <li>The “SizeCategory” column looks like a vector of strings (a character vector), but it isn’t.</li>
 <li>A factor is a class that contains:
@@ -561,9 +523,7 @@ sml
 </ol></li>
 <li>What? If that’s not clear, continuing with the <code>sml</code> example from above should help clarify things</li>
 </ul>
-
 <h3><em>sml</em> data frame’s SizeCategory</h3>
-
 <ul>
 <li><p>We can access the <em>levels</em> attribute of <code>sml$SizeCategory</code> like this:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(sml$SizeCategory)
@@ -594,18 +554,13 @@ sml
 <span class="co">#&gt; 15 Fish_15        Large                         1</span></code></pre></li>
 <li><p>(Note that, by default, if categories are named by characters, R sorts them alphabetically to give them an order in the <em>levels</em> of the factor.)</p></li>
 </ul>
-
 <h3>Factors are immensely useful, but tricky</h3>
-
 <ul>
 <li>We will continue talking about factors on Thursday.<br /></li>
 <li>Before that class, please download <a href="http://www.burns-stat.com/pages/Tutor/R_inferno.pdf">The R Inferno</a> and read the Preface on page 8 and the first few paragraphs of Chapter 1 (because it is fun to do so—we have all been in R hell at one time or another), then read from section 8.2 through 8.2.8, which covers factor hell.</li>
 </ul>
-
 <h2 id="mission-data-frame">Your mission</h2>
-
 <p>In lieu of homework on this topic, everyone should just do the following while this is fresh in your mind:</p>
-
 <ol style="list-style-type: decimal">
 <li>Read <code>?read.table</code></li>
 <li>Go get your own data sets that you want to work with (or are working with) and read them into R and have a look around them.
